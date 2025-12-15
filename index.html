@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+        <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -6,33 +6,45 @@
 <title>Capital Edge | Finance & Stock Market News</title>
 
 <style>
+*{
+    box-sizing:border-box;
+}
 body{
     margin:0;
     font-family: Arial, sans-serif;
-    background:#f5f7fa;
+    background:#f4f6f9;
     color:#333;
 }
 
-/* HEADER */
+/* FULL WIDTH HEADER */
 header{
-    background:#ffffff;
-    padding:15px 30px;
-    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    width:100%;
+    background:#0a3d62;
+    color:white;
+    padding:25px 20px;
+    text-align:center;
 }
 header h1{
     margin:0;
-    color:#0a3d62;
+    font-size:32px;
+}
+header p{
+    margin:5px 0 0;
+    font-size:14px;
 }
 
-/* MENU */
+/* FULL WIDTH MENU */
 nav{
-    background:#0a3d62;
+    width:100%;
+    background:#083154;
 }
 nav ul{
     margin:0;
     padding:0;
     list-style:none;
     display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
 }
 nav ul li a{
     color:white;
@@ -44,11 +56,21 @@ nav ul li a:hover{
     background:#1e5f99;
 }
 
-/* LAYOUT */
+/* BANNER IMAGE */
+.banner img{
+    width:100%;
+    height:300px;
+    object-fit:cover;
+    display:block;
+}
+
+/* PAGE LAYOUT */
 .container{
+    max-width:1200px;
+    margin:auto;
     display:flex;
-    padding:20px;
     gap:20px;
+    padding:20px;
 }
 
 /* MAIN CONTENT */
@@ -56,36 +78,37 @@ nav ul li a:hover{
     flex:3;
     background:white;
     padding:20px;
-    border-radius:5px;
+    border-radius:6px;
 }
 .main h2{
     color:#0a3d62;
 }
 
-/* SIDEBAR */
+/* RIGHT SIDEBAR */
 .sidebar{
     flex:1;
     background:white;
     padding:15px;
-    border-radius:5px;
+    border-radius:6px;
 }
 .sidebar h3{
+    color:#0a3d62;
     border-bottom:2px solid #0a3d62;
     padding-bottom:5px;
-    color:#0a3d62;
 }
 .news{
-    margin-bottom:10px;
     font-size:14px;
+    padding:8px 0;
+    border-bottom:1px solid #eee;
 }
 
-/* FOOTER */
+/* FOOTER FULL WIDTH */
 footer{
+    width:100%;
     background:#0a3d62;
     color:white;
     text-align:center;
     padding:15px;
-    margin-top:20px;
 }
 
 /* RESPONSIVE */
@@ -93,9 +116,11 @@ footer{
     .container{
         flex-direction:column;
     }
+    .banner img{
+        height:200px;
+    }
 }
 </style>
-
 </head>
 
 <body>
@@ -115,38 +140,21 @@ footer{
     </ul>
 </nav>
 
+<div class="banner">
+    <img src="https://images.unsplash.com/photo-1569025690938-a00729c9e1f9" alt="Stock Market">
+</div>
+
 <div class="container">
 
     <div class="main">
         <h2>Today Stock Market Update</h2>
         <p>
-            Welcome to Capital Edge. Yahan aapko stock market, finance aur
-            investment se related latest news aur educational content milega.
+            Capital Edge par aapko stock market aur finance se judi
+            latest aur trusted information milegi.
         </p>
 
         <h2>Market Highlights</h2>
         <ul>
-            <li>Nifty strong support ke upar trade kar raha hai</li>
-            <li>Banking stocks mein buying interest</li>
-            <li>Midcap stocks volatile hain</li>
-        </ul>
-    </div>
-
-    <div class="sidebar">
-        <h3>Latest News</h3>
-        <div class="news">🔹 Sensex opens flat today</div>
-        <div class="news">🔹 IT stocks under pressure</div>
-        <div class="news">🔹 New IPO announcement expected</div>
-        <div class="news">🔹 Crude oil prices rise</div>
-    </div>
-
-</div>
-
-<footer>
-    © 2025 Capital Edge | This is for educational purpose only
-</footer>
-
-</body>
-</html>
-
-
+            <li>Nifty support zone ke upar hai</li>
+            <li>Banking stocks mei
+                
