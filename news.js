@@ -1,6 +1,11 @@
 
 const newsData = [
   {
+  title: "Aaj ki breaking news",
+  date: "2025-01-13",
+  content: "Market green zone mein band hua."
+},
+  {
     title: "Sensex jumps 500 points",
     date: "2025-01-12",
     content: "Market strong buying ke saath band hua."
