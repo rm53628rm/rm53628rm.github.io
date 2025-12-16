@@ -3,41 +3,46 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Capital Edge | Finance & Stock Market News</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capital Edge | Finance & Stock Market News</title>
 
 <style>
+*{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#333}
-header{
-  background:linear-gradient(rgba(10,61,98,0.7),rgba(10,61,98,0.7)),
-  url("https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3");
-  background-size:cover;
-  background-position:center;
-  color:#fff;
-  padding:60px 20px;
-  text-align:center;
-}
-nav{background:#083154}
-nav ul{list-style:none;margin:0;padding:0;display:flex;justify-content:center;flex-wrap:wrap}
+
+/* HEADER */
+header{width:100%;background:#0a3d62;color:#fff;padding:25px 20px;text-align:center}
+header h1{margin:0;font-size:32px}
+header p{margin:5px 0 0;font-size:14px}
+
+/* MENU */
+nav{width:100%;background:#083154}
+nav ul{margin:0;padding:0;list-style:none;display:flex;justify-content:center;flex-wrap:wrap}
 nav ul li a{color:#fff;padding:12px 18px;display:block;text-decoration:none}
 nav ul li a:hover{background:#1e5f99}
-.container{max-width:1100px;margin:auto;padding:20px}
-.news{
-  background:#fff;
-  padding:15px;
-  margin-bottom:15px;
-  border-radius:6px;
-}
-.news h2{color:#0a3d62;margin-top:0}
-.news small{color:#777}
-footer{
-  background:#0a3d62;
-  color:#fff;
-  text-align:center;
-  padding:15px;
-}
+
+/* BANNER */
+.banner img{width:100%;height:300px;object-fit:cover;display:block}
+
+/* LAYOUT */
+.container{max-width:1200px;margin:auto;display:flex;gap:20px;padding:20px}
+
+/* MAIN */
+.main{flex:3;background:#fff;padding:20px;border-radius:6px}
+.main h2{color:#0a3d62}
+
+/* SIDEBAR */
+.sidebar{flex:1;background:#fff;padding:15px;border-radius:6px}
+.sidebar h3{color:#0a3d62;border-bottom:2px solid #0a3d62;padding-bottom:5px}
+.news{font-size:14px;padding:8px 0;border-bottom:1px solid #eee}
+
+/* FOOTER */
+footer{width:100%;background:#0a3d62;color:#fff;text-align:center;padding:15px}
+
+/* RESPONSIVE */
 @media(max-width:768px){
-  header{padding:40px 15px}
+  .container{flex-direction:column}
+  .banner img{height:200px}
 }
 </style>
 </head>
@@ -46,7 +51,7 @@ footer{
 
 <header>
 <h1>Capital Edge</h1>
-<p>Finance | Stock Market | Daily News</p>
+<p>Finance | Stock Market | Investment News</p>
 </header>
 
 <nav>
@@ -56,11 +61,25 @@ footer{
 </ul>
 </nav>
 
+<div class="banner">
+<img src="https://images.unsplash.com/photo-1569025690938-a00729c9e1f9" alt="Stock Market">
+</div>
+
 <div class="container">
+
+<!-- MAIN NEWS -->
+<div class="main">
 <h2>Latest News</h2>
 <div id="latest-news"></div>
-
 <a href="archive.html">View All Old News →</a>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h3>Latest Headlines</h3>
+<div id="sidebar-news"></div>
+</div>
+
 </div>
 
 <footer>
@@ -70,6 +89,7 @@ footer{
 <script src="news.js"></script>
 <script>
 showLatestNews(4);
+showSidebarNews(5);
 </script>
 
 </body>
