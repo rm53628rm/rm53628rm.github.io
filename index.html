@@ -1,124 +1,43 @@
-     <!DOCTYPE html>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Capital Edge | Finance & Stock Market News</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{
-    box-sizing:border-box;
-}
-body{
-    margin:0;
-    font-family: Arial, sans-serif;
-    background:#f4f6f9;
-    color:#333;
-}
-
-/* FULL WIDTH HEADER */
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#333}
 header{
-    width:100%;
-    background:#0a3d62;
-    color:white;
-    padding:25px 20px;
-    text-align:center;
+  background:linear-gradient(rgba(10,61,98,0.7),rgba(10,61,98,0.7)),
+  url("https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3");
+  background-size:cover;
+  background-position:center;
+  color:#fff;
+  padding:60px 20px;
+  text-align:center;
 }
-header h1{
-    margin:0;
-    font-size:32px;
-}
-header p{
-    margin:5px 0 0;
-    font-size:14px;
-}
-
-/* FULL WIDTH MENU */
-nav{
-    width:100%;
-    background:#083154;
-}
-nav ul{
-    margin:0;
-    padding:0;
-    list-style:none;
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-}
-nav ul li a{
-    color:white;
-    padding:12px 18px;
-    display:block;
-    text-decoration:none;
-}
-nav ul li a:hover{
-    background:#1e5f99;
-}
-
-/* BANNER IMAGE */
-.banner img{
-    width:100%;
-    height:300px;
-    object-fit:cover;
-    display:block;
-}
-
-/* PAGE LAYOUT */
-.container{
-    max-width:1200px;
-    margin:auto;
-    display:flex;
-    gap:20px;
-    padding:20px;
-}
-
-/* MAIN CONTENT */
-.main{
-    flex:3;
-    background:white;
-    padding:20px;
-    border-radius:6px;
-}
-.main h2{
-    color:#0a3d62;
-}
-
-/* RIGHT SIDEBAR */
-.sidebar{
-    flex:1;
-    background:white;
-    padding:15px;
-    border-radius:6px;
-}
-.sidebar h3{
-    color:#0a3d62;
-    border-bottom:2px solid #0a3d62;
-    padding-bottom:5px;
-}
+nav{background:#083154}
+nav ul{list-style:none;margin:0;padding:0;display:flex;justify-content:center;flex-wrap:wrap}
+nav ul li a{color:#fff;padding:12px 18px;display:block;text-decoration:none}
+nav ul li a:hover{background:#1e5f99}
+.container{max-width:1100px;margin:auto;padding:20px}
 .news{
-    font-size:14px;
-    padding:8px 0;
-    border-bottom:1px solid #eee;
+  background:#fff;
+  padding:15px;
+  margin-bottom:15px;
+  border-radius:6px;
 }
-
-/* FOOTER FULL WIDTH */
+.news h2{color:#0a3d62;margin-top:0}
+.news small{color:#777}
 footer{
-    width:100%;
-    background:#0a3d62;
-    color:white;
-    text-align:center;
-    padding:15px;
+  background:#0a3d62;
+  color:#fff;
+  text-align:center;
+  padding:15px;
 }
-
-/* RESPONSIVE */
 @media(max-width:768px){
-    .container{
-        flex-direction:column;
-    }
-    .banner img{
-        height:200px;
-    }
+  header{padding:40px 15px}
 }
 </style>
 </head>
@@ -126,55 +45,32 @@ footer{
 <body>
 
 <header>
-    <h1>Capital Edge</h1>
-    <p>Finance | Stock Market | Investment News</p>
+<h1>Capital Edge</h1>
+<p>Finance | Stock Market | Daily News</p>
 </header>
 
 <nav>
-    <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Stock Market</a></li>
-        <li><a href="#">IPO</a></li>
-        <li><a href="#">Mutual Funds</a></li>
-        <li><a href="#">Contact</a></li>
-    </ul>
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="archive.html">Old News</a></li>
+</ul>
 </nav>
 
-<div class="banner">
-    <img src="https://images.unsplash.com/photo-1569025690938-a00729c9e1f9" alt="Stock Market">
-</div>
-
 <div class="container">
+<h2>Latest News</h2>
+<div id="latest-news"></div>
 
-    <div class="main">
-        <h2>Today Stock Market Update</h2>
-        <p>
-            Capital Edge par aapko stock market aur finance se judi
-            latest aur trusted information milegi.
-        </p>
-
-        <h2>Market Highlights</h2>
-        <ul>
-            <li>Nifty support zone ke upar hai</li>
-            <li>Banking stocks mein strength</li>
-            <li>Midcap stocks volatile</li>
-        </ul>
-    </div>
-
-    <div class="sidebar">
-        <h3>Latest News</h3>
-        <div class="news">🔹 Sensex flat opening</div>
-        <div class="news">🔹 IT stocks pressure mein</div>
-        <div class="news">🔹 New IPO update soon</div>
-        <div class="news">🔹 Crude oil prices up</div>
-    </div>
-
+<a href="archive.html">View All Old News →</a>
 </div>
 
 <footer>
-    © 2025 Capital Edge | Educational Purpose Only
+© 2025 Capital Edge | Educational Purpose Only
 </footer>
+
+<script src="news.js"></script>
+<script>
+showLatestNews(4);
+</script>
 
 </body>
 </html>
-  
