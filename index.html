@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,42 +10,129 @@
 body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#333}
 
 /* HEADER */
-header{width:100%;background:#0a3d62;color:#fff;padding:25px 20px;text-align:center}
+header{background:#0a3d62;color:#fff;padding:22px 16px;text-align:center}
 header h1{margin:0;font-size:32px}
-header p{margin:5px 0 0;font-size:14px}
+header p{margin:6px 0 0;font-size:14px}
 
-/* MENU */
-nav{width:100%;background:#083154}
-nav ul{margin:0;padding:0;list-style:none;display:flex;justify-content:center;flex-wrap:wrap}
-nav ul li a{color:#fff;padding:12px 18px;display:block;text-decoration:none}
-nav ul li a:hover{background:#1e5f99}
+/* NAVBAR */
+.navbar{background:#083154;display:flex;align-items:center;padding:0 12px}
+
+.menu-toggle{font-size:26px;color:#fff;cursor:pointer;padding:14px 10px}
+
+.menu-center{flex:1;display:flex;justify-content:center}
+.menu-center ul{list-style:none;margin:0;padding:0;display:flex}
+.menu-center ul li a{color:#fff;text-decoration:none;padding:14px 18px;font-weight:600;font-size:14px}
+.menu-center ul li a:hover{background:#1e5f99}
+
+.dropdown{display:none;position:absolute;left:10px;top:100%;background:#1c1c1c;border-radius:6px;min-width:200px;box-shadow:0 8px 20px rgba(0,0,0,.3);z-index:99}
+.dropdown a{display:block;color:#fff;text-decoration:none;padding:10px 14px;font-size:14px}
+.dropdown a:hover{background:#ff9f1c;color:#000}
 
 /* BANNER */
-.banner img{width:100%;height:300px;object-fit:cover;display:block}
+.banner img{width:100%;height:260px;object-fit:cover;display:block}
 
 /* LAYOUT */
-.container{max-width:1200px;margin:auto;display:flex;gap:20px;padding:20px}
+.container{max-width:1200px;margin:20px auto;display:flex;gap:20px;padding:0 16px}
 
 /* MAIN */
-.main{flex:3;background:#fff;padding:20px;border-radius:6px}
-.main h2{color:#0a3d62}
+.main{flex:3;background:#fff;padding:20px;border-radius:8px}
+.news-card{border:1px solid #e6e6e6;border-radius:8px;padding:14px;margin-bottom:14px}
+.news-card h3{margin:0 0 6px;color:#083154;font-size:18px}
+.news-meta{font-size:12px;color:#777;margin-bottom:6px}
 
-/* SIDEBAR */
-.sidebar{flex:1;background:#fff;padding:15px;border-radius:6px}
-.sidebar h3{color:#0a3d62;border-bottom:2px solid #0a3d62;padding-bottom:5px}
-.news{font-size:14px;padding:8px 0;border-bottom:1px solid #eee}
+/* SIDEBAR CATEGORY */
+.sidebar{
+  flex:0 0 auto;
+  background:linear-gradient(180deg,#ffffff,#f6f7f9);
+  padding:14px 14px 8px;
+  border-radius:12px;
+  border:1px solid #e1e1e1;
+  box-shadow:0 4px 14px rgba(0,0,0,0.06);
+  display:inline-block; /* desktop: content jitna */
+  align-self:flex-start;
+}
 
-/* FOOTER */
-footer{width:100%;background:#0a3d62;color:#fff;text-align:center;padding:15px}
+@media(max-width:768px){
+  .sidebar{
+    width:100%;          /* mobile: full width */
+    display:block;       /* full stretch */
+  }
+}
 
-/* RESPONSIVE */
+
+
+
+.sidebar h3{
+  margin:0 0 10px;
+  font-weight:700;
+  font-size:17px;
+  color:#111;
+  border-bottom:2px solid #ff9f1c;
+  padding-bottom:6px;
+}
+
+
+.category-item{
+  padding:14px 34px 14px 22px; /* left space dot ke liye */
+  font-weight:700;
+  font-size:17px; /* thoda bada */
+  border-bottom:1px dashed #ddd;
+  cursor:pointer;
+  position:relative;
+  color:#2b2b2b; /* premium dark grey */
+}
+
+.category-item::before{
+  content:'';
+  width:8px;
+  height:8px;
+  background:#ff9f1c; /* premium dot */
+  border-radius:50%;
+  position:absolute;
+  left:0;
+  top:50%;
+  transform:translateY(-50%);
+  box-shadow:0 0 0 3px rgba(255,159,28,0.15);
+}
+
+.category-item.active{
+  color:#ff9f1c;
+}
+
+
+
+.category-item:last-child{border-bottom:none}
+.category-item.active{color:#ff9f1c}
+
+.category-item::after{
+  content:'▼';
+  position:absolute;
+  right:0;
+  transition:transform .3s ease;
+}
+.category-item.active::after{transform:rotate(180deg)}
+
+.sub{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .35s ease,padding .35s ease;
+  padding:0 12px;
+  margin-top:6px;
+  background:#f7f9fc;
+  border-left:3px solid #ff9f1c;
+  border-radius:6px;
+}
+.sub span{display:block;padding:6px 0;font-size:13px;cursor:pointer}
+.sub span:hover{color:#ff9f1c;font-weight:600}
+
+footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:30px}
+
 @media(max-width:768px){
   .container{flex-direction:column}
-  .banner img{height:200px}
+  .menu-center ul{flex-wrap:wrap;justify-content:center}
 }
 </style>
 </head>
-
 <body>
 
 <header>
@@ -54,43 +140,86 @@ footer{width:100%;background:#0a3d62;color:#fff;text-align:center;padding:15px}
 <p>Finance | Stock Market | Investment News</p>
 </header>
 
-<nav>
-<ul>
-<li><a href="index.html">Home</a></li>
-<li><a href="archive.html">Old News</a></li>
-</ul>
-</nav>
+<div class="navbar">
+  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+  <div class="menu-center">
+    <ul>
+      <li><a href="#">Investment</a></li>
+      <li><a href="#">Stock Market</a></li>
+      <li><a href="#">IPO</a></li>
+      <li><a href="#">Dividend</a></li>
+      <li><a href="#">Indicator</a></li>
+    </ul>
+  </div>
+  <div class="dropdown" id="dropdownMenu">
+    <a href="#">Contact Us</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Disclaimer</a>
+  </div>
+</div>
 
 <div class="banner">
 <img src="https://images.unsplash.com/photo-1569025690938-a00729c9e1f9" alt="Stock Market">
 </div>
 
 <div class="container">
-
-<!-- MAIN NEWS -->
-<div class="main">
-<h2>Latest News</h2>
-<div id="latest-news"></div>
-<a href="archive.html">View All Old News →</a>
+  <div class="main" id="latest-news"></div>
+  <div class="sidebar">
+    <h3>Category</h3>
+    <div class="category-item" onclick="toggleSub(this)">Equity
+      <div class="sub"><span>Large Cap</span><span>Mid Cap</span><span>Small Cap</span></div>
+    </div>
+    <div class="category-item" onclick="toggleSub(this)">IPO
+      <div class="sub"><span>Mainboard</span><span>SME</span></div>
+    </div>
+    <div class="category-item" onclick="toggleSub(this)">Dividend
+      <div class="sub"><span>Interim</span><span>Final</span></div>
+    </div>
+  </div>
 </div>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-<h3>Latest Headlines</h3>
-<div id="sidebar-news"></div>
-</div>
+<footer>© 2025 Capital Edge | Educational Purpose Only</footer>
 
-</div>
-
-<footer>
-© 2025 Capital Edge | Educational Purpose Only
-</footer>
-
-<script src="news.js"></script>
 <script>
-showLatestNews(4);
-showSidebarNews(5);
+const news=[
+  {t:'Market Hits New High',d:'16 Dec 2025',c:'Stock Market'},
+  {t:'IPO Buzz This Week',d:'15 Dec 2025',c:'IPO'},
+  {t:'RBI Policy Update',d:'14 Dec 2025',c:'Economy'}
+];
+
+const box=document.getElementById('latest-news');
+news.forEach(n=>{
+  box.innerHTML+=`<div class="news-card"><h3>${n.t}</h3><div class="news-meta">${n.d} | ${n.c}</div></div>`;
+});
+
+function toggleMenu(){
+  const d=document.getElementById('dropdownMenu');
+  d.style.display=d.style.display==='block'?'none':'block';
+}
+
+function toggleSub(el){
+  document.querySelectorAll('.category-item').forEach(item=>{
+    if(item!==el){
+      item.classList.remove('active');
+      const s=item.querySelector('.sub');
+      s.style.maxHeight=null;
+      s.style.padding='0 12px';
+    }
+  });
+
+  const sub=el.querySelector('.sub');
+  el.classList.toggle('active');
+
+  if(sub.style.maxHeight){
+    sub.style.maxHeight=null;
+    sub.style.padding='0 12px';
+  }else{
+    sub.style.maxHeight=sub.scrollHeight+'px';
+    sub.style.padding='8px 12px';
+  }
+}
 </script>
 
 </body>
 </html>
+
