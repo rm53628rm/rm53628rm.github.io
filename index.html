@@ -1,3 +1,4 @@
+  
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,9 +37,13 @@ header p{margin:6px 0 0;font-size:14px}
 
 /* MAIN */
 .main{flex:3;background:#fff;padding:20px;border-radius:8px}
-.news-card{border:1px solid #e6e6e6;border-radius:8px;padding:14px;margin-bottom:14px}
+.news-card{border:1px solid #e6e6e6;border-radius:8px;padding:12px 14px;margin-bottom:10px;transition:0.3s; background:#fff;}
+.news-card:hover{box-shadow:0 8px 20px rgba(0,0,0,0.1);}
 .news-card h3{margin:0 0 6px;color:#083154;font-size:18px}
-.news-meta{font-size:12px;color:#777;margin-bottom:6px}
+.news-meta{font-size:12px;color:#777;margin-bottom:8px}
+.news-summary{font-size:14px;color:#444; margin-bottom:8px; line-height:1.5;}
+.read-more{display:inline-block;font-size:13px;font-weight:600;color:#ff9f1c;text-decoration:none;padding:4px 10px;border:1px solid #ff9f1c;border-radius:4px;transition:0.3s}
+.read-more:hover{background:#ff9f1c;color:#fff;box-shadow:0 4px 12px rgba(255,159,28,0.3);}
 
 /* SIDEBAR CATEGORY */
 .sidebar{
@@ -59,9 +64,6 @@ header p{margin:6px 0 0;font-size:14px}
   }
 }
 
-
-
-
 .sidebar h3{
   margin:0 0 10px;
   font-weight:700;
@@ -70,7 +72,6 @@ header p{margin:6px 0 0;font-size:14px}
   border-bottom:2px solid #ff9f1c;
   padding-bottom:6px;
 }
-
 
 .category-item{
   padding:14px 34px 14px 22px; /* left space dot ke liye */
@@ -98,8 +99,6 @@ header p{margin:6px 0 0;font-size:14px}
 .category-item.active{
   color:#ff9f1c;
 }
-
-
 
 .category-item:last-child{border-bottom:none}
 .category-item.active{color:#ff9f1c}
@@ -178,48 +177,29 @@ footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:3
   </div>
 </div>
 
+<div style="text-align:center; margin-top:12px;">
+  <button id="view-all">View All News</button>
+</div>
+
 <footer>© 2025 Capital Edge | Educational Purpose Only</footer>
 
 <script>
 const news=[
-  {t:'Market Hits New High',d:'16 Dec 2025',c:'Stock Market'},
-  {t:'IPO Buzz This Week',d:'15 Dec 2025',c:'IPO'},
-  {t:'RBI Policy Update',d:'14 Dec 2025',c:'Economy'}
+  {t:'Market Hits New High',d:'16 Dec 2025',c:'Stock Market',s:'The stock market reached a new all-time high today as investors responded positively to the latest earnings reports...'},
+  {t:'IPO Buzz This Week',d:'15 Dec 2025',c:'IPO',s:'Several exciting IPOs are lined up this week. Here is a quick overview of the top companies entering the market...'},
+  {t:'RBI Policy Update',d:'14 Dec 2025',c:'Economy',s:'RBI has announced a new monetary policy update impacting lending rates and market liquidity...'},
+  {t:'Tech Stocks Rally',d:'13 Dec 2025',c:'Stock Market',s:'Technology sector witnessed a strong rally with top companies reporting better-than-expected quarterly results...'},
+  {t:'Mutual Fund Trends',d:'12 Dec 2025',c:'Investment',s:'Mutual funds continue to attract retail investors with diversified portfolio options and good returns...'},
+  {t:'Global Market Insights',d:'11 Dec 2025',c:'Economy',s:'Global markets reacted to geopolitical news with moderate fluctuations, analysts suggest cautious optimism...'},
+  {t:'Dividend Announcements',d:'10 Dec 2025',c:'Dividend',s:'Companies have declared dividends for this quarter, rewarding shareholders and boosting investor confidence...'},
+  {t:'Upcoming IPOs in 2026',d:'09 Dec 2025',c:'IPO',s:'Looking ahead, several key IPOs are expected to launch in early 2026, providing investment opportunities...'}
 ];
 
+// Home page: only 7 latest news
 const box=document.getElementById('latest-news');
-news.forEach(n=>{
-  box.innerHTML+=`<div class="news-card"><h3>${n.t}</h3><div class="news-meta">${n.d} | ${n.c}</div></div>`;
-});
-
-function toggleMenu(){
-  const d=document.getElementById('dropdownMenu');
-  d.style.display=d.style.display==='block'?'none':'block';
-}
-
-function toggleSub(el){
-  document.querySelectorAll('.category-item').forEach(item=>{
-    if(item!==el){
-      item.classList.remove('active');
-      const s=item.querySelector('.sub');
-      s.style.maxHeight=null;
-      s.style.padding='0 12px';
-    }
-  });
-
-  const sub=el.querySelector('.sub');
-  el.classList.toggle('active');
-
-  if(sub.style.maxHeight){
-    sub.style.maxHeight=null;
-    sub.style.padding='0 12px';
-  }else{
-    sub.style.maxHeight=sub.scrollHeight+'px';
-    sub.style.padding='8px 12px';
-  }
-}
-</script>
-
-</body>
-</html>
-
+const latestNews = news.slice(0,7);  // latest 7
+latestNews.forEach(n=>{
+  box.innerHTML+=`<div class="news-card">
+    <h3>${n.t}</h3>
+    <div class="news-met
+    
