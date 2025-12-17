@@ -1,4 +1,3 @@
-  
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,14 +16,11 @@ header p{margin:6px 0 0;font-size:14px}
 
 /* NAVBAR */
 .navbar{background:#083154;display:flex;align-items:center;padding:0 12px}
-
 .menu-toggle{font-size:26px;color:#fff;cursor:pointer;padding:14px 10px}
-
 .menu-center{flex:1;display:flex;justify-content:center}
 .menu-center ul{list-style:none;margin:0;padding:0;display:flex}
 .menu-center ul li a{color:#fff;text-decoration:none;padding:14px 18px;font-weight:600;font-size:14px}
 .menu-center ul li a:hover{background:#1e5f99}
-
 .dropdown{display:none;position:absolute;left:10px;top:100%;background:#1c1c1c;border-radius:6px;min-width:200px;box-shadow:0 8px 20px rgba(0,0,0,.3);z-index:99}
 .dropdown a{display:block;color:#fff;text-decoration:none;padding:10px 14px;font-size:14px}
 .dropdown a:hover{background:#ff9f1c;color:#000}
@@ -37,13 +33,16 @@ header p{margin:6px 0 0;font-size:14px}
 
 /* MAIN */
 .main{flex:3;background:#fff;padding:20px;border-radius:8px}
-.news-card{border:1px solid #e6e6e6;border-radius:8px;padding:12px 14px;margin-bottom:10px;transition:0.3s; background:#fff;}
-.news-card:hover{box-shadow:0 8px 20px rgba(0,0,0,0.1);}
+.news-card{border:1px solid #e6e6e6;border-radius:8px;padding:12px 14px;margin-bottom:10px; background:#fff; box-shadow:0 4px 12px rgba(0,0,0,0.05);}
 .news-card h3{margin:0 0 6px;color:#083154;font-size:18px}
-.news-meta{font-size:12px;color:#777;margin-bottom:8px}
-.news-summary{font-size:14px;color:#444; margin-bottom:8px; line-height:1.5;}
-.read-more{display:inline-block;font-size:13px;font-weight:600;color:#ff9f1c;text-decoration:none;padding:4px 10px;border:1px solid #ff9f1c;border-radius:4px;transition:0.3s}
-.read-more:hover{background:#ff9f1c;color:#fff;box-shadow:0 4px 12px rgba(255,159,28,0.3);}
+.news-meta{font-size:12px;color:#777;margin-bottom:6px}
+.news-card p{font-size:14px;line-height:1.5;margin-bottom:6px}
+.read-more{display:inline-block;padding:5px 10px;background:#ff9f1c;color:#fff;border-radius:4px;font-size:13px;text-decoration:none;transition:0.3s}
+.read-more:hover{background:#e57a00;}
+
+/* VIEW ALL BUTTON */
+.view-all{display:block;margin-top:10px;padding:8px 14px;background:#083154;color:#fff;text-align:center;border-radius:6px;text-decoration:none;font-weight:600;transition:0.3s}
+.view-all:hover{background:#0a3d62}
 
 /* SIDEBAR CATEGORY */
 .sidebar{
@@ -53,41 +52,31 @@ header p{margin:6px 0 0;font-size:14px}
   border-radius:12px;
   border:1px solid #e1e1e1;
   box-shadow:0 4px 14px rgba(0,0,0,0.06);
-  display:inline-block; /* desktop: content jitna */
+  display:inline-block;
   align-self:flex-start;
 }
 
 @media(max-width:768px){
-  .sidebar{
-    width:100%;          /* mobile: full width */
-    display:block;       /* full stretch */
-  }
+  .sidebar{width:100%; display:block;}
 }
 
-.sidebar h3{
-  margin:0 0 10px;
-  font-weight:700;
-  font-size:17px;
-  color:#111;
-  border-bottom:2px solid #ff9f1c;
-  padding-bottom:6px;
-}
+.sidebar h3{margin:0 0 10px;font-weight:700;font-size:17px;color:#111;border-bottom:2px solid #ff9f1c;padding-bottom:6px;}
 
 .category-item{
-  padding:14px 34px 14px 22px; /* left space dot ke liye */
+  padding:14px 34px 14px 22px;
   font-weight:700;
-  font-size:17px; /* thoda bada */
+  font-size:17px;
   border-bottom:1px dashed #ddd;
   cursor:pointer;
   position:relative;
-  color:#2b2b2b; /* premium dark grey */
+  color:#2b2b2b;
 }
 
 .category-item::before{
   content:'';
   width:8px;
   height:8px;
-  background:#ff9f1c; /* premium dot */
+  background:#ff9f1c;
   border-radius:50%;
   position:absolute;
   left:0;
@@ -96,40 +85,18 @@ header p{margin:6px 0 0;font-size:14px}
   box-shadow:0 0 0 3px rgba(255,159,28,0.15);
 }
 
-.category-item.active{
-  color:#ff9f1c;
-}
-
+.category-item.active{color:#ff9f1c;}
 .category-item:last-child{border-bottom:none}
-.category-item.active{color:#ff9f1c}
-
-.category-item::after{
-  content:'▼';
-  position:absolute;
-  right:0;
-  transition:transform .3s ease;
-}
+.category-item::after{content:'▼';position:absolute;right:0;transition:transform .3s ease;}
 .category-item.active::after{transform:rotate(180deg)}
 
-.sub{
-  max-height:0;
-  overflow:hidden;
-  transition:max-height .35s ease,padding .35s ease;
-  padding:0 12px;
-  margin-top:6px;
-  background:#f7f9fc;
-  border-left:3px solid #ff9f1c;
-  border-radius:6px;
-}
+.sub{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;padding:0 12px;margin-top:6px;background:#f7f9fc;border-left:3px solid #ff9f1c;border-radius:6px;}
 .sub span{display:block;padding:6px 0;font-size:13px;cursor:pointer}
 .sub span:hover{color:#ff9f1c;font-weight:600}
 
 footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:30px}
 
-@media(max-width:768px){
-  .container{flex-direction:column}
-  .menu-center ul{flex-wrap:wrap;justify-content:center}
-}
+@media(max-width:768px){.container{flex-direction:column}.menu-center ul{flex-wrap:wrap;justify-content:center}}
 </style>
 </head>
 <body>
@@ -177,29 +144,60 @@ footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:3
   </div>
 </div>
 
-<div style="text-align:center; margin-top:12px;">
-  <button id="view-all">View All News</button>
-</div>
-
 <footer>© 2025 Capital Edge | Educational Purpose Only</footer>
 
 <script>
-const news=[
-  {t:'Market Hits New High',d:'16 Dec 2025',c:'Stock Market',s:'The stock market reached a new all-time high today as investors responded positively to the latest earnings reports...'},
-  {t:'IPO Buzz This Week',d:'15 Dec 2025',c:'IPO',s:'Several exciting IPOs are lined up this week. Here is a quick overview of the top companies entering the market...'},
-  {t:'RBI Policy Update',d:'14 Dec 2025',c:'Economy',s:'RBI has announced a new monetary policy update impacting lending rates and market liquidity...'},
-  {t:'Tech Stocks Rally',d:'13 Dec 2025',c:'Stock Market',s:'Technology sector witnessed a strong rally with top companies reporting better-than-expected quarterly results...'},
-  {t:'Mutual Fund Trends',d:'12 Dec 2025',c:'Investment',s:'Mutual funds continue to attract retail investors with diversified portfolio options and good returns...'},
-  {t:'Global Market Insights',d:'11 Dec 2025',c:'Economy',s:'Global markets reacted to geopolitical news with moderate fluctuations, analysts suggest cautious optimism...'},
-  {t:'Dividend Announcements',d:'10 Dec 2025',c:'Dividend',s:'Companies have declared dividends for this quarter, rewarding shareholders and boosting investor confidence...'},
-  {t:'Upcoming IPOs in 2026',d:'09 Dec 2025',c:'IPO',s:'Looking ahead, several key IPOs are expected to launch in early 2026, providing investment opportunities...'}
+const allNews=[
+  {t:'Market Hits New High',d:'16 Dec 2025',c:'Stock Market',p:'Market reached new highs driven by banking and IT stocks. More details inside.'},
+  {t:'IPO Buzz This Week',d:'15 Dec 2025',c:'IPO',p:'Multiple IPOs opening this week with strong GMP. Check details.'},
+  {t:'RBI Policy Update',d:'14 Dec 2025',c:'Economy',p:'RBI keeps rates unchanged focusing on inflation.'},
+  {t:'Tech Stocks Rally',d:'13 Dec 2025',c:'Stock Market',p:'Tech stocks led the rally this week. Read more for insights.'},
+  {t:'Dividend Announced',d:'12 Dec 2025',c:'Dividend',p:'Company announces interim dividend payout.'},
+  {t:'New IPO Listing',d:'11 Dec 2025',c:'IPO',p:'New IPO listed on NSE with positive market sentiment.'},
+  {t:'Banking Sector Update',d:'10 Dec 2025',c:'Economy',p:'Banking stocks showing stable growth.'},
+  {t:'Mid Cap Trends',d:'09 Dec 2025',c:'Equity',p:'Mid cap stocks performing well this month.'}
 ];
 
-// Home page: only 7 latest news
-const box=document.getElementById('latest-news');
-const latestNews = news.slice(0,7);  // latest 7
-latestNews.forEach(n=>{
-  box.innerHTML+=`<div class="news-card">
+const latestNews=document.getElementById('latest-news');
+const newsToShow=allNews.slice(0,7); // top 7 latest
+latestNews.innerHTML='';
+newsToShow.forEach(n=>{
+  latestNews.innerHTML+=`
+  <div class="news-card">
     <h3>${n.t}</h3>
-    <div class="news-met
-    
+    <div class="news-meta">${n.d} | ${n.c}</div>
+    <p>${n.p}</p>
+    <a href="#" class="read-more">Read More</a>
+  </div>`;
+});
+latestNews.innerHTML+=`<a href="#" class="view-all">View All News →</a>`;
+
+function toggleMenu(){
+  const d=document.getElementById('dropdownMenu');
+  d.style.display=d.style.display==='block'?'none':'block';
+}
+
+function toggleSub(el){
+  document.querySelectorAll('.category-item').forEach(item=>{
+    if(item!==el){
+      item.classList.remove('active');
+      const s=item.querySelector('.sub');
+      s.style.maxHeight=null;
+      s.style.padding='0 12px';
+    }
+  });
+  const sub=el.querySelector('.sub');
+  el.classList.toggle('active');
+  if(sub.style.maxHeight){
+    sub.style.maxHeight=null;
+    sub.style.padding='0 12px';
+  }else{
+    sub.style.maxHeight=sub.scrollHeight+'px';
+    sub.style.padding='8px 12px';
+  }
+}
+</script>
+
+</body>
+</html>
+
