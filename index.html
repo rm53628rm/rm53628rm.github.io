@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,85 +8,66 @@
 
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f4f6f9;
-  color:#333;
-  overflow-x:hidden;
-}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#333}
 
 /* HEADER */
-header{
-  background:#0a3d62;
-  color:#fff;
-  padding:22px 16px;
-  text-align:center
-}
+header{background:#0a3d62;color:#fff;padding:22px 16px;text-align:center}
 header h1{margin:0;font-size:32px}
 header p{margin:6px 0 0;font-size:14px}
 
 /* NAVBAR */
 .navbar{
-  background:linear-gradient(90deg,#0a3d62,#083154);
+  background:#083154;
   display:flex;
   align-items:center;
-  padding:0 14px;
-  position:relative;
+  padding:0 12px;
+  position:relative
 }
-
-/* THREE LINE MENU */
-.menu-left{position:relative}
 .menu-toggle{
   font-size:26px;
   color:#fff;
   cursor:pointer;
-  padding:14px 12px;
+  padding:14px 10px
 }
+.menu-center{
+  flex:1;
+  display:flex;
+  justify-content:center
+}
+.menu-center ul{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex
+}
+.menu-center ul li a{
+  color:#fff;
+  text-decoration:none;
+  padding:14px 16px;
+  font-weight:600;
+  font-size:14px
+}
+.menu-center ul li a:hover{background:#1e5f99}
 
-/* SIDE MENU */
-.side-menu{
+.dropdown{
   display:none;
   position:absolute;
+  left:10px;
   top:100%;
-  left:0;
-  background:#111;
-  border-radius:10px;
-  min-width:200px;
-  box-shadow:0 10px 30px rgba(0,0,0,.4);
-  overflow:hidden;
-  z-index:99;
-}
-.side-menu a{
-  display:block;
-  padding:12px 16px;
-  color:#fff;
-  text-decoration:none;
-  font-size:14px;
-}
-.side-menu a:hover{
-  background:#ff9f1c;
-  color:#000;
-}
-
-/* CENTER MENU */
-.menu-center{
-  list-style:none;
-  display:flex;
-  margin:0 auto;
-  padding:0;
-}
-.menu-center li a{
-  color:#fff;
-  text-decoration:none;
-  padding:14px 18px;
-  font-weight:600;
-  font-size:14px;
-}
-.menu-center li a:hover{
-  background:rgba(255,255,255,.15);
+  background:#1c1c1c;
   border-radius:6px;
+  min-width:200px;
+  box-shadow:0 8px 20px rgba(0,0,0,.3);
+  z-index:99
 }
+.dropdown a{
+  display:block;
+  color:#fff;
+  text-decoration:none;
+  padding:10px 14px;
+  font-size:14px
+}
+.dropdown a:hover{background:#ff9f1c;color:#000}
 
 /* BANNER */
 .banner img{
@@ -101,7 +83,7 @@ header p{margin:6px 0 0;font-size:14px}
   margin:20px auto;
   display:flex;
   gap:20px;
-  padding:0 16px;
+  padding:0 16px
 }
 
 /* MAIN */
@@ -109,10 +91,61 @@ header p{margin:6px 0 0;font-size:14px}
   flex:3;
   background:#fff;
   padding:20px;
+  border-radius:8px
+}
+.news-card{
+  border:1px solid #e6e6e6;
   border-radius:8px;
+  padding:12px 14px;
+  margin-bottom:10px;
+  background:#fff;
+  box-shadow:0 4px 12px rgba(0,0,0,0.05);
+}
+.news-card h3{
+  margin:0 0 6px;
+  color:#083154;
+  font-size:18px
+}
+.news-meta{
+  font-size:12px;
+  color:#777;
+  margin-bottom:6px
+}
+.news-card p{
+  font-size:14px;
+  line-height:1.5;
+  margin-bottom:6px
 }
 
-/* SIDEBAR */
+/* READ MORE */
+.read-more{
+  display:inline-block;
+  padding:6px 12px;
+  background:#ff9f1c;
+  color:#fff;
+  border-radius:6px;
+  font-size:13px;
+  text-decoration:none;
+  font-weight:600;
+  transition:.3s
+}
+.read-more:hover{background:#e57a00}
+
+/* VIEW ALL */
+.view-all{
+  display:block;
+  margin-top:12px;
+  padding:10px;
+  background:#083154;
+  color:#fff;
+  text-align:center;
+  border-radius:6px;
+  text-decoration:none;
+  font-weight:700
+}
+.view-all:hover{background:#0a3d62}
+
+/* SIDEBAR CATEGORY */
 .sidebar{
   flex:0 0 auto;
   background:linear-gradient(180deg,#ffffff,#f6f7f9);
@@ -128,7 +161,7 @@ header p{margin:6px 0 0;font-size:14px}
   font-weight:700;
   font-size:17px;
   border-bottom:2px solid #ff9f1c;
-  padding-bottom:6px;
+  padding-bottom:6px
 }
 
 /* CATEGORY ITEM */
@@ -139,7 +172,7 @@ header p{margin:6px 0 0;font-size:14px}
   border-bottom:1px dashed #ddd;
   cursor:pointer;
   position:relative;
-  color:#2b2b2b;
+  color:#2b2b2b
 }
 .category-item::before{
   content:'';
@@ -150,19 +183,19 @@ header p{margin:6px 0 0;font-size:14px}
   position:absolute;
   left:0;
   top:50%;
-  transform:translateY(-50%);
+  transform:translateY(-50%)
 }
 .category-item::after{
   content:'▼';
   position:absolute;
   right:0;
-  transition:.3s;
+  transition:.3s
 }
 .category-item.active{
-  color:#ff9f1c;
+  color:#ff9f1c
 }
 .category-item.active::after{
-  transform:rotate(180deg);
+  transform:rotate(180deg)
 }
 .category-item:last-child{border-bottom:none}
 
@@ -172,20 +205,19 @@ header p{margin:6px 0 0;font-size:14px}
   overflow:hidden;
   transition:max-height .35s ease,padding .35s ease;
   padding:0 12px;
-  margin-top:6px;
   background:#f7f9fc;
   border-left:3px solid #ff9f1c;
-  border-radius:6px;
+  border-radius:6px
 }
 .sub span{
   display:block;
   padding:6px 0;
   font-size:13px;
-  cursor:pointer;
+  cursor:pointer
 }
 .sub span:hover{
   color:#ff9f1c;
-  font-weight:600;
+  font-weight:600
 }
 
 /* FOOTER */
@@ -201,10 +233,7 @@ footer{
 @media(max-width:768px){
   .container{flex-direction:column}
   .sidebar{width:100%}
-  .menu-center{
-    flex-wrap:wrap;
-    justify-content:center;
-  }
+  .menu-center ul{flex-wrap:wrap;justify-content:center}
 }
 </style>
 </head>
@@ -216,27 +245,24 @@ footer{
   <p>Finance | Stock Market | Investment News</p>
 </header>
 
-<!-- NAVBAR -->
 <div class="navbar">
-
-  <div class="menu-left">
-    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-    <div class="side-menu" id="sideMenu">
-      <a href="#">About Us</a>
-      <a href="#">Contact Us</a>
-      <a href="#">Privacy Policy</a>
-      <a href="#">Disclaimer</a>
-    </div>
+  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+  <div class="menu-center">
+    <ul>
+      <li><a href="#">Investment</a></li>
+      <li><a href="#">Stock Market</a></li>
+      <li><a href="#">IPO</a></li>
+      <li><a href="#">Dividend</a></li>
+      <li><a href="#">Old News</a></li>
+    </ul>
   </div>
 
-  <ul class="menu-center">
-    <li><a href="#">Investment</a></li>
-    <li><a href="#">Stock Market</a></li>
-    <li><a href="#">Dividend</a></li>
-    <li><a href="#">IPO</a></li>
-    <li><a href="archive.html">Old News</a></li>
-  </ul>
-
+  <div class="dropdown" id="dropdownMenu">
+    <a href="#">About Us</a>
+    <a href="#">Contact Us</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Disclaimer</a>
+  </div>
 </div>
 
 <div class="banner">
@@ -245,12 +271,8 @@ footer{
 
 <div class="container">
 
-  <!-- MAIN CONTENT -->
-  <div class="main">
-    <!-- NEWS JS SE AAYEGA -->
-    <h3>Latest News</h3>
-    <p>News automatically yahan show hoga (news.js se)</p>
-  </div>
+  <!-- MAIN NEWS -->
+  <div class="main" id="latest-news"></div>
 
   <!-- SIDEBAR CATEGORY -->
   <div class="sidebar">
@@ -280,32 +302,53 @@ footer{
         <span>Final</span>
       </div>
     </div>
-
   </div>
 
 </div>
 
 <footer>© 2025 Capital Edge | Educational Purpose Only</footer>
 
+<!-- ===== JS FILE ===== -->
+<script src="news.js"></script>
+
 <script>
+/* MENU */
 function toggleMenu(){
-  const menu=document.getElementById("sideMenu");
-  menu.style.display = menu.style.display==="block" ? "none" : "block";
+  const d=document.getElementById('dropdownMenu');
+  d.style.display=d.style.display==='block'?'none':'block';
 }
 
+/* CATEGORY */
 function toggleSub(el){
-  document.querySelectorAll('.category-item').forEach(item=>{
-    if(item!==el){
-      item.classList.remove('active');
-      item.querySelector('.sub').style.maxHeight=null;
+  document.querySelectorAll('.category-item').forEach(i=>{
+    if(i!==el){
+      i.classList.remove('active');
+      i.querySelector('.sub').style.maxHeight=null;
     }
   });
   el.classList.toggle('active');
-  const sub=el.querySelector('.sub');
-  sub.style.maxHeight = sub.style.maxHeight ? null : sub.scrollHeight+"px";
+  const s=el.querySelector('.sub');
+  s.style.maxHeight=s.style.maxHeight?null:s.scrollHeight+'px';
 }
+
+/* LATEST 7 NEWS */
+const box=document.getElementById('latest-news');
+
+ALL_NEWS.slice(0,7).forEach(n=>{
+  box.innerHTML+=`
+    <div class="news-card">
+      <h3>${n.title}</h3>
+      <div class="news-meta">${n.date} | ${n.category}</div>
+      <p>${n.content}</p>
+      <a href="archive.html" class="read-more">Read More</a>
+    </div>
+  `;
+});
+
+box.innerHTML+=`
+  <a href="archive.html" class="view-all">View All News</a>
+`;
 </script>
 
 </body>
 </html>
-
