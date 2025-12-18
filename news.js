@@ -1,4 +1,5 @@
 
+// news.js
 const allNews = [
   {id:0, t:'Market fall New High', d:'16 Dec 2025', c:'Stock Market', p:'Market reached new highs driven by banking and IT stocks.'},
   {id:1, t:'IPO Buzz This Week', d:'15 Dec 2025', c:'IPO', p:'Multiple IPOs opening this week with strong GMP.'},
@@ -7,15 +8,18 @@ const allNews = [
   {id:4, t:'Dividend Announced', d:'12 Dec 2025', c:'Dividend', p:'Company announces interim dividend payout.'}
 ];
 
-function renderNews(containerId, limit = null){
+function renderNews(containerId, limit){
   const container = document.getElementById(containerId);
-  if(!container) return;
+  if(!container){
+    console.error('Container not found:', containerId);
+    return;
+  }
 
-  container.innerHTML='';
+  container.innerHTML = '';
 
-  let newsToShow = limit ? allNews.slice(0, limit) : allNews;
+  const list = limit ? allNews.slice(0, limit) : allNews;
 
-  newsToShow.forEach(n=>{
+  list.forEach(n=>{
     container.innerHTML += `
       <div class="news-card">
         <h3>${n.t}</h3>
@@ -34,5 +38,5 @@ function renderNews(containerId, limit = null){
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{
-  renderNews('latest-news',5);
+  renderNews('latest-news', 5);
 });
