@@ -4,7 +4,68 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Capital Edge | Finance & Stock Market News</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css"> <!-- optional separate CSS -->
+<style>
+/* Same CSS as aapne diya, header, navbar, container, main, sidebar, footer styles */
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#333;overflow-x:hidden}
+
+/* HEADER */
+header{background:#0a3d62;color:#fff;padding:22px 16px;text-align:center}
+header h1{margin:0;font-size:32px}
+header p{margin:6px 0 0;font-size:14px}
+
+/* NAVBAR */
+.navbar{background:linear-gradient(90deg,#062743,#0a3d62);display:flex;align-items:center;gap:14px;padding:12px 16px;position:relative}
+.top-links{display:flex;gap:14px;flex-wrap:wrap}
+.top-links a{color:#eaf3ff;text-decoration:none;font-weight:700;font-size:14px;padding:6px 12px;border-radius:20px;transition:.3s;background:rgba(255,255,255,.08)}
+.top-links a:hover{background:#ffecd1;color:#083154}
+
+.hamburger{width:34px;height:26px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer}
+.hamburger span{height:3px;width:100%;background:#fff;border-radius:4px;transition:.35s}
+.hamburger.active span:nth-child(1){transform:translateY(11px) rotate(45deg)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:translateY(-11px) rotate(-45deg)}
+
+.mobile-menu{position:absolute;top:100%;left:12px;width:260px;background:linear-gradient(180deg,#ffffff,#eef3f8);border-radius:16px;box-shadow:0 16px 40px rgba(0,0,0,.18);overflow:hidden;display:none;animation:slideDown .35s ease}
+.mobile-menu a{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;color:#083154;text-decoration:none;font-weight:700;border-bottom:1px solid #dde5ee;background:transparent}
+.mobile-menu a:last-child{border-bottom:none}
+.mobile-menu a:hover{background:#ffecd1;color:#000}
+
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+
+/* CONTAINER */
+.container{max-width:1200px;margin:20px auto;display:flex;align-items:flex-start;gap:20px;padding:0 16px}
+
+/* MAIN NEWS */
+.main{flex:3;background:#fff;padding:14px;border-radius:8px}
+.news-card{border:1px solid #e6e6e6;border-radius:8px;padding:10px 12px;margin-bottom:8px;background:#fff;box-shadow:0 4px 10px rgba(0,0,0,0.04)}
+.news-card h3{margin:0 0 6px;color:#083154;font-size:18px}
+.news-meta{font-size:12px;color:#777;margin-bottom:6px}
+.news-card p{font-size:14px;line-height:1.5;margin-bottom:6px}
+.read-more{display:inline-block;padding:5px 10px;background:#ff9f1c;color:#fff;border-radius:4px;font-size:13px;text-decoration:none}
+.view-all{display:block;margin-top:10px;padding:8px 14px;background:#083154;color:#fff;text-align:center;border-radius:6px;text-decoration:none;font-weight:600}
+
+/* SIDEBAR */
+.sidebar{flex:0 0 280px;max-width:280px;align-self:flex-start;background:linear-gradient(180deg,#ffffff,#f6f7f9);padding:14px 14px 8px;border-radius:12px;border:1px solid #e1e1e1;box-shadow:0 4px 14px rgba(0,0,0,0.06)}
+.sidebar h3{margin:0 0 10px;font-weight:700;font-size:17px;color:#111;border-bottom:2px solid #ff9f1c;padding-bottom:6px}
+.category-item{padding:14px 34px 14px 22px;font-weight:700;font-size:17px;border-bottom:1px dashed #ddd;cursor:pointer;position:relative}
+.category-item::before{content:'';width:8px;height:8px;background:#ff9f1c;border-radius:50%;position:absolute;left:0;top:50%;transform:translateY(-50%)}
+.category-item::after{content:'▼';position:absolute;right:0;transition:.3s}
+.category-item.active::after{transform:rotate(180deg)}
+.sub{max-height:0;overflow:hidden;transition:.3s;padding:0 12px;background:#f7f9fc;border-left:3px solid #ff9f1c;border-radius:6px}
+.sub span{display:block;padding:6px 0;font-size:13px}
+
+/* FOOTER */
+footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:30px}
+
+/* MEDIA */
+@media(max-width:768px){
+  .container{flex-direction:column;padding:0}
+  .main,.sidebar{width:100%;max-width:100%}
+  .mobile-menu{max-width:100%;left:0;right:0}
+}
+</style>
 </head>
 <body>
 
@@ -24,7 +85,12 @@
     <a href="#">IPO</a>
     <a href="#">Indicators</a>
   </nav>
-  <div class="mobile-menu" id="mobileMenu"></div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#">About Us</a>
+    <a href="#">Contact Us</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Disclaimer</a>
+  </div>
 </div>
 
 <div class="container">
@@ -45,8 +111,8 @@
 <script src="news.js"></script>
 <script>
 function toggleMenu(){
-  const menu=document.getElementById('mobileMenu');
-  const ham=document.querySelector('.hamburger');
+  const menu = document.getElementById('mobileMenu');
+  const ham = document.querySelector('.hamburger');
   ham.classList.toggle('active');
   menu.style.display = menu.style.display==='block' ? 'none' : 'block';
 }
