@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,27 +7,37 @@
 
 <style>
 body{margin:0;font-family:Arial;background:#f4f6f9}
-.main{max-width:900px;margin:20px auto;background:#fff;padding:20px;border-radius:8px}
-.news-card{border:1px solid #e6e6e6;border-radius:8px;padding:12px;margin-bottom:10px}
-.news-card h3{margin:0;color:#083154}
-.news-meta{font-size:12px;color:#777;margin:4px 0}
+.container{max-width:1100px;margin:20px auto;padding:16px}
+.news-card{
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:8px;
+  padding:14px;
+  margin-bottom:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,.05)
+}
+.news-card h3{margin:0 0 6px;color:#083154}
+.news-meta{font-size:12px;color:#777;margin-bottom:6px}
 </style>
 </head>
 
 <body>
 
-<div class="main" id="all-news"></div>
+<div class="container">
+  <h2>All News</h2>
+  <div id="all-news"></div>
+</div>
 
 <script src="news.js"></script>
 <script>
-const box = document.getElementById("all-news");
+const allNewsBox = document.getElementById("all-news");
 
 allNews.forEach(n=>{
-  box.innerHTML += `
+  allNewsBox.innerHTML += `
     <div class="news-card">
       <h3>${n.title}</h3>
       <div class="news-meta">${n.date} | ${n.category}</div>
-      <p>${n.content}</p>
+      <p>${n.description}</p>
     </div>
   `;
 });
@@ -36,3 +45,4 @@ allNews.forEach(n=>{
 
 </body>
 </html>
+
