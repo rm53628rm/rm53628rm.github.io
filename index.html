@@ -1,11 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Capital Edge | Finance & Stock Market News</title>
-
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#333;overflow-x:hidden}
@@ -47,7 +45,6 @@ header p{margin:6px 0 0;font-size:14px}
 .news-meta{font-size:12px;color:#777;margin-bottom:6px}
 .news-card p{font-size:14px;line-height:1.5;margin-bottom:6px}
 .read-more{display:inline-block;padding:5px 10px;background:#ff9f1c;color:#fff;border-radius:4px;font-size:13px;text-decoration:none}
-
 .view-all{display:block;margin-top:10px;padding:8px 14px;background:#083154;color:#fff;text-align:center;border-radius:6px;text-decoration:none;font-weight:600}
 
 /* SIDEBAR */
@@ -67,11 +64,6 @@ footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:3
   .main,.sidebar{width:100%;max-width:100%}
   .mobile-menu{max-width:100%;left:0;right:0}
 }
-  .main,.sidebar{width:100%}
-  .mobile-menu{max-width:100%;left:0;right:0}
-}
-  .main,.sidebar{width:100%}
-}
 </style>
 </head>
 <body>
@@ -86,12 +78,12 @@ footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:3
     <span></span><span></span><span></span>
   </div>
   <nav class="top-links">
-  <a href="#">Investment</a>
-  <a href="#">Old News</a>
-  <a href="#">Stock Analysis</a>
-  <a href="#">IPO</a>
-  <a href="#">Indicators</a>
-</nav>
+    <a href="#">Investment</a>
+    <a href="#">Old News</a>
+    <a href="#">Stock Analysis</a>
+    <a href="#">IPO</a>
+    <a href="#">Indicators</a>
+  </nav>
   <div class="mobile-menu" id="mobileMenu">
     <a href="#">About Us</a>
     <a href="#">Contact Us</a>
@@ -99,7 +91,6 @@ footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:3
     <a href="#">Disclaimer</a>
   </div>
 </div>
-
 
 <div class="container">
   <div class="main" id="latest-news"></div>
@@ -117,20 +108,41 @@ footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:3
 <footer>© 2025 Capital Edge | Educational Purpose Only</footer>
 
 <script>
-// fallback news
-var allNews = [
+// All news
+const allNews = [
   {t:'Market Hits New High',d:'16 Dec 2025',c:'Stock Market',p:'Market reached new highs driven by banking and IT stocks.'},
   {t:'IPO Buzz This Week',d:'15 Dec 2025',c:'IPO',p:'Multiple IPOs opening this week with strong GMP.'},
   {t:'RBI Policy Update',d:'14 Dec 2025',c:'Economy',p:'RBI keeps rates unchanged focusing on inflation.'},
   {t:'Tech Stocks Rally',d:'13 Dec 2025',c:'Stock Market',p:'Tech stocks led the rally this week.'},
-  {t:'Dividend Announced',d:'12 Dec 2025',c:'Dividend',p:'Company announces interim dividend payout.'}
+  {t:'Dividend Announced',d:'12 Dec 2025',c:'Dividend',p:'Company announces interim dividend payout.'},
+  {t:'Banking Sector Update',d:'10 Dec 2025',c:'Economy',p:'Banking stocks showing stable growth.'}
 ];
 
-const latestNews=document.getElementById('latest-news');
-allNews.slice(0,5).forEach(n=>{
-  latestNews.innerHTML+=`<div class="news-card"><h3>${n.t}</h3><div class="news-meta">${n.d} | ${n.c}</div><p>${n.p}</p><a href="archive.html" class="read-more">Read More</a></div>`;
+function renderNews(containerId, limit = null){
+  const container=document.getElementById(containerId);
+  if(!container) return;
+  container.innerHTML='';
+  let newsToShow=allNews;
+  if(limit) newsToShow=allNews.slice(0, limit);
+
+  newsToShow.forEach(n=>{
+    container.innerHTML+=`
+    <div class="news-card">
+      <h3>${n.t}</h3>
+      <div class="news-meta">${n.d} | ${n.c}</div>
+      <p>${n.p}</p>
+      <a href="archive.html" class="read-more">Read More</a>
+    </div>`;
+  });
+
+  if(containerId==='latest-news'){
+    container.innerHTML+=`<a href="archive.html" class="view-all">View All News →</a>`;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  renderNews('latest-news',5);
 });
-latestNews.innerHTML+=`<a href="archive.html" class="view-all">View All News →</a>`;
 
 function toggleMenu(){
   const menu=document.getElementById('mobileMenu');
@@ -148,8 +160,10 @@ function toggleSub(el){
   });
   el.classList.toggle('active');
   const sub=el.querySelector('.sub');
-  sub.style.maxHeight = sub.style.maxHeight ? null : sub.scrollHeight+'px';
+  sub.style.maxHeight=sub.style.maxHeight?null:sub.scrollHeight+'px';
 }
 </script>
+
 </body>
 </html>
+
