@@ -1,24 +1,125 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Old News | Capital Edge</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capital Edge | All News Archive</title>
+
 <style>
-body{font-family:Arial;background:#f4f6f9;margin:0}
-header{background:#083154;color:#fff;padding:20px;text-align:center}
-.container{max-width:1200px;margin:auto;padding:20px}
-.news{background:#fff;padding:15px;margin-bottom:15px;border-radius:6px}
-.news h2{color:#083154}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#333}
+
+/* HEADER */
+header{background:#0a3d62;color:#fff;padding:22px 16px;text-align:center}
+header h1{margin:0;font-size:32px}
+header p{margin:6px 0 0;font-size:14px}
+
+/* NAVBAR */
+.navbar{background:#083154;display:flex;align-items:center;padding:0 12px;position:relative}
+.menu-toggle{font-size:26px;color:#fff;cursor:pointer;padding:14px 10px}
+.menu-center{flex:1;display:flex;justify-content:center}
+.menu-center ul{list-style:none;margin:0;padding:0;display:flex}
+.menu-center ul li a{color:#fff;text-decoration:none;padding:14px 18px;font-weight:600;font-size:14px}
+.menu-center ul li a:hover{background:#1e5f99}
+.dropdown{display:none;position:absolute;left:10px;top:100%;background:#1c1c1c;border-radius:6px;min-width:200px;box-shadow:0 8px 20px rgba(0,0,0,.3);z-index:99}
+.dropdown a{display:block;color:#fff;text-decoration:none;padding:10px 14px;font-size:14px}
+.dropdown a:hover{background:#ff9f1c;color:#000}
+
+/* BANNER */
+.banner img{width:100%;height:260px;object-fit:cover;display:block}
+
+/* LAYOUT */
+.container{max-width:1200px;margin:20px auto;display:flex;gap:20px;padding:0 16px;flex-direction:column}
+
+/* MAIN */
+.main{background:#fff;padding:20px;border-radius:8px}
+.news-card{
+  border:1px solid #e6e6e6;
+  border-radius:8px;
+  padding:12px 14px;
+  margin-bottom:10px;
+  background:#fff;
+  box-shadow:0 4px 12px rgba(0,0,0,0.05);
+}
+.news-card h3{margin:0 0 6px;color:#083154;font-size:18px}
+.news-meta{font-size:12px;color:#777;margin-bottom:6px}
+.news-card p{font-size:14px;line-height:1.5;margin-bottom:6px}
+.read-more{
+  display:inline-block;
+  padding:5px 10px;
+  background:#ff9f1c;
+  color:#fff;
+  border-radius:4px;
+  font-size:13px;
+  text-decoration:none;
+  transition:.3s
+}
+.read-more:hover{background:#e57a00}
+
+/* FOOTER */
+footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:30px}
+
+@media(max-width:768px){
+  .container{padding:0 10px}
+}
 </style>
 </head>
-
 <body>
-<header><h1>Old News Archive</h1></header>
-<div class="container" id="all-news"></div>
+
+<header>
+  <h1>Capital Edge</h1>
+  <p>All News Archive</p>
+</header>
+
+<div class="navbar">
+  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+  <div class="menu-center">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#">Investment</a></li>
+      <li><a href="#">Stock Market</a></li>
+      <li><a href="#">IPO</a></li>
+      <li><a href="#">Dividend</a></li>
+    </ul>
+  </div>
+  <div class="dropdown" id="dropdownMenu">
+    <a href="#">Contact Us</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Disclaimer</a>
+  </div>
+</div>
+
+<div class="banner">
+  <img src="https://images.unsplash.com/photo-1569025690938-a00729c9e1f9" alt="Stock Market">
+</div>
+
+<div class="container">
+  <div class="main" id="all-news"></div>
+</div>
+
+<footer>© 2025 Capital Edge | Educational Purpose Only</footer>
 
 <script src="news.js"></script>
-<script>showAllNews();</script>
+<script>
+const allDiv=document.getElementById('all-news');
+allDiv.innerHTML='';
+allNews.forEach(n=>{
+  allDiv.innerHTML += `
+    <div class="news-card">
+      <h3>${n.t}</h3>
+      <div class="news-meta">${n.d} | ${n.c}</div>
+      <p>${n.p}</p>
+      <a href="#" class="read-more">Read More</a>
+    </div>
+  `;
+});
+
+function toggleMenu(){
+  const d=document.getElementById('dropdownMenu');
+  d.style.display=d.style.display==='block'?'none':'block';
+}
+</script>
+
 </body>
 </html>
+
