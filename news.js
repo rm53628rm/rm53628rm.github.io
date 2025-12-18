@@ -1,10 +1,10 @@
 
 const allNews = [
   {
-    title: "Market Hits New High",
+    title: "Market fall High",
     date: "16 Dec 2025",
     category: "Stock Market",
-    content: "Market reached new highs driven by banking and IT stocks."
+    content: "Market driven by banking and IT stocks."
   },
   {
     title: "IPO Buzz This Week",
