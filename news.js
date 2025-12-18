@@ -1,68 +1,12 @@
-
-const newsData = [
-  {
-  title: "Aaj ki breaking news",
-  date: "2025-01-13",
-  content: "Market green zone mein band hua."
-},
-  {
-    title: "Sensex jumps 500 points",
-    date: "2025-01-12",
-    content: "Market strong buying ke saath band hua."
-  },
-  {
-    title: "New IPO opening next week",
-    date: "2025-01-11",
-    content: "Retail investors ke liye achha mauka."
-  },
-  {
-    title: "Bank stocks rally",
-    date: "2025-01-10",
-    content: "Private banks mein buying dekhi gayi."
-  },
-  {
-    title: "Nifty above 22000",
-    date: "2025-01-09",
-    content: "Technical breakout confirm."
-  },
-  {
-    title: "IT stocks weak",
-    date: "2025-01-08",
-    content: "Global cues pressure mein."
-  }
+// news.js
+const allNews=[
+  {t:'Market Hits New High',d:'16 Dec 2025',c:'Stock Market',p:'Market reached new highs driven by banking and IT stocks.'},
+  {t:'IPO Buzz This Week',d:'15 Dec 2025',c:'IPO',p:'Multiple IPOs opening this week with strong GMP.'},
+  {t:'RBI Policy Update',d:'14 Dec 2025',c:'Economy',p:'RBI keeps rates unchanged focusing on inflation.'},
+  {t:'Tech Stocks Rally',d:'13 Dec 2025',c:'Stock Market',p:'Tech stocks led the rally this week.'},
+  {t:'Dividend Announced',d:'12 Dec 2025',c:'Dividend',p:'Company announces interim dividend payout.'},
+  {t:'New IPO Listing',d:'11 Dec 2025',c:'IPO',p:'New IPO listed on NSE.'},
+  {t:'Banking Sector Update',d:'10 Dec 2025',c:'Economy',p:'Banking stocks showing stable growth.'},
+  {t:'Mid Cap Trends',d:'09 Dec 2025',c:'Equity',p:'Mid cap stocks performing well.'}
 ];
 
-// latest news upar
-newsData.sort((a,b)=>new Date(b.date)-new Date(a.date));
-
-function showLatestNews(limit){
-  let html="";
-  newsData.slice(0,limit).forEach(n=>{
-    html+=`<div class="news">
-      <h2>${n.title}</h2>
-      <small>${n.date}</small>
-      <p>${n.content}</p>
-    </div>`;
-  });
-  document.getElementById("latest-news").innerHTML=html;
-}
-
-function showSidebarNews(limit){
-  let html="";
-  newsData.slice(0,limit).forEach(n=>{
-    html+=`<div class="news">🔹 ${n.title}</div>`;
-  });
-  document.getElementById("sidebar-news").innerHTML=html;
-}
-
-function showAllNews(){
-  let html="";
-  newsData.forEach(n=>{
-    html+=`<div class="news">
-      <h2>${n.title}</h2>
-      <small>${n.date}</small>
-      <p>${n.content}</p>
-    </div>`;
-  });
-  document.getElementById("all-news").innerHTML=html;
-}
