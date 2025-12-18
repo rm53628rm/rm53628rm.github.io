@@ -4,34 +4,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Capital Edge | News Archive</title>
-<link rel="stylesheet" href="style.css">
+<title>All News | Capital Edge</title>
+
+<style>
+body{margin:0;font-family:Arial;background:#f4f6f9}
+.main{max-width:900px;margin:20px auto;background:#fff;padding:20px;border-radius:8px}
+.news-card{border:1px solid #e6e6e6;border-radius:8px;padding:12px;margin-bottom:10px}
+.news-card h3{margin:0;color:#083154}
+.news-meta{font-size:12px;color:#777;margin:4px 0}
+</style>
 </head>
+
 <body>
 
-<header>
-  <h1>Capital Edge</h1>
-  <p>All News Archive</p>
-</header>
-
-<div class="container">
-  <div class="main" id="all-news"></div>
-</div>
-
-<footer>© 2025 Capital Edge | Educational Purpose Only</footer>
+<div class="main" id="all-news"></div>
 
 <script src="news.js"></script>
 <script>
-const allDiv=document.getElementById('all-news');
-allDiv.innerHTML='';
+const box = document.getElementById("all-news");
 
 allNews.forEach(n=>{
-  allDiv.innerHTML += `
+  box.innerHTML += `
     <div class="news-card">
-      <h3>${n.t}</h3>
-      <div class="news-meta">${n.d} | ${n.c}</div>
-      <p>${n.p}</p>
-      <a href="#" class="read-more">Read More</a>
+      <h3>${n.title}</h3>
+      <div class="news-meta">${n.date} | ${n.category}</div>
+      <p>${n.content}</p>
     </div>
   `;
 });
