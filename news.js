@@ -1,51 +1,39 @@
 
-const allNews = [
+// news.js
+var allNews = [
   {
-    title: "Market fall High",
+    id: 1,
+    title: "Market falls New High",
     date: "16 Dec 2025",
     category: "Stock Market",
-    content: "Market driven by banking and IT stocks."
+    description: "Market reached new highs driven by banking and IT stocks."
   },
   {
+    id: 2,
     title: "IPO Buzz This Week",
     date: "15 Dec 2025",
     category: "IPO",
-    content: "Multiple IPOs opening this week with strong GMP."
+    description: "Multiple IPOs opening this week with strong GMP."
   },
   {
+    id: 3,
     title: "RBI Policy Update",
     date: "14 Dec 2025",
     category: "Economy",
-    content: "RBI keeps rates unchanged focusing on inflation."
+    description: "RBI keeps interest rates unchanged focusing on inflation."
   },
   {
+    id: 4,
     title: "Tech Stocks Rally",
     date: "13 Dec 2025",
     category: "Stock Market",
-    content: "Tech stocks led the rally this week."
+    description: "IT and AI stocks lead the weekly rally."
   },
   {
-    title: "Dividend Announced",
+    id: 5,
+    title: "Dividend Announcement",
     date: "12 Dec 2025",
     category: "Dividend",
-    content: "Company announces interim dividend payout."
-  },
-  {
-    title: "New IPO Listing",
-    date: "11 Dec 2025",
-    category: "IPO",
-    content: "New IPO listed on NSE with positive sentiment."
-  },
-  {
-    title: "Banking Sector Update",
-    date: "10 Dec 2025",
-    category: "Economy",
-    content: "Banking stocks showing stable growth."
-  },
-  {
-    title: "Mid Cap Trends",
-    date: "09 Dec 2025",
-    category: "Equity",
-    content: "Mid cap stocks performing well this month."
+    description: "Company announces interim dividend for shareholders."
   }
 ];
