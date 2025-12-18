@@ -4,96 +4,72 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Capital Edge | Finance & Stock Market News</title>
-<link rel="stylesheet" href="style.css">
+<title>Capital Edge</title>
+
 <style>
-/* Add main styles (same as before) for news-card, sidebar, header, etc. */
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9}
+
+/* HEADER */
+header{background:#0a3d62;color:#fff;padding:22px;text-align:center}
+
+/* LAYOUT */
+.container{max-width:1200px;margin:20px auto;display:flex;gap:20px;padding:0 16px}
+.main{flex:3;background:#fff;padding:20px;border-radius:8px}
+.sidebar{flex:0 0 auto;background:#fff;padding:14px;border-radius:12px;border:1px solid #ddd}
+
+/* NEWS */
+.news-card{border:1px solid #e6e6e6;border-radius:8px;padding:12px;margin-bottom:10px}
+.news-card h3{margin:0;color:#083154}
+.news-meta{font-size:12px;color:#777;margin:4px 0}
+.read-more{font-size:13px;color:#ff9f1c;text-decoration:none;font-weight:600}
+
+/* CATEGORY */
+.category-item{font-weight:700;padding:10px;border-bottom:1px dashed #ddd;cursor:pointer}
+
+/* MOBILE */
+@media(max-width:768px){
+  .container{flex-direction:column}
+  .sidebar{width:100%}
+}
 </style>
 </head>
+
 <body>
 
 <header>
   <h1>Capital Edge</h1>
-  <p>Finance | Stock Market | Investment News</p>
+  <p>Finance | Stock Market News</p>
 </header>
-
-<div class="navbar">
-  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-  <div class="menu-center">
-    <ul>
-      <li><a href="#">Investment</a></li>
-      <li><a href="#">Stock Market</a></li>
-      <li><a href="#">IPO</a></li>
-      <li><a href="#">Dividend</a></li>
-      <li><a href="#">Indicator</a></li>
-    </ul>
-  </div>
-  <div class="dropdown" id="dropdownMenu">
-    <a href="#">Contact Us</a>
-    <a href="#">Privacy Policy</a>
-    <a href="#">Disclaimer</a>
-  </div>
-</div>
-
-<div class="banner">
-  <img src="https://images.unsplash.com/photo-1569025690938-a00729c9e1f9">
-</div>
 
 <div class="container">
   <div class="main" id="latest-news"></div>
 
   <div class="sidebar">
     <h3>Category</h3>
-    <div class="category-item" onclick="toggleSub(this)">Equity
-      <div class="sub"><span>Large Cap</span><span>Mid Cap</span><span>Small Cap</span></div>
-    </div>
-    <div class="category-item" onclick="toggleSub(this)">IPO
-      <div class="sub"><span>Mainboard</span><span>SME</span></div>
-    </div>
-    <div class="category-item" onclick="toggleSub(this)">Dividend
-      <div class="sub"><span>Interim</span><span>Final</span></div>
-    </div>
+    <div class="category-item">Equity</div>
+    <div class="category-item">IPO</div>
+    <div class="category-item">Dividend</div>
   </div>
 </div>
 
-<footer>© 2025 Capital Edge | Educational Purpose Only</footer>
-
 <script src="news.js"></script>
 <script>
-const latestNews=document.getElementById('latest-news');
-latestNews.innerHTML='';
+const box = document.getElementById("latest-news");
 
-// Show top 7 latest news
+// Latest 7 news (top se)
 allNews.slice(0,7).forEach(n=>{
-  latestNews.innerHTML += `
+  box.innerHTML += `
     <div class="news-card">
-      <h3>${n.t}</h3>
-      <div class="news-meta">${n.d} | ${n.c}</div>
-      <p>${n.p}</p>
+      <h3>${n.title}</h3>
+      <div class="news-meta">${n.date} | ${n.category}</div>
+      <p>${n.content}</p>
       <a href="archive.html" class="read-more">Read More</a>
     </div>
   `;
 });
-latestNews.innerHTML += `<a href="archive.html" class="view-all">View All News</a>`;
 
-// Menu toggle
-function toggleMenu(){
-  const d=document.getElementById('dropdownMenu');
-  d.style.display=d.style.display==='block'?'none':'block';
-}
-
-// Sidebar sub menu toggle
-function toggleSub(el){
-  document.querySelectorAll('.category-item').forEach(i=>{
-    if(i!==el){
-      i.classList.remove('active');
-      i.querySelector('.sub').style.maxHeight=null;
-    }
-  });
-  el.classList.toggle('active');
-  const s=el.querySelector('.sub');
-  s.style.maxHeight=s.style.maxHeight?null:s.scrollHeight+'px';
-}
+box.innerHTML += `<a href="archive.html" class="read-more">View All News →</a>`;
 </script>
 
 </body>
