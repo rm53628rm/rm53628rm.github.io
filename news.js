@@ -1,7 +1,7 @@
 
 // news.js
 const allNews = [
-  {id:0, t:'Market fall New High', d:'16 Dec 2025', c:'Stock Market', p:'Market reached new highs driven by banking and IT stocks.'},
+  {id:0, t:'Market fall down New High', d:'16 Dec 2025', c:'Stock Market', p:'Market reached new highs driven by banking and IT stocks.'},
   {id:1, t:'IPO Buzz This Week', d:'15 Dec 2025', c:'IPO', p:'Multiple IPOs opening this week with strong GMP.'},
   {id:2, t:'RBI Policy Update', d:'14 Dec 2025', c:'Economy', p:'RBI keeps rates unchanged focusing on inflation.'},
   {id:3, t:'Tech Stocks Rally', d:'13 Dec 2025', c:'Stock Market', p:'Tech stocks led the rally this week.'},
