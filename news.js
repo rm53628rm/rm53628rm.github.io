@@ -1,42 +1,58 @@
 
-// news.js
+console.log("news.js loaded");
+
+// ===== ALL NEWS DATA =====
 const allNews = [
-  {id:0, t:'Market fall New High', d:'16 Dec 2025', c:'Stock Market', p:'Market reached new highs driven by banking and IT stocks.'},
-  {id:1, t:'IPO Buzz This Week', d:'15 Dec 2025', c:'IPO', p:'Multiple IPOs opening this week with strong GMP.'},
-  {id:2, t:'RBI Policy Update', d:'14 Dec 2025', c:'Economy', p:'RBI keeps rates unchanged focusing on inflation.'},
-  {id:3, t:'Tech Stocks Rally', d:'13 Dec 2025', c:'Stock Market', p:'Tech stocks led the rally this week.'},
-  {id:4, t:'Dividend Announced', d:'12 Dec 2025', c:'Dividend', p:'Company announces interim dividend payout.'}
+  {
+    id: 0,
+    title: "Market Hits New High",
+    date: "16 Sept 2025",
+    category: "Market",
+    content: "Stock market ne aaj naya record banaya. Banking aur IT stocks lead kar rahe hain."
+  },
+  {
+    id: 1,
+    title: "IPO Boom Continues",
+    date: "15 Sept 2025",
+    category: "IPO",
+    content: "IPO market me heavy subscription dekhne ko mil raha hai, retail investors active hain."
+  },
+  {
+    id: 2,
+    title: "RBI Policy Update",
+    date: "14 Sept 2025",
+    category: "Economy",
+    content: "RBI ne interest rate unchanged rakha aur growth outlook positive bataya."
+  }
 ];
 
+// ===== RENDER LATEST NEWS ON INDEX =====
 function renderNews(containerId, limit){
-  const container = document.getElementById(containerId);
-  if(!container){
-    console.error('Container not found:', containerId);
-    return;
-  }
+  const box = document.getElementById(containerId);
+  if(!box) return;
 
-  container.innerHTML = '';
+  box.innerHTML = "";
 
-  const list = limit ? allNews.slice(0, limit) : allNews;
-
-  list.forEach(n=>{
-    container.innerHTML += `
+  allNews.slice(0, limit).forEach((n, i) => {
+    box.innerHTML += `
       <div class="news-card">
-        <h3>${n.t}</h3>
-        <div class="news-meta">${n.d} | ${n.c}</div>
-        <p>${n.p}</p>
-        <a href="news.html?id=${n.id}" class="read-more">Read More</a>
+        <h3>
+          ${i === 0 ? '<span class="new-badge">NEW</span>' : ''}
+          ${n.title}
+        </h3>
+        <div class="news-meta">${n.date} | ${n.category}</div>
+        <p>${n.content.substring(0, 90)}...</p>
+        <a class="read-more" href="news.html?id=${n.id}">Read More</a>
       </div>
     `;
   });
 
-  if(containerId === 'latest-news'){
-    container.innerHTML += `
-      <a href="archive.html" class="view-all">View All News →</a>
-    `;
-  }
+  box.innerHTML += `<a class="view-all" href="archive.html">View All News</a>`;
 }
 
-document.addEventListener('DOMContentLoaded', ()=>{
-  renderNews('latest-news', 5);
+// ===== AUTO LOAD FOR INDEX PAGE =====
+document.addEventListener("DOMContentLoaded", function(){
+  if(document.getElementById("latest-news")){
+    renderNews("latest-news", 5);
+  }
 });
