@@ -5,8 +5,103 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>News | Capital Edge</title>
-<link rel="stylesheet" href="style.css">
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Segoe UI,Arial,sans-serif;
+  background:#f4f6f9;
+  color:#222;
+}
+
+/* HEADER */
+header{
+  background:linear-gradient(90deg,#062743,#0a3d62);
+  color:#fff;
+  padding:22px 16px;
+  text-align:center;
+}
+header h1{margin:0;font-size:32px}
+header p{margin:6px 0 0;font-size:14px}
+
+/* CONTAINER */
+.container{
+  max-width:900px;
+  margin:25px auto;
+  padding:0 16px;
+}
+
+/* ARTICLE */
+.article{
+  background:#fff;
+  padding:22px;
+  border-radius:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.article h2{
+  font-size:26px;
+  color:#083154;
+  margin:0 0 10px;
+  line-height:1.3;
+}
+
+.article-meta{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  font-size:13px;
+  color:#666;
+  margin-bottom:18px;
+}
+
+.article-meta span{
+  background:#eef3f8;
+  padding:5px 10px;
+  border-radius:20px;
+  font-weight:600;
+}
+
+.article-content{
+  font-size:16px;
+  line-height:1.75;
+  color:#333;
+}
+
+.article-content p{
+  margin-bottom:16px;
+}
+
+/* BACK BUTTON */
+.back-btn{
+  display:inline-block;
+  margin-top:20px;
+  padding:10px 16px;
+  background:#ff9f1c;
+  color:#fff;
+  text-decoration:none;
+  border-radius:6px;
+  font-weight:700;
+}
+
+/* FOOTER */
+footer{
+  background:#0a3d62;
+  color:#fff;
+  text-align:center;
+  padding:14px;
+  margin-top:40px;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  .article h2{font-size:22px}
+  .article-content{font-size:15px}
+}
+</style>
 </head>
+
 <body>
 
 <header>
@@ -15,10 +110,12 @@
 </header>
 
 <div class="container">
-  <div class="main" id="news-detail"></div>
+  <div class="article" id="news-detail">
+    <!-- News load hogi yahan -->
+  </div>
 </div>
 
-<footer>© 2025 Capital Edge</footer>
+<footer>© 2025 Capital Edge | Educational Purpose Only</footer>
 
 <script src="news.js"></script>
 <script>
@@ -31,11 +128,20 @@ const box = document.getElementById("news-detail");
 if(news){
   box.innerHTML = `
     <h2>${news.title}</h2>
-    <div class="news-meta">${news.date} | ${news.category}</div>
-    <p>${news.content}</p>
+
+    <div class="article-meta">
+      <span>${news.date}</span>
+      <span>${news.category}</span>
+    </div>
+
+    <div class="article-content">
+      <p>${news.content}</p>
+    </div>
+
+    <a href="index.html" class="back-btn">← Back to Home</a>
   `;
 }else{
-  box.innerHTML = "<p>News not found</p>";
+  box.innerHTML = "<p><b>News not found</b></p>";
 }
 </script>
 
