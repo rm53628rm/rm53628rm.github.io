@@ -1,6 +1,6 @@
 const allNews = [
   {
-    t:'Market Hits New High',
+    t:'Market Hits 25600 New High',
     d:'16 Dec 2025',
     ts: Date.now(),
     c:'Stock Market',
