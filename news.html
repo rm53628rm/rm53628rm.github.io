@@ -1,59 +1,43 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Capital Edge | News</title>
-
-<style>
-body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9}
-header{background:#0a3d62;color:#fff;padding:22px 16px;text-align:center}
-.container{max-width:900px;margin:20px auto;padding:16px}
-.news-box{background:#fff;padding:20px;border-radius:8px}
-.news-meta{font-size:12px;color:#777;margin-bottom:10px}
-.back{display:inline-block;margin-top:14px;background:#ff9f1c;color:#fff;padding:6px 12px;text-decoration:none;border-radius:4px}
-</style>
+<title>News | Capital Edge</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-<h1>Capital Edge</h1>
-<p>Finance | Stock Market | Investment News</p>
+  <h1>Capital Edge</h1>
+  <p>Finance | Stock Market | Investment News</p>
 </header>
 
 <div class="container">
-  <div class="news-box" id="news-detail">Loading...</div>
+  <div class="main" id="news-detail"></div>
 </div>
 
-<!-- VERY IMPORTANT ORDER -->
+<footer>© 2025 Capital Edge</footer>
+
 <script src="news.js"></script>
 <script>
 const params = new URLSearchParams(window.location.search);
-const id = Number(params.get('id')); // 🔑 force number
+const id = params.get("id");
 
-const box = document.getElementById('news-detail');
+const news = allNews.find(n => n.id == id);
+const box = document.getElementById("news-detail");
 
-if(typeof allNews === 'undefined'){
-  box.innerHTML = '<p style="color:red">news.js not loaded</p>';
+if(news){
+  box.innerHTML = `
+    <h2>${news.title}</h2>
+    <div class="news-meta">${news.date} | ${news.category}</div>
+    <p>${news.content}</p>
+  `;
 }else{
-  const news = allNews.find(n => n.id === id);
-
-  if(news){
-    box.innerHTML = `
-      <h2>${news.t}</h2>
-      <div class="news-meta">${news.d} | ${news.c}</div>
-      <p>${news.p}</p>
-      <a href="archive.html" class="back">← Back to Archive</a>
-    `;
-  }else{
-    box.innerHTML = `
-      <p>News not found</p>
-      <a href="archive.html" class="back">← Back</a>
-    `;
-  }
+  box.innerHTML = "<p>News not found</p>";
 }
 </script>
 
 </body>
 </html>
-
