@@ -2,6 +2,7 @@
 // news.js
 const allNews = [
   {t:'Market Hits New High',ts: Date.now(),c:'Stock Market',p:'...'},
+  {t:'Market fall100 New High',ts: Date.now(),c:'Stock analysis ',p:'.....'},
   {t:'IPO Buzz This Week',ts: Date.now()-2*24*60*60*1000,c:'IPO',p:'...'}
 ];
 
