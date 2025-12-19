@@ -22,13 +22,15 @@ function renderNews(containerId, limit){
       <div class="news-card">
         <h3>
   ${
-    (typeof IS_INDEX_PAGE !== 'undefined' &&
-     (Date.now() - new Date(n.d).getTime()) < 24*60*60*1000)
-    ? '<span class="new-badge">NEW</span>'
-    : ''
+    typeof IS_INDEX_PAGE !== 'undefined' &&
+    n.ts &&
+    (Date.now() - n.ts < 24*60*60*1000)
+      ? '<span class="new-badge">NEW</span>'
+      : ''
   }
   ${n.t}
 </h3>
+
 
 
         <div class="news-meta">${n.d} | ${n.c}</div>
