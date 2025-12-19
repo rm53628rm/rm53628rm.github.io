@@ -20,7 +20,8 @@ function renderNews(containerId, limit = null){
       <h3>${n.t}</h3>
       <div class="news-meta">${n.d} | ${n.c}</div>
       <p>${n.p}</p>
-      <a href="archive.html" class="read-more">Read More</a>
+      <a href="news.html?id=${n.id}" class="read-more">Read More</a>
+      
     </div>`;
   });
 
