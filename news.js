@@ -1,9 +1,10 @@
 
 // news.js
 const allNews = [
-  {t:'Market Hits New High',ts: Date.now(),c:'Stock Market',p:'...'},
-  {t:'Market fall100 New High',ts: Date.now(),c:'Stock analysis ',p:'.....'},
-  {t:'IPO Buzz This Week',ts: Date.now()-2*24*60*60*1000,c:'IPO',p:'...'}
+  {t:'sensex Hits New High',d:'19 Dec 2025',c:'Stock Market',p:'...'},
+  {t:'Market Hits New High',d:'19 Dec 2025',c:'Stock Market',p:'...'},
+  {t:'Market fall100 New High',d:'17 Dec 2025',c:'Stock analysis ',p:'.....'},
+  {t:'IPO Buzz This Week',d:'18 Dec 2025',IPO',p:'...'}
 ];
 
 
@@ -23,14 +24,14 @@ function renderNews(containerId, limit){
       <div class="news-card">
         <h3>
   ${
-    typeof IS_INDEX_PAGE !== 'undefined' &&
-    n.ts &&
-    (Date.now() - n.ts < 24*60*60*1000)
-      ? '<span class="new-badge">NEW</span>'
-      : ''
+    (typeof IS_INDEX_PAGE !== 'undefined' &&
+     (Date.now() - new Date(n.d).getTime()) < 24*60*60*1000)
+    ? '<span class="new-badge">NEW</span>'
+    : ''
   }
   ${n.t}
 </h3>
+
 
 
 
