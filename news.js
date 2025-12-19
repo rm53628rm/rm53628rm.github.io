@@ -25,6 +25,7 @@ function renderNews(containerId, limit){
         <h3>
   ${
     (typeof IS_INDEX_PAGE !== 'undefined' &&
+     n.d  &&
      (Date.now() - new Date(n.d).getTime()) < 24*60*60*1000)
     ? '<span class="new-badge">NEW</span>'
     : ''
