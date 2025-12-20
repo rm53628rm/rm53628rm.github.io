@@ -5,7 +5,7 @@ console.log("news.js loaded");
    ALL NEWS DATA
 ========================= */
 const allNews = [
-  { id:0, title:"Market Hits New High", category:"Stock Market", date:"2025-12-16T10:30:00", excerpt:"Market reached new highs driven by banking and IT stocks.", content:"Market reached new highs driven by banking and IT stocks. Banking stocks gained strongly after positive global cues while IT stocks rallied due to a weaker rupee and improved outlook." },
+  { id:0, title:"Market Hits New High", category:"Stock Market", date:"2025-12-20T10:30:00", excerpt:"Market reached new highs driven by banking and IT stocks.", content:"Market reached new highs driven by banking and IT stocks. Banking stocks gained strongly after positive global cues while IT stocks rallied due to a weaker rupee and improved outlook." },
   { id:1, title:"IPO Buzz This Week", category:"IPO", date:"2025-12-14T09:00:00", excerpt:"Multiple IPOs opening this week with strong GMP.", content:"Multiple IPOs are opening this week with strong grey market premium. Retail participation is expected to be high amid positive market sentiment." },
   { id:2, title:"RBI Policy Update", category:"Economy", date:"2025-12-13T08:45:00", excerpt:"RBI keeps rates unchanged focusing on inflation.", content:"The Reserve Bank of India kept interest rates unchanged, focusing on inflation control while supporting growth. Experts believe the stance remains cautious." }
 ];
