@@ -26,7 +26,13 @@ header p{margin:6px 0 0;font-size:14px}
 .hamburger.active span:nth-child(1){transform:translateY(11px) rotate(45deg)}
 .hamburger.active span:nth-child(2){opacity:0}
 .hamburger.active span:nth-child(3){transform:translateY(-11px) rotate(-45deg)}
-
+.mobile-menu{
+  position:absolute;top:100%;left:12px;width:260px;background:linear-gradient(180deg,#ffffff,#eef3f8);
+  border-radius:16px;box-shadow:0 16px 40px rgba(0,0,0,.18);overflow:hidden;display:none;animation:slideDown .35s ease;
+}
+.mobile-menu a{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;color:#083154;text-decoration:none;font-weight:700;border-bottom:1px solid #dde5ee;background:transparent}
+.mobile-menu a:last-child{border-bottom:none}
+.mobile-menu a:hover{background:#ffecd1;color:#000}
 
 @keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 
@@ -81,31 +87,28 @@ footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:3
   .main,.sidebar{width:100%;max-width:100%}
   .mobile-menu{max-width:100%;left:0;right:0}
 }
+  
   /* ==============================
-   PREMIUM MOBILE MENU (FINAL)
+   MOBILE MENU TRANSPARENT FIX
 ================================ */
 
+/* Mobile menu – light background (transparent nahi) */
 .mobile-menu{
-  background: #f4f7fb !important;
+  background: #f4f7fb !important;   /* light premium color */
+  box-shadow: 0 20px 40px rgba(0,0,0,0.18) !important;
   padding: 10px;
   border-radius: 18px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.18);
   z-index: 9999;
 }
 
+/* Menu items – card look */
 .mobile-menu a{
-  background: #ffffff;
+  background: rgba(255,255,255,0.95);
   margin: 8px 12px;
   padding: 14px 18px;
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px solid #e1e6ef;
   box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-  font-weight: 700;
-}
-
-.mobile-menu a:hover,
-.mobile-menu a:active{
-  background: #fff3e0;
 }
 
 /* Blur background jab menu open ho */
@@ -114,7 +117,7 @@ body.menu-open .container{
   pointer-events: none;
 }
 
-/* 🚫 Mobile menu ke andar NEW badge bilkul band */
+/* 🚫 Mobile menu ke andar NEW badge band */
 .mobile-menu .new-badge{
   display: none !important;
 }
