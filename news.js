@@ -8,7 +8,7 @@ const newsData = [
     id: 1,
     title: "Market gains as IT stocks rally",
     category: "Stock Market",
-    date: "2025-01-10T09:30:00",
+    date: "2025-12-20T09:30:00",
     content: "Indian stock market witnessed strong buying interest in IT stocks today as global cues remained positive. Experts believe this momentum may continue in the near term."
   },
   {
