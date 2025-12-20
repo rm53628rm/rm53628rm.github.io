@@ -10,9 +10,10 @@ const allNews = [
     id: 0,
     title: "Market Hits New High",
     category: "Stock Market",
-    date: "2025-12-16T10:30:00",
+    date: "2025-12-20T10:30:00",
     excerpt: "Market reached new highs driven by banking and IT stocks.",
-    content: "Market reached new highs driven by banking and IT stocks. Banking stocks gained strongly after positive global cues while IT stocks rallied due to a weaker rupee and improved outlook."
+    content:
+      "Market reached new highs driven by banking and IT stocks. Banking stocks gained strongly after positive global cues while IT stocks rallied due to a weaker rupee and improved outlook."
   },
   {
     id: 1,
@@ -20,7 +21,8 @@ const allNews = [
     category: "IPO",
     date: "2025-12-14T09:00:00",
     excerpt: "Multiple IPOs opening this week with strong GMP.",
-    content: "Multiple IPOs are opening this week with strong grey market premium. Retail participation is expected to be high amid positive market sentiment."
+    content:
+      "Multiple IPOs are opening this week with strong grey market premium. Retail participation is expected to be high amid positive market sentiment."
   },
   {
     id: 2,
@@ -28,7 +30,8 @@ const allNews = [
     category: "Economy",
     date: "2025-12-13T08:45:00",
     excerpt: "RBI keeps rates unchanged focusing on inflation.",
-    content: "The Reserve Bank of India kept interest rates unchanged, focusing on inflation control while supporting growth. Experts believe the stance remains cautious."
+    content:
+      "The Reserve Bank of India kept interest rates unchanged, focusing on inflation control while supporting growth. Experts believe the stance remains cautious."
   },
   {
     id: 3,
@@ -36,7 +39,8 @@ const allNews = [
     category: "Stock Market",
     date: "2025-12-12T11:15:00",
     excerpt: "Tech stocks led the rally this week.",
-    content: "Technology stocks led the market rally this week supported by global tech gains and strong quarterly outlook from major IT companies."
+    content:
+      "Technology stocks led the market rally this week supported by global tech gains and strong quarterly outlook from major IT companies."
   },
   {
     id: 4,
@@ -44,7 +48,8 @@ const allNews = [
     category: "Dividend",
     date: "2025-12-10T14:00:00",
     excerpt: "Company announces interim dividend payout.",
-    content: "The company announced an interim dividend payout for shareholders. The record date and payment schedule will be announced shortly."
+    content:
+      "The company announced an interim dividend payout for shareholders. The record date and payment schedule will be announced shortly."
   }
 ];
 
@@ -52,7 +57,7 @@ const allNews = [
    24 HOURS NEW BADGE LOGIC
 ========================= */
 
-function isNewNews(newsDate){
+function isNewNews(newsDate) {
   const now = new Date();
   const posted = new Date(newsDate);
   const diffHours = (now - posted) / (1000 * 60 * 60);
@@ -60,24 +65,28 @@ function isNewNews(newsDate){
 }
 
 /* =========================
-   FORMAT DATE
+   DATE FORMAT
 ========================= */
 
-function formatDate(dateStr){
-  return new Date(dateStr).toDateString();
+function formatDate(dateStr) {
+  return new Date(dateStr).toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
 }
 
 /* =========================
    RENDER LATEST NEWS (INDEX)
 ========================= */
 
-function renderLatestNews(){
+function renderLatestNews() {
   const box = document.getElementById("latest-news");
-  if(!box) return;
+  if (!box) return;
 
   box.innerHTML = "";
 
-  allNews.slice(0,5).forEach(n=>{
+  allNews.slice(0, 5).forEach(n => {
     box.innerHTML += `
       <div class="news-card">
         <h3>
@@ -100,13 +109,13 @@ function renderLatestNews(){
    RENDER ARCHIVE PAGE
 ========================= */
 
-function renderArchive(){
+function renderArchive() {
   const box = document.getElementById("archive-news");
-  if(!box) return;
+  if (!box) return;
 
   box.innerHTML = "";
 
-  allNews.forEach(n=>{
+  allNews.forEach(n => {
     box.innerHTML += `
       <div class="news-card">
         <h3>
@@ -122,10 +131,38 @@ function renderArchive(){
 }
 
 /* =========================
-   PAGE LOAD HANDLER
+   SINGLE NEWS PAGE
 ========================= */
 
-document.addEventListener("DOMContentLoaded", ()=>{
+function renderSingleNews() {
+  const box = document.getElementById("single-news");
+  if (!box) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  const news = allNews.find(n => n.id == id);
+
+  if (!news) {
+    box.innerHTML = "<p>News not found</p>";
+    return;
+  }
+
+  box.innerHTML = `
+    <div class="news-card">
+      <h2>${news.title}</h2>
+      <div class="news-meta">${formatDate(news.date)} | ${news.category}</div>
+      <p>${news.content}</p>
+    </div>
+  `;
+}
+
+/* =========================
+   PAGE LOAD
+========================= */
+
+document.addEventListener("DOMContentLoaded", () => {
   renderLatestNews();
   renderArchive();
+  renderSingleNews();
 });
