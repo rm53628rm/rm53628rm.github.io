@@ -23,8 +23,21 @@ const newsData = [
 ];
 
 /* =========================
-   NEW BADGE LOGIC
-   (SIRF TITLE KE LIYE)
+   DATE FORMAT
+========================= */
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
+}
+
+/* =========================
+   NEW BADGE (24 HOURS ONLY)
+   ⚠️ SIRF NEWS TITLE KE LIYE
 ========================= */
 
 function getNewBadge(dateStr) {
@@ -111,14 +124,14 @@ if (singleNewsEl) {
 }
 
 /* =========================
-   DATE FORMAT
+   🚫 FINAL SAFETY NET
+   MENU / NAVBAR SE NEW HATAO
 ========================= */
 
-function formatDate(dateStr) {
-  const d = new Date(dateStr);
-  return d.toLocaleDateString("en-IN", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric"
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".new-badge").forEach(badge => {
+    if (!badge.closest(".news-card")) {
+      badge.remove();
+    }
   });
-}
+});
