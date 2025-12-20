@@ -18,7 +18,7 @@ const allNews = [
     id: 1,
     title: "IPO Buzz This Week",
     category: "IPO",
-    date: "2025-12-14T09:00:00",
+    date: "2025-12-20T09:00:00",
     excerpt: "Multiple IPOs opening this week with strong GMP.",
     content: "Multiple IPOs are opening this week with strong grey market premium. Retail participation is expected to be high amid positive market sentiment."
   },
