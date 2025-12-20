@@ -79,15 +79,6 @@ header p{margin:6px 0 0;font-size:14px}
   100% { opacity: 1; }
 }
 
-/* 🚫 Navbar aur menu me NEW badge bilkul hide */
-header .new-badge,
-.navbar .new-badge,
-.mobile-menu .new-badge,
-nav .new-badge,
-.hamburger .new-badge {
-  display: none !important;
-}
-
 /* FOOTER */
 footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:30px}
 
@@ -97,6 +88,34 @@ footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:3
   .main,.sidebar{width:100%;max-width:100%}
   .mobile-menu{max-width:100%;left:0;right:0}
 }
+  /* ==============================
+   MOBILE MENU TRANSPARENT FIX
+================================ */
+
+/* Mobile menu transparent */
+.mobile-menu{
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Menu items ko card jaisa look dena */
+.mobile-menu a{
+  background: rgba(255,255,255,0.95);
+  margin: 8px 12px;
+  border-radius: 12px;
+}
+
+/* Blur background jab menu open ho */
+body.menu-open .container{
+  filter: blur(3px);
+  pointer-events: none;
+}
+
+/* Menu hamesha upar rahe */
+.mobile-menu{
+  z-index: 9999;
+}
+  
 </style>
 </head>
 <body>
