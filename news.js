@@ -1,82 +1,131 @@
 
 console.log("news.js loaded");
 
-// ===== NEWS DATA =====
+/* =========================
+   ALL NEWS DATA
+========================= */
+
 const allNews = [
   {
     id: 0,
     title: "Market Hits New High",
-    date: "16 Sept 2025",
-    category: "Market",
-    content: "Stock market ne aaj naya record banaya. Banking aur IT stocks lead kar rahe hain. Experts ka maanna hai ki agar FII inflow aise hi raha toh rally continue reh sakti hai."
+    category: "Stock Market",
+    date: "2025-12-16T10:30:00",
+    excerpt: "Market reached new highs driven by banking and IT stocks.",
+    content: "Market reached new highs driven by banking and IT stocks. Banking stocks gained strongly after positive global cues while IT stocks rallied due to a weaker rupee and improved outlook."
   },
   {
     id: 1,
-    title: "IPO Boom Continues",
-    date: "15 Sept 2025",
+    title: "IPO Buzz This Week",
     category: "IPO",
-    content: "IPO market me heavy subscription dekhne ko mil raha hai. Retail aur HNI dono segment active hain. Listing gains ke chances strong bataye ja rahe hain."
+    date: "2025-12-14T09:00:00",
+    excerpt: "Multiple IPOs opening this week with strong GMP.",
+    content: "Multiple IPOs are opening this week with strong grey market premium. Retail participation is expected to be high amid positive market sentiment."
   },
   {
     id: 2,
     title: "RBI Policy Update",
-    date: "14 Sept 2025",
     category: "Economy",
-    content: "RBI ne repo rate unchanged rakha hai. Inflation outlook stable bataya gaya hai aur GDP growth estimate ko maintain kiya gaya hai."
+    date: "2025-12-13T08:45:00",
+    excerpt: "RBI keeps rates unchanged focusing on inflation.",
+    content: "The Reserve Bank of India kept interest rates unchanged, focusing on inflation control while supporting growth. Experts believe the stance remains cautious."
+  },
+  {
+    id: 3,
+    title: "Tech Stocks Rally",
+    category: "Stock Market",
+    date: "2025-12-12T11:15:00",
+    excerpt: "Tech stocks led the rally this week.",
+    content: "Technology stocks led the market rally this week supported by global tech gains and strong quarterly outlook from major IT companies."
+  },
+  {
+    id: 4,
+    title: "Dividend Announced",
+    category: "Dividend",
+    date: "2025-12-10T14:00:00",
+    excerpt: "Company announces interim dividend payout.",
+    content: "The company announced an interim dividend payout for shareholders. The record date and payment schedule will be announced shortly."
   }
 ];
 
-// ===== SHORT TEXT FUNCTION =====
-function shortText(text, words = 25){
-  return text.split(" ").slice(0, words).join(" ") + "...";
+/* =========================
+   24 HOURS NEW BADGE LOGIC
+========================= */
+
+function isNewNews(newsDate){
+  const now = new Date();
+  const posted = new Date(newsDate);
+  const diffHours = (now - posted) / (1000 * 60 * 60);
+  return diffHours <= 24;
 }
 
-// ===== INDEX PAGE =====
-function renderNews(containerId, limit){
-  const box = document.getElementById(containerId);
+/* =========================
+   FORMAT DATE
+========================= */
+
+function formatDate(dateStr){
+  return new Date(dateStr).toDateString();
+}
+
+/* =========================
+   RENDER LATEST NEWS (INDEX)
+========================= */
+
+function renderLatestNews(){
+  const box = document.getElementById("latest-news");
   if(!box) return;
 
   box.innerHTML = "";
 
-  allNews.slice(0, limit).forEach((n, i) => {
+  allNews.slice(0,5).forEach(n=>{
     box.innerHTML += `
       <div class="news-card">
-        <h3>${i === 0 ? '<span class="new-badge">NEW</span>' : ''}${n.title}</h3>
-        <div class="news-meta">${n.date} | ${n.category}</div>
-        <p>${shortText(n.content)}</p>
-        <a class="read-more" href="news.html?id=${n.id}">Read More</a>
+        <h3>
+          ${isNewNews(n.date) ? '<span class="new-badge">NEW</span>' : ''}
+          ${n.title}
+        </h3>
+        <div class="news-meta">${formatDate(n.date)} | ${n.category}</div>
+        <p>${n.excerpt}</p>
+        <a href="news.html?id=${n.id}" class="read-more">Read More</a>
       </div>
     `;
   });
 
-  box.innerHTML += `<a class="view-all" href="archive.html">View All News</a>`;
+  box.innerHTML += `
+    <a href="archive.html" class="view-all">View All News →</a>
+  `;
 }
 
-// ===== ARCHIVE PAGE =====
+/* =========================
+   RENDER ARCHIVE PAGE
+========================= */
+
 function renderArchive(){
   const box = document.getElementById("archive-news");
   if(!box) return;
 
   box.innerHTML = "";
 
-  allNews.forEach(n => {
+  allNews.forEach(n=>{
     box.innerHTML += `
       <div class="news-card">
-        <h3>${n.title}</h3>
-        <div class="news-meta">${n.date} | ${n.category}</div>
-        <p>${shortText(n.content, 30)}</p>
-        <a class="read-more" href="news.html?id=${n.id}">Read More</a>
+        <h3>
+          ${isNewNews(n.date) ? '<span class="new-badge">NEW</span>' : ''}
+          ${n.title}
+        </h3>
+        <div class="news-meta">${formatDate(n.date)} | ${n.category}</div>
+        <p>${n.excerpt}</p>
+        <a href="news.html?id=${n.id}" class="read-more">Read More</a>
       </div>
     `;
   });
 }
 
-// ===== AUTO LOAD =====
-document.addEventListener("DOMContentLoaded", function(){
-  if(document.getElementById("latest-news")){
-    renderNews("latest-news", 5);
-  }
-  if(document.getElementById("archive-news")){
-    renderArchive();
-  }
+/* =========================
+   PAGE LOAD HANDLER
+========================= */
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  renderLatestNews();
+  renderArchive();
 });
