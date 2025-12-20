@@ -1,15 +1,15 @@
+
 console.log("news.js loaded");
 
 /* =========================
    ALL NEWS DATA
 ========================= */
-
 const allNews = [
   {
     id: 0,
     title: "Market Hits New High",
     category: "Stock Market",
-    date: "2025-12-20T10:30:00",
+    date: "2025-12-16T10:30:00",
     excerpt: "Market reached new highs driven by banking and IT stocks.",
     content: "Market reached new highs driven by banking and IT stocks. Banking stocks gained strongly after positive global cues while IT stocks rallied due to a weaker rupee and improved outlook."
   },
@@ -50,7 +50,6 @@ const allNews = [
 /* =========================
    24 HOURS NEW BADGE LOGIC
 ========================= */
-
 function isNewNews(newsDate){
   const now = new Date();
   const posted = new Date(newsDate);
@@ -61,7 +60,6 @@ function isNewNews(newsDate){
 /* =========================
    FORMAT DATE
 ========================= */
-
 function formatDate(dateStr){
   return new Date(dateStr).toDateString();
 }
@@ -69,7 +67,6 @@ function formatDate(dateStr){
 /* =========================
    RENDER LATEST NEWS (INDEX)
 ========================= */
-
 function renderLatestNews(){
   const box = document.getElementById("latest-news");
   if(!box) return;
@@ -98,7 +95,6 @@ function renderLatestNews(){
 /* =========================
    RENDER ARCHIVE PAGE
 ========================= */
-
 function renderArchive(){
   const box = document.getElementById("archive-news");
   if(!box) return;
@@ -123,9 +119,7 @@ function renderArchive(){
 /* =========================
    PAGE LOAD HANDLER
 ========================= */
-
 document.addEventListener("DOMContentLoaded", ()=>{
   renderLatestNews();
   renderArchive();
 });
-
