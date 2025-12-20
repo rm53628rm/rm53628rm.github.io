@@ -2,130 +2,123 @@
 console.log("news.js loaded");
 
 /* =========================
-   ALL NEWS DATA
+   NEWS DATA
 ========================= */
 
-const allNews = [
-  {
-    id: 0,
-    title: "Market Hits New High",
-    category: "Stock Market",
-    date: "2025-12-20T10:30:00",
-    excerpt: "Market reached new highs driven by banking and IT stocks.",
-    content: "Market reached new highs driven by banking and IT stocks. Banking stocks gained strongly after positive global cues while IT stocks rallied due to a weaker rupee and improved outlook."
-  },
+const newsData = [
   {
     id: 1,
-    title: "IPO Buzz This Week",
-    category: "IPO",
-    date: "2025-12-20T09:00:00",
-    excerpt: "Multiple IPOs opening this week with strong GMP.",
-    content: "Multiple IPOs are opening this week with strong grey market premium. Retail participation is expected to be high amid positive market sentiment."
+    title: "Market gains as IT stocks rally",
+    category: "Stock Market",
+    date: "2025-01-10T09:30:00",
+    content: "Indian stock market witnessed strong buying interest in IT stocks today as global cues remained positive. Experts believe this momentum may continue in the near term."
   },
   {
     id: 2,
-    title: "RBI Policy Update",
-    category: "Economy",
-    date: "2025-12-13T08:45:00",
-    excerpt: "RBI keeps rates unchanged focusing on inflation.",
-    content: "The Reserve Bank of India kept interest rates unchanged, focusing on inflation control while supporting growth. Experts believe the stance remains cautious."
-  },
-  {
-    id: 3,
-    title: "Tech Stocks Rally",
-    category: "Stock Market",
-    date: "2025-12-12T11:15:00",
-    excerpt: "Tech stocks led the rally this week.",
-    content: "Technology stocks led the market rally this week supported by global tech gains and strong quarterly outlook from major IT companies."
-  },
-  {
-    id: 4,
-    title: "Dividend Announced",
-    category: "Dividend",
-    date: "2025-12-10T14:00:00",
-    excerpt: "Company announces interim dividend payout.",
-    content: "The company announced an interim dividend payout for shareholders. The record date and payment schedule will be announced shortly."
+    title: "IPO market sees strong retail participation",
+    category: "IPO",
+    date: "2025-01-08T11:00:00",
+    content: "The IPO market is buzzing with activity as retail investors show strong interest. Several SME IPOs were subscribed multiple times."
   }
 ];
 
 /* =========================
-   24 HOURS NEW BADGE LOGIC
+   NEW BADGE LOGIC
+   (SIRF TITLE KE LIYE)
 ========================= */
 
-function isNewNews(newsDate){
+function getNewBadge(dateStr) {
+  const publishDate = new Date(dateStr);
   const now = new Date();
-  const posted = new Date(newsDate);
-  const diffHours = (now - posted) / (1000 * 60 * 60);
-  return diffHours <= 24;
+  const diffHours = (now - publishDate) / (1000 * 60 * 60);
+
+  if (diffHours <= 24) {
+    return '<span class="new-badge">NEW</span>';
+  }
+  return '';
 }
 
 /* =========================
-   FORMAT DATE
+   INDEX PAGE (LATEST NEWS)
 ========================= */
 
-function formatDate(dateStr){
-  return new Date(dateStr).toDateString();
-}
+const latestNewsEl = document.getElementById("latest-news");
 
-/* =========================
-   RENDER LATEST NEWS (INDEX)
-========================= */
+if (latestNewsEl) {
+  let html = "";
 
-function renderLatestNews(){
-  const box = document.getElementById("latest-news");
-  if(!box) return;
-
-  box.innerHTML = "";
-
-  allNews.slice(0,5).forEach(n=>{
-    box.innerHTML += `
+  newsData.slice(0, 5).forEach(news => {
+    html += `
       <div class="news-card">
-        <h3>
-          ${isNewNews(n.date) ? '<span class="new-badge">NEW</span>' : ''}
-          ${n.title}
-        </h3>
-        <div class="news-meta">${formatDate(n.date)} | ${n.category}</div>
-        <p>${n.excerpt}</p>
-        <a href="news.html?id=${n.id}" class="read-more">Read More</a>
+        <h3>${getNewBadge(news.date)} ${news.title}</h3>
+        <div class="news-meta">${news.category} | ${formatDate(news.date)}</div>
+        <p>${news.content.substring(0, 120)}...</p>
+        <a class="read-more" href="news.html?id=${news.id}">Read more</a>
       </div>
     `;
   });
 
-  box.innerHTML += `
-    <a href="archive.html" class="view-all">View All News →</a>
-  `;
+  html += `<a href="archive.html" class="view-all">View All News</a>`;
+  latestNewsEl.innerHTML = html;
 }
 
 /* =========================
-   RENDER ARCHIVE PAGE
+   ARCHIVE PAGE
 ========================= */
 
-function renderArchive(){
-  const box = document.getElementById("archive-news");
-  if(!box) return;
+const archiveEl = document.getElementById("archive-news");
 
-  box.innerHTML = "";
+if (archiveEl) {
+  let html = "";
 
-  allNews.forEach(n=>{
-    box.innerHTML += `
+  newsData.forEach(news => {
+    html += `
       <div class="news-card">
-        <h3>
-          ${isNewNews(n.date) ? '<span class="new-badge">NEW</span>' : ''}
-          ${n.title}
-        </h3>
-        <div class="news-meta">${formatDate(n.date)} | ${n.category}</div>
-        <p>${n.excerpt}</p>
-        <a href="news.html?id=${n.id}" class="read-more">Read More</a>
+        <h3>${getNewBadge(news.date)} ${news.title}</h3>
+        <div class="news-meta">${news.category} | ${formatDate(news.date)}</div>
+        <p>${news.content.substring(0, 140)}...</p>
+        <a class="read-more" href="news.html?id=${news.id}">Read more</a>
       </div>
     `;
   });
+
+  archiveEl.innerHTML = html;
 }
 
 /* =========================
-   PAGE LOAD HANDLER
+   SINGLE NEWS PAGE
 ========================= */
 
-document.addEventListener("DOMContentLoaded", ()=>{
-  renderLatestNews();
-  renderArchive();
-});
+const singleNewsEl = document.getElementById("single-news");
+
+if (singleNewsEl) {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  const news = newsData.find(n => n.id == id);
+
+  if (!news) {
+    singleNewsEl.innerHTML = "<p>News not found</p>";
+  } else {
+    singleNewsEl.innerHTML = `
+      <div class="news-card">
+        <h2>${news.title}</h2>
+        <div class="news-meta">${news.category} | ${formatDate(news.date)}</div>
+        <p>${news.content}</p>
+      </div>
+    `;
+  }
+}
+
+/* =========================
+   DATE FORMAT
+========================= */
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
+}
