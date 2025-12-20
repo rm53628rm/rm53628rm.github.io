@@ -5,9 +5,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Capital Edge | Finance & Stock Market News</title>
-<link rel="stylesheet" href="style.css"> <!-- optional separate CSS -->
+
 <style>
-/* Same CSS as aapne diya, header, navbar, container, main, sidebar, footer styles */
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#333;overflow-x:hidden}
 
@@ -18,19 +17,20 @@ header p{margin:6px 0 0;font-size:14px}
 
 /* NAVBAR */
 .navbar{background:linear-gradient(90deg,#062743,#0a3d62);display:flex;align-items:center;gap:14px;padding:12px 16px;position:relative}
-  
-.top-links{margin-left:20px;}
-.top-links{display:flex;gap:14px;flex-wrap:wrap}
-.top-links a{color:#eaf3ff;text-decoration:none;font-weight:700;font-size:8px;padding:5px 10px;border-radius:20px;transition:.3s;background:rgba(255,255,255,.08)}
+.top-links{margin-left:20px; display:flex;gap:14px;flex-wrap:wrap}
+.top-links a{color:#eaf3ff;text-decoration:none;font-weight:700;font-size:14px;padding:6px 12px;border-radius:20px;transition:.3s;background:rgba(255,255,255,.08)}
 .top-links a:hover{background:#ffecd1;color:#083154}
 
-.hamburger{width:34px;height:26px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer}
+.hamburger{width:34px;height:26px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;z-index:10}
 .hamburger span{height:3px;width:100%;background:#fff;border-radius:4px;transition:.35s}
 .hamburger.active span:nth-child(1){transform:translateY(11px) rotate(45deg)}
 .hamburger.active span:nth-child(2){opacity:0}
 .hamburger.active span:nth-child(3){transform:translateY(-11px) rotate(-45deg)}
 
-.mobile-menu{position:absolute;top:100%;left:12px;width:260px;background:linear-gradient(180deg,#ffffff,#eef3f8);border-radius:16px;box-shadow:0 16px 40px rgba(0,0,0,.18);overflow:hidden;display:none;animation:slideDown .35s ease}
+.mobile-menu{
+  position:absolute;top:100%;left:12px;width:260px;background:linear-gradient(180deg,#ffffff,#eef3f8);
+  border-radius:16px;box-shadow:0 16px 40px rgba(0,0,0,.18);overflow:hidden;display:none;animation:slideDown .35s ease;
+}
 .mobile-menu a{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;color:#083154;text-decoration:none;font-weight:700;border-bottom:1px solid #dde5ee;background:transparent}
 .mobile-menu a:last-child{border-bottom:none}
 .mobile-menu a:hover{background:#ffecd1;color:#000}
@@ -59,34 +59,44 @@ header p{margin:6px 0 0;font-size:14px}
 .sub{max-height:0;overflow:hidden;transition:.3s;padding:0 12px;background:#f7f9fc;border-left:3px solid #ff9f1c;border-radius:6px}
 .sub span{display:block;padding:6px 0;font-size:13px}
 
+/* NEW badge sirf news card ke liye */
+.news-card .new-badge {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: bold;
+  color: #fff;
+  background: #e60000;
+  border-radius: 4px;
+  animation: blink 1s infinite;
+  vertical-align: middle;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* 🚫 Navbar aur menu me NEW badge bilkul hide */
+header .new-badge,
+.navbar .new-badge,
+.mobile-menu .new-badge,
+nav .new-badge,
+.hamburger .new-badge {
+  display: none !important;
+}
+
 /* FOOTER */
 footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:30px}
 
 /* MEDIA */
 @media(max-width:768px){
-  .container{flex-direction:column;padding:0}
-  .main,.sidebar{width:100%;max-width:100%}
-  .mobile-menu{max-width:100%;left:0;right:0}
+  .container{flex-direction:column;padding:0}
+  .main,.sidebar{width:100%;max-width:100%}
+  .mobile-menu{max-width:100%;left:0;right:0}
 }
-  .new-badge{
-  display:inline-block;
-  margin-right:6px;
-  padding:2px 6px;
-  font-size:10px;
-  font-weight:bold;
-  color:#fff;
-  background:#e60000;
-  border-radius:4px;
-  animation:blink 1s infinite;
-  vertical-align:middle;
-}
-
-@keyframes blink{
-  0%{opacity:1}
-  50%{opacity:0}
-  100%{opacity:1}
-}
-  
 </style>
 </head>
 <body>
@@ -97,60 +107,60 @@ footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:3
 </header>
 
 <div class="navbar">
-  <div class="hamburger" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </div>
-  <nav class="top-links">
-    <a href="#">Investment</a>
-    <a href="#">Old News</a>
-    <a href="#">Stock Analysis</a>
-    <a href="#">IPO</a>
-    <a href="#">Indicators</a>
-  </nav>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#">About Us</a>
-    <a href="#">Contact Us</a>
-    <a href="#">Privacy Policy</a>
-    <a href="#">Disclaimer</a>
-  </div>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+  <nav class="top-links">
+    <a href="#">Investment</a>
+    <a href="#">Old News</a>
+    <a href="#">Stock Analysis</a>
+    <a href="#">IPO</a>
+    <a href="#">Indicators</a>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#">About Us</a>
+    <a href="#">Contact Us</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Disclaimer</a>
+  </div>
 </div>
 
 <div class="container">
-  <div class="main" id="latest-news"></div>
-  <div class="sidebar">
-    <h3>Category</h3>
-    <div class="category-item" onclick="toggleSub(this)">Equity
-      <div class="sub"><span>Large Cap</span><span>Mid Cap</span><span>Small Cap</span></div>
-    </div>
-    <div class="category-item" onclick="toggleSub(this)">IPO
-      <div class="sub"><span>Mainboard</span><span>SME</span></div>
-    </div>
-  </div>
+  <div class="main" id="latest-news"></div>
+  <div class="sidebar">
+    <h3>Category</h3>
+    <div class="category-item" onclick="toggleSub(this)">Equity
+      <div class="sub"><span>Large Cap</span><span>Mid Cap</span><span>Small Cap</span></div>
+    </div>
+    <div class="category-item" onclick="toggleSub(this)">IPO
+      <div class="sub"><span>Mainboard</span><span>SME</span></div>
+    </div>
+  </div>
 </div>
 
 <footer>© 2025 Capital Edge | Educational Purpose Only</footer>
+
 <script src="news.js"></script>
 <script>
 function toggleMenu(){
-  const menu = document.getElementById('mobileMenu');
-  const ham = document.querySelector('.hamburger');
-  ham.classList.toggle('active');
-  menu.style.display = menu.style.display==='block' ? 'none' : 'block';
+  const menu = document.getElementById('mobileMenu');
+  const ham = document.querySelector('.hamburger');
+  ham.classList.toggle('active');
+  menu.style.display = menu.style.display==='block' ? 'none' : 'block';
 }
 
 function toggleSub(el){
-  document.querySelectorAll('.category-item').forEach(item=>{
-    if(item!==el){
-      item.classList.remove('active');
-      item.querySelector('.sub').style.maxHeight=null;
-    }
-  });
-  el.classList.toggle('active');
-  const sub=el.querySelector('.sub');
-  sub.style.maxHeight = sub.style.maxHeight ? null : sub.scrollHeight+'px';
+  document.querySelectorAll('.category-item').forEach(item=>{
+    if(item!==el){
+      item.classList.remove('active');
+      item.querySelector('.sub').style.maxHeight=null;
+    }
+  });
+  el.classList.toggle('active');
+  const sub=el.querySelector('.sub');
+  sub.style.maxHeight = sub.style.maxHeight ? null : sub.scrollHeight+'px';
 }
 </script>
-<script src="news.js"></script>
 
 </body>
 </html>
