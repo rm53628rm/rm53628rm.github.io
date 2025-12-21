@@ -58,40 +58,47 @@ header p{margin:6px 0 0;font-size:14px}
 .sub{max-height:0;overflow:hidden;transition:.3s;padding:0 12px;background:#f7f9fc;border-left:3px solid #ff9f1c;border-radius:6px}
 .sub span{display:block;padding:6px 0;font-size:13px}
   /* ==============================
-   SUB CATEGORY – FINAL PREMIUM
+   SUB CATEGORY – STRUCTURE SAFE FIX
 ================================ */
 
+/* sub container – structure same rahe */
 .sub{
-  padding: 8px 10px;
+  padding: 4px 12px;
+  background: #f7f9fc;
+  border-left: 3px solid #ff9f1c;
+  border-radius: 6px;
 }
 
+/* sub items – simple & separate */
 .sub a{
   display: block;
-  margin: 6px 0;
-  padding: 10px 12px;
-  background: #ffffff;
-  border-radius: 8px;
-  border: 1px solid #e2e7ef;
+  padding: 6px 4px;
+  margin: 4px 0;
   font-size: 13px;
   font-weight: 600;
   color: #083154;
   text-decoration: none;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  border-bottom: 1px dashed #d9dfe7;
 }
 
-/* Hover / touch effect */
+/* last item border remove */
+.sub a:last-child{
+  border-bottom: none;
+}
+
+/* hover effect – light */
 .sub a:hover{
-  background: #f4f7fb;
-  color: #000;
+  color: #ff9f1c;
 }
 
-/* 🚫 Mobile blue tap highlight band */
+/* mobile blue tap remove */
 .sub a,
 .sub a:focus,
 .sub a:active{
   outline: none;
   -webkit-tap-highlight-color: transparent;
 }
+
   
   
 
