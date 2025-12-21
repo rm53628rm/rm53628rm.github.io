@@ -7,226 +7,145 @@
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#333}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#333;overflow-x:hidden}
 
 /* HEADER */
-header{
-  background:#0a3d62;
-  color:#fff;
-  padding:22px 16px;
-  text-align:center
-}
+header{background:#0a3d62;color:#fff;padding:22px 16px;text-align:center}
 header h1{margin:0;font-size:32px}
 header p{margin:6px 0 0;font-size:14px}
 
 /* NAVBAR */
-.navbar{
-  background:linear-gradient(90deg,#062743,#0a3d62);
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 12px;
-  position:relative
-}
-.top-links{
-  margin-left:16px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap
-}
-.top-links a{
-  color:#eaf3ff;
-  text-decoration:none;
-  font-weight:700;
-  font-size:10px;
-  padding:5px 10px;
-  border-radius:16px;
-  background:rgba(255,255,255,.08)
-}
+.navbar{background:linear-gradient(90deg,#062743,#0a3d62);display:flex;align-items:center;gap:10px;padding:10px 10px;position:relative}
+.top-links{margin-left:20px; display:flex;gap:10px;flex-wrap:wrap}
+.top-links a{color:#eaf3ff;text-decoration:none;font-weight:700;font-size:10px;padding:5px 10px;border-radius:16px;transition:.3s;background:rgba(255,255,255,.08)}
+.top-links a:hover{background:#ffecd1;color:#083154}
 
-/* HAMBURGER */
-.hamburger{
-  width:34px;
-  height:26px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  cursor:pointer;
-}
-.hamburger span{
-  height:3px;
-  width:100%;
-  background:#fff;
-  border-radius:4px;
-}
-
-/* MOBILE MENU */
+.hamburger{width:34px;height:26px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;z-index:10}
+.hamburger span{height:3px;width:100%;background:#fff;border-radius:4px;transition:.35s}
+.hamburger.active span:nth-child(1){transform:translateY(11px) rotate(45deg)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:translateY(-11px) rotate(-45deg)}
 .mobile-menu{
-  position:absolute;
-  top:100%;
-  left:12px;
-  width:260px;
-  background:#f4f7fb;
-  border-radius:18px;
-  box-shadow:0 20px 40px rgba(0,0,0,.18);
-  display:none;
-  padding:6px;
-  z-index:9999;
+  position:absolute;top:100%;left:12px;width:260px;background:#f4f7fb;
+  border-radius:18px;box-shadow:0 20px 40px rgba(0,0,0,.18);overflow:hidden;display:none;animation:slideDown .35s ease; z-index:9999;
 }
-.mobile-menu a{
-  display:block;
-  padding:10px 14px;
-  margin:6px;
-  background:#fff;
-  border-radius:12px;
-  font-weight:700;
-  color:#083154;
-  text-decoration:none;
-  box-shadow:0 4px 12px rgba(0,0,0,.08)
-}
+.mobile-menu a{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;color:#083154;text-decoration:none;font-weight:700;border-bottom:1px solid #dde5ee;background:rgba(255,255,255,0.95); border-radius:12px; margin:6px 10px; box-shadow:0 6px 16px rgba(0,0,0,0.08);}
+.mobile-menu a:last-child{border-bottom:none}
+.mobile-menu a:hover{background:#ffecd1;color:#000}
 
-/* LAYOUT */
-.container{
-  max-width:1200px;
-  margin:20px auto;
-  display:flex;
-  gap:20px;
-  padding:0 16px
-}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 
-/* MAIN */
-.main{
-  flex:3;
-  background:#fff;
-  padding:14px;
-  border-radius:8px
-}
-.news-card{
-  border:1px solid #e6e6e6;
-  border-radius:8px;
-  padding:12px;
-  margin-bottom:10px;
-  background:#fff
-}
-.news-card h3{margin:0 0 6px;color:#083154}
+/* CONTAINER */
+.container{max-width:1200px;margin:20px auto;display:flex;align-items:flex-start;gap:20px;padding:0 16px}
+
+/* MAIN NEWS */
+.main{flex:3;background:#fff;padding:14px;border-radius:8px}
+.news-card{border:1px solid #e6e6e6;border-radius:8px;padding:10px 12px;margin-bottom:8px;background:#fff;box-shadow:0 4px 10px rgba(0,0,0,0.04)}
+.news-card h3{margin:0 0 6px;color:#083154;font-size:18px}
 .news-meta{font-size:12px;color:#777;margin-bottom:6px}
-.read-more{
-  display:inline-block;
-  padding:6px 12px;
-  background:#ff9f1c;
-  color:#fff;
-  border-radius:4px;
-  font-size:13px;
-  text-decoration:none
-}
-
-/* NEW BADGE */
-.news-card .new-badge{
-  display:inline-block;
-  margin-right:6px;
-  padding:2px 6px;
-  font-size:10px;
-  font-weight:bold;
-  color:#fff;
-  background:#e60000;
-  border-radius:4px;
-  animation:blink 1s infinite
-}
-@keyframes blink{
-  0%{opacity:1}
-  50%{opacity:0}
-  100%{opacity:1}
-}
+.news-card p{font-size:14px;line-height:1.5;margin-bottom:6px}
+.read-more{display:inline-block;padding:5px 10px;background:#ff9f1c;color:#fff;border-radius:4px;font-size:13px;text-decoration:none}
+.view-all{display:block;margin-top:10px;padding:8px 14px;background:#083154;color:#fff;text-align:center;border-radius:6px;text-decoration:none;font-weight:600}
 
 /* SIDEBAR */
-.sidebar{
-  width:280px;
-  background:#fff;
-  padding:14px;
-  border-radius:12px;
-  border:1px solid #e1e1e1
-}
-.sidebar h3{
-  margin:0 0 12px;
-  font-size:17px;
-  border-bottom:2px solid #ff9f1c;
-  padding-bottom:6px
+.sidebar{flex:0 0 280px;max-width:280px;align-self:flex-start}
+
+/* ===== NEW CATEGORY STYLE ===== */
+.ce-category{
+  background:#f7f9fc;
+  border-radius:14px;
+  padding:10px;
+  margin-bottom:16px;
+  border:1px solid #e2e6ee;
 }
 
-/* CATEGORY (NEW STRUCTURE) */
-.category-box{margin-bottom:16px}
-
-.category-title{
-  font-size:15px;
-  font-weight:700;
-  padding:10px 12px;
+.ce-title{
   background:#083154;
   color:#fff;
-  border-radius:8px;
-  margin-bottom:8px
-}
-
-.category-sub{
-  background:#f7f9fc;
+  padding:10px 14px;
   border-radius:10px;
-  padding:6px;
-  border:1px solid #e3e7ee
+  font-weight:700;
+  margin-bottom:10px;
+  font-size:15px;
 }
 
-.category-sub div{
-  padding:8px 10px;
-  font-size:13px;
+.ce-category a{
+  display:block;
+  padding:10px 14px;
+  margin-bottom:8px;
+  background:#fff;
+  border-radius:10px;
+  font-size:14px;
   font-weight:600;
   color:#083154;
-  border-radius:6px;
-  cursor:pointer;
-  margin-bottom:6px;
-  background:#fff;
-  box-shadow:0 2px 6px rgba(0,0,0,.06);
-  -webkit-tap-highlight-color:transparent
+  text-decoration:none;
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+  -webkit-tap-highlight-color:transparent;
 }
-.category-sub div:last-child{margin-bottom:0}
-.category-sub div:hover{background:#ffecd1}
+
+.ce-category a:last-child{margin-bottom:0}
+.ce-category a:hover{background:#ffecd1;color:#000}
+.ce-category a:focus,
+.ce-category a:active{outline:none}
+
+/* NEW badge sirf news card ke liye */
+.news-card .new-badge {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: bold;
+  color: #fff;
+  background: #e60000;
+  border-radius: 4px;
+  animation: blink 1s infinite;
+  vertical-align: middle;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
 
 /* FOOTER */
-footer{
-  background:#0a3d62;
-  color:#fff;
-  text-align:center;
-  padding:14px;
-  margin-top:30px
+footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:30px}
+
+/* MEDIA */
+@media(max-width:768px){
+  .container{flex-direction:column;padding:0}
+  .main,.sidebar{width:100%;max-width:100%}
+  .mobile-menu{max-width:100%;left:0;right:0}
 }
 
-/* RESPONSIVE */
-@media(max-width:768px){
-  .container{flex-direction:column}
-  .sidebar{width:100%}
+/* Blur background jab menu open ho */
+body.menu-open .container{
+  filter: blur(3px);
+  pointer-events: none;
 }
 </style>
 </head>
-
 <body>
 
 <header>
-  <h1>Capital Edge</h1>
-  <p>Finance | Stock Market | Investment News</p>
+<h1>Capital Edge</h1>
+<p>Finance | Stock Market | Investment News</p>
 </header>
 
 <div class="navbar">
   <div class="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </div>
-
   <nav class="top-links">
     <a href="#">Investment</a>
+    <a href="#">Old News</a>
     <a href="#">Stock Analysis</a>
     <a href="#">IPO</a>
     <a href="#">Indicators</a>
   </nav>
-
   <div class="mobile-menu" id="mobileMenu">
     <a href="#">About Us</a>
-    <a href="#">Contact</a>
+    <a href="#">Contact Us</a>
     <a href="#">Privacy Policy</a>
     <a href="#">Disclaimer</a>
   </div>
@@ -234,29 +153,23 @@ footer{
 
 <div class="container">
 
-  <div class="main" id="latest-news">
-    <!-- news.js yahan news inject karega -->
-  </div>
+  <div class="main" id="latest-news"></div>
 
   <div class="sidebar">
-    <h3>Category</h3>
 
-    <div class="category-box">
-      <div class="category-title">Equity</div>
-      <div class="category-sub">
-        <div data-link="category.html?cat=large">Large Cap</div>
-        <div data-link="category.html?cat=mid">Mid Cap</div>
-        <div data-link="category.html?cat=small">Small Cap</div>
-      </div>
+    <div class="ce-category">
+      <div class="ce-title">Equity</div>
+      <a href="category.html?cat=large">Large Cap</a>
+      <a href="category.html?cat=mid">Mid Cap</a>
+      <a href="category.html?cat=small">Small Cap</a>
     </div>
 
-    <div class="category-box">
-      <div class="category-title">IPO</div>
-      <div class="category-sub">
-        <div data-link="category.html?cat=mainboard">Mainboard</div>
-        <div data-link="category.html?cat=sme">SME</div>
-      </div>
+    <div class="ce-category">
+      <div class="ce-title">IPO</div>
+      <a href="category.html?cat=mainboard">Mainboard IPO</a>
+      <a href="category.html?cat=sme">SME IPO</a>
     </div>
+
   </div>
 
 </div>
@@ -264,18 +177,14 @@ footer{
 <footer>© 2025 Capital Edge | Educational Purpose Only</footer>
 
 <script src="news.js"></script>
-
 <script>
 function toggleMenu(){
-  const menu=document.getElementById('mobileMenu');
+  const menu = document.getElementById('mobileMenu');
+  const ham = document.querySelector('.hamburger');
+  ham.classList.toggle('active');
+  document.body.classList.toggle('menu-open');
   menu.style.display = menu.style.display==='block' ? 'none' : 'block';
 }
-
-document.querySelectorAll('.category-sub div').forEach(item=>{
-  item.addEventListener('click',()=>{
-    window.location.href=item.dataset.link;
-  });
-});
 </script>
 
 </body>
