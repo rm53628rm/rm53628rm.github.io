@@ -57,37 +57,27 @@ header p{margin:6px 0 0;font-size:14px}
 .category-item.active::after{transform:rotate(180deg)}
 .sub{max-height:0;overflow:hidden;transition:.3s;padding:0 12px;background:#f7f9fc;border-left:3px solid #ff9f1c;border-radius:6px}
 .sub span{display:block;padding:6px 0;font-size:13px}
- /* ==============================
-   SUB CATEGORY FINAL FIX
-================================ */
-
-.sub{
-  padding: 6px 12px;
-}
-
-/* a ko bilkul span jaisa bana diya */
-.sub a{
+ /* span ke andar link ko clean banao */
+.sub span a{
   display: block;
-  padding: 6px 0;
-  font-size: 13px;
-  font-weight: normal;
   color: #083154;
   text-decoration: none;
 }
 
-/* hover effect */
-.sub a:hover{
+/* hover */
+.sub span a:hover{
   color: #ff9f1c;
 }
 
-/* mobile blue touch remove */
-.sub a,
-.sub a:focus,
-.sub a:active{
+/* mobile blue tap band */
+.sub span a,
+.sub span a:focus,
+.sub span a:active{
   outline: none;
-  background: transparent;
   -webkit-tap-highlight-color: transparent;
 }
+  
+ 
   
 /* NEW badge sirf news card ke liye */
 .news-card .new-badge {
@@ -206,17 +196,20 @@ footer{
     <h3>Category</h3>
     <div class="category-item" onclick="toggleSub(this)">Equity
 <div class="sub">
-  <a href="category.html?cat=large">Large Cap</a>
-  <a href="category.html?cat=mid">Mid Cap</a>
-  <a href="category.html?cat=small">Small Cap</a>
+  <span><a href="category.html?cat=large">Large Cap</a></span>
+  <span><a href="category.html?cat=mid">Mid Cap</a></span>
+  <span><a href="category.html?cat=small">Small Cap</a></span>
 </div>
+      
       
       
     <div class="category-item" onclick="toggleSub(this)">IPO
       <div class="sub">
-  <a href="category.html?type=mainboard-ipo">Mainboard</a>
-  <a href="category.html?type=sme-ipo">SME</a>
+  <span><a href="category.html?cat=large">Large Cap</a></span>
+  <span><a href="category.html?cat=mid">Mid Cap</a></span>
+  <span><a href="category.html?cat=small">Small Cap</a></span>
       </div>
+      
       
   </div>
 </div>
