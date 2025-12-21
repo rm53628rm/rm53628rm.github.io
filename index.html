@@ -57,36 +57,22 @@ header p{margin:6px 0 0;font-size:14px}
 .category-item.active::after{transform:rotate(180deg)}
 .sub{max-height:0;overflow:hidden;transition:.3s;padding:0 12px;background:#f7f9fc;border-left:3px solid #ff9f1c;border-radius:6px}
 .sub span{display:block;padding:6px 0;font-size:13px}
-  /* ==============================
-   SUB CATEGORY – STRUCTURE SAFE FIX
+ /* ==============================
+   SUB CATEGORY – LINK FIX
+   (structure bilkul same rahega)
 ================================ */
 
-/* sub container – structure same rahe */
-.sub{
-  padding: 4px 12px;
-  background: #f7f9fc;
-  border-left: 3px solid #ff9f1c;
-  border-radius: 6px;
-}
-
-/* sub items – simple & separate */
+/* a ko span jaisa behave karwao */
 .sub a{
   display: block;
-  padding: 6px 4px;
-  margin: 4px 0;
+  padding: 6px 0;
   font-size: 13px;
-  font-weight: 600;
-  color: #083154;
+  color: inherit;
   text-decoration: none;
-  border-bottom: 1px dashed #d9dfe7;
+  font-weight: inherit;
 }
 
-/* last item border remove */
-.sub a:last-child{
-  border-bottom: none;
-}
-
-/* hover effect – light */
+/* hover sirf color change */
 .sub a:hover{
   color: #ff9f1c;
 }
@@ -98,6 +84,7 @@ header p{margin:6px 0 0;font-size:14px}
   outline: none;
   -webkit-tap-highlight-color: transparent;
 }
+  
 
   
   
