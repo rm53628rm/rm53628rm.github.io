@@ -25,13 +25,18 @@ header p{margin:6px 0 0;font-size:14px}
 .hamburger.active span:nth-child(1){transform:translateY(11px) rotate(45deg)}
 .hamburger.active span:nth-child(2){opacity:0}
 .hamburger.active span:nth-child(3){transform:translateY(-11px) rotate(-45deg)}
+
+/* MOBILE MENU */
 .mobile-menu{
-  position:absolute;top:100%;left:12px;width:260px;background:#f4f7fb;
-  border-radius:18px;box-shadow:0 20px 40px rgba(0,0,0,.18);overflow:hidden;display:none;animation:slideDown .35s ease; z-index:9999;
+  position:absolute;top:100%;left:12px;width:260px;
+  background:#f4f7fb;
+  border-radius:18px;box-shadow:0 20px 40px rgba(0,0,0,.18);overflow:hidden;display:none;animation:slideDown .35s ease;
+  z-index:9999;
 }
-.mobile-menu a{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;color:#083154;text-decoration:none;font-weight:700;border-bottom:1px solid #dde5ee;background:rgba(255,255,255,0.95); border-radius:12px; margin:6px 10px; box-shadow:0 6px 16px rgba(0,0,0,0.08);}
+.mobile-menu a{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;color:#083154;text-decoration:none;font-weight:700;border-bottom:1px solid #dde5ee;background:rgba(255,255,255,0.95);margin:6px 10px;border-radius:12px;box-shadow:0 6px 16px rgba(0,0,0,0.08)}
 .mobile-menu a:last-child{border-bottom:none}
 .mobile-menu a:hover{background:#ffecd1;color:#000}
+.mobile-menu .new-badge{display:none !important;}
 
 @keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 
@@ -47,66 +52,18 @@ header p{margin:6px 0 0;font-size:14px}
 .read-more{display:inline-block;padding:5px 10px;background:#ff9f1c;color:#fff;border-radius:4px;font-size:13px;text-decoration:none}
 .view-all{display:block;margin-top:10px;padding:8px 14px;background:#083154;color:#fff;text-align:center;border-radius:6px;text-decoration:none;font-weight:600}
 
-/* SIDEBAR */
-.sidebar{flex:0 0 280px;max-width:280px;align-self:flex-start}
-
-/* ===== NEW CATEGORY STYLE ===== */
-.ce-category{
-  background:#f7f9fc;
-  border-radius:14px;
-  padding:10px;
-  margin-bottom:16px;
-  border:1px solid #e2e6ee;
-}
-
-.ce-title{
-  background:#083154;
-  color:#fff;
-  padding:10px 14px;
-  border-radius:10px;
-  font-weight:700;
-  margin-bottom:10px;
-  font-size:15px;
-}
-
-.ce-category a{
-  display:block;
-  padding:10px 14px;
-  margin-bottom:8px;
-  background:#fff;
-  border-radius:10px;
-  font-size:14px;
-  font-weight:600;
-  color:#083154;
-  text-decoration:none;
-  box-shadow:0 4px 10px rgba(0,0,0,.08);
-  -webkit-tap-highlight-color:transparent;
-}
-
+/* SIDEBAR - PREMIUM CATEGORY */
+.sidebar{flex:0 0 280px;max-width:280px;align-self:flex-start;}
+.ce-category{background:#f7f9fc;border-radius:14px;padding:10px;margin-bottom:16px;border:1px solid #e2e6ee}
+.ce-title{background:#083154;color:#fff;padding:10px 14px;border-radius:10px;font-weight:700;margin-bottom:10px;font-size:15px}
+.ce-category a{display:block;padding:10px 14px;margin-bottom:8px;background:#fff;border-radius:10px;font-size:14px;font-weight:600;color:#083154;text-decoration:none;box-shadow:0 4px 10px rgba(0,0,0,.08);-webkit-tap-highlight-color:transparent}
 .ce-category a:last-child{margin-bottom:0}
 .ce-category a:hover{background:#ffecd1;color:#000}
-.ce-category a:focus,
-.ce-category a:active{outline:none}
+.ce-category a:focus,.ce-category a:active{outline:none}
 
-/* NEW badge sirf news card ke liye */
-.news-card .new-badge {
-  display: inline-block;
-  margin-right: 6px;
-  padding: 2px 6px;
-  font-size: 10px;
-  font-weight: bold;
-  color: #fff;
-  background: #e60000;
-  border-radius: 4px;
-  animation: blink 1s infinite;
-  vertical-align: middle;
-}
-
-@keyframes blink {
-  0% { opacity: 1; }
-  50% { opacity: 0; }
-  100% { opacity: 1; }
-}
+/* NEW badge in news cards only */
+.news-card .new-badge{display:inline-block;margin-right:6px;padding:2px 6px;font-size:10px;font-weight:bold;color:#fff;background:#e60000;border-radius:4px;animation:blink 1s infinite;vertical-align:middle}
+@keyframes blink{0%{opacity:1}50%{opacity:0}100%{opacity:1}}
 
 /* FOOTER */
 footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:30px}
@@ -116,13 +73,9 @@ footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:3
   .container{flex-direction:column;padding:0}
   .main,.sidebar{width:100%;max-width:100%}
   .mobile-menu{max-width:100%;left:0;right:0}
+  body.menu-open .container{filter:blur(3px);pointer-events:none}
 }
 
-/* Blur background jab menu open ho */
-body.menu-open .container{
-  filter: blur(3px);
-  pointer-events: none;
-}
 </style>
 </head>
 <body>
@@ -133,9 +86,7 @@ body.menu-open .container{
 </header>
 
 <div class="navbar">
-  <div class="hamburger" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </div>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
   <nav class="top-links">
     <a href="#">Investment</a>
     <a href="#">Old News</a>
@@ -152,11 +103,9 @@ body.menu-open .container{
 </div>
 
 <div class="container">
-
   <div class="main" id="latest-news"></div>
 
   <div class="sidebar">
-
     <div class="ce-category">
       <div class="ce-title">Equity</div>
       <a href="category.html?cat=large">Large Cap</a>
@@ -169,9 +118,7 @@ body.menu-open .container{
       <a href="category.html?cat=mainboard">Mainboard IPO</a>
       <a href="category.html?cat=sme">SME IPO</a>
     </div>
-
   </div>
-
 </div>
 
 <footer>© 2025 Capital Edge | Educational Purpose Only</footer>
@@ -179,11 +126,11 @@ body.menu-open .container{
 <script src="news.js"></script>
 <script>
 function toggleMenu(){
-  const menu = document.getElementById('mobileMenu');
-  const ham = document.querySelector('.hamburger');
+  const menu=document.getElementById('mobileMenu');
+  const ham=document.querySelector('.hamburger');
   ham.classList.toggle('active');
+  menu.style.display = menu.style.display==='block'?'none':'block';
   document.body.classList.toggle('menu-open');
-  menu.style.display = menu.style.display==='block' ? 'none' : 'block';
 }
 </script>
 
