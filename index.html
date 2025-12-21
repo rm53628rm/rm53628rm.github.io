@@ -57,18 +57,42 @@ header p{margin:6px 0 0;font-size:14px}
 .category-item.active::after{transform:rotate(180deg)}
 .sub{max-height:0;overflow:hidden;transition:.3s;padding:0 12px;background:#f7f9fc;border-left:3px solid #ff9f1c;border-radius:6px}
 .sub span{display:block;padding:6px 0;font-size:13px}
-  .sub a{
-  display:block;
-  padding:6px 0;
-  font-size:13px;
-  color:#083154;
-  text-decoration:none;
-  font-weight:600;
+  /* ==============================
+   SUB CATEGORY – FINAL PREMIUM
+================================ */
+
+.sub{
+  padding: 8px 10px;
 }
 
-.sub a:hover{
-  color:#ff9f1c;
+.sub a{
+  display: block;
+  margin: 6px 0;
+  padding: 10px 12px;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e2e7ef;
+  font-size: 13px;
+  font-weight: 600;
+  color: #083154;
+  text-decoration: none;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
 }
+
+/* Hover / touch effect */
+.sub a:hover{
+  background: #f4f7fb;
+  color: #000;
+}
+
+/* 🚫 Mobile blue tap highlight band */
+.sub a,
+.sub a:focus,
+.sub a:active{
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+  
   
 
 /* NEW badge sirf news card ke liye */
