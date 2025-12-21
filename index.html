@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,18 +26,13 @@ header p{margin:6px 0 0;font-size:14px}
 .hamburger.active span:nth-child(1){transform:translateY(11px) rotate(45deg)}
 .hamburger.active span:nth-child(2){opacity:0}
 .hamburger.active span:nth-child(3){transform:translateY(-11px) rotate(-45deg)}
-
-/* MOBILE MENU */
 .mobile-menu{
-  position:absolute;top:100%;left:12px;width:260px;
-  background:#f4f7fb;
-  border-radius:18px;box-shadow:0 20px 40px rgba(0,0,0,.18);overflow:hidden;display:none;animation:slideDown .35s ease;
-  z-index:9999;
+  position:absolute;top:100%;left:12px;width:260px;background:linear-gradient(180deg,#ffffff,#eef3f8);
+  border-radius:16px;box-shadow:0 16px 40px rgba(0,0,0,.18);overflow:hidden;display:none;animation:slideDown .35s ease;
 }
-.mobile-menu a{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;color:#083154;text-decoration:none;font-weight:700;border-bottom:1px solid #dde5ee;background:rgba(255,255,255,0.95);margin:6px 10px;border-radius:12px;box-shadow:0 6px 16px rgba(0,0,0,0.08)}
+.mobile-menu a{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;color:#083154;text-decoration:none;font-weight:700;border-bottom:1px solid #dde5ee;background:transparent}
 .mobile-menu a:last-child{border-bottom:none}
 .mobile-menu a:hover{background:#ffecd1;color:#000}
-.mobile-menu .new-badge{display:none !important;}
 
 @keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 
@@ -52,30 +48,80 @@ header p{margin:6px 0 0;font-size:14px}
 .read-more{display:inline-block;padding:5px 10px;background:#ff9f1c;color:#fff;border-radius:4px;font-size:13px;text-decoration:none}
 .view-all{display:block;margin-top:10px;padding:8px 14px;background:#083154;color:#fff;text-align:center;border-radius:6px;text-decoration:none;font-weight:600}
 
-/* SIDEBAR - PREMIUM CATEGORY */
-.sidebar{flex:0 0 280px;max-width:280px;align-self:flex-start;}
-.ce-category{background:#f7f9fc;border-radius:14px;padding:10px;margin-bottom:16px;border:1px solid #e2e6ee}
-.ce-title{background:#083154;color:#fff;padding:10px 14px;border-radius:10px;font-weight:700;margin-bottom:10px;font-size:15px}
-.ce-category a{display:block;padding:10px 14px;margin-bottom:8px;background:#fff;border-radius:10px;font-size:14px;font-weight:600;color:#083154;text-decoration:none;box-shadow:0 4px 10px rgba(0,0,0,.08);-webkit-tap-highlight-color:transparent}
-.ce-category a:last-child{margin-bottom:0}
-.ce-category a:hover{background:#ffecd1;color:#000}
-.ce-category a:focus,.ce-category a:active{outline:none}
+/* SIDEBAR */
+.sidebar{flex:0 0 280px;max-width:280px;align-self:flex-start;background:linear-gradient(180deg,#ffffff,#f6f7f9);padding:14px 14px 8px;border-radius:12px;border:1px solid #e1e1e1;box-shadow:0 4px 14px rgba(0,0,0,0.06)}
+.sidebar h3{margin:0 0 10px;font-weight:700;font-size:17px;color:#111;border-bottom:2px solid #ff9f1c;padding-bottom:6px}
+.category-item{padding:14px 34px 14px 22px;font-weight:700;font-size:17px;border-bottom:1px dashed #ddd;cursor:pointer;position:relative}
+.category-item::before{content:'';width:8px;height:8px;background:#ff9f1c;border-radius:50%;position:absolute;left:0;top:50%;transform:translateY(-50%)}
+.category-item::after{content:'▼';position:absolute;right:0;transition:.3s}
+.category-item.active::after{transform:rotate(180deg)}
+.sub{max-height:0;overflow:hidden;transition:.3s;padding:0 12px;background:#f7f9fc;border-left:3px solid #ff9f1c;border-radius:6px}
+.sub span{display:block;padding:6px 0;font-size:13px}
 
-/* NEW badge in news cards only */
-.news-card .new-badge{display:inline-block;margin-right:6px;padding:2px 6px;font-size:10px;font-weight:bold;color:#fff;background:#e60000;border-radius:4px;animation:blink 1s infinite;vertical-align:middle}
-@keyframes blink{0%{opacity:1}50%{opacity:0}100%{opacity:1}}
+/* NEW badge sirf news card ke liye */
+.news-card .new-badge {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: bold;
+  color: #fff;
+  background: #e60000;
+  border-radius: 4px;
+  animation: blink 1s infinite;
+  vertical-align: middle;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
 
 /* FOOTER */
 footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:30px}
 
 /* MEDIA */
 @media(max-width:768px){
-  .container{flex-direction:column;padding:0}
-  .main,.sidebar{width:100%;max-width:100%}
-  .mobile-menu{max-width:100%;left:0;right:0}
-  body.menu-open .container{filter:blur(3px);pointer-events:none}
+  .container{flex-direction:column;padding:0}
+  .main,.sidebar{width:100%;max-width:100%}
+  .mobile-menu{max-width:100%;left:0;right:0}
+}
+  
+  /* ==============================
+   MOBILE MENU TRANSPARENT FIX
+================================ */
+/* Mobile menu – light background (transparent nahi) */
+.mobile-menu{
+  background: #f4f7fb !important;   /* light premium color */
+  box-shadow: 0 20px 40px rgba(0,0,0,0.18) !important;
+  padding: 5px;
+  border-radius: 18px;
+  z-index: 9999;
 }
 
+/* Menu items – card look */
+.mobile-menu a{
+  background: rgba(255,255,255,0.95);
+  margin: 6px 10px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid #e1e6ef;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+/* Blur background jab menu open ho */
+body.menu-open .container{
+  filter: blur(3px);
+  pointer-events: none;
+}
+
+/* 🚫 Mobile menu ke andar NEW badge band */
+.mobile-menu .new-badge{
+  display: none !important;
+}
+  
+  
 </style>
 </head>
 <body>
@@ -86,39 +132,35 @@ footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:3
 </header>
 
 <div class="navbar">
-  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
-  <nav class="top-links">
-    <a href="#">Investment</a>
-    <a href="#">Old News</a>
-    <a href="#">Stock Analysis</a>
-    <a href="#">IPO</a>
-    <a href="#">Indicators</a>
-  </nav>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#">About Us</a>
-    <a href="#">Contact Us</a>
-    <a href="#">Privacy Policy</a>
-    <a href="#">Disclaimer</a>
-  </div>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+  <nav class="top-links">
+    <a href="#">Investment</a>
+    <a href="#">Old News</a>
+    <a href="#">Stock Analysis</a>
+    <a href="#">IPO</a>
+    <a href="#">Indicators</a>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#">About Us</a>
+    <a href="#">Contact Us</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Disclaimer</a>
+  </div>
 </div>
 
 <div class="container">
-  <div class="main" id="latest-news"></div>
-
-  <div class="sidebar">
-    <div class="ce-category">
-      <div class="ce-title">Equity</div>
-      <a href="category.html?cat=large">Large Cap</a>
-      <a href="category.html?cat=mid">Mid Cap</a>
-      <a href="category.html?cat=small">Small Cap</a>
-    </div>
-
-    <div class="ce-category">
-      <div class="ce-title">IPO</div>
-      <a href="category.html?cat=mainboard">Mainboard IPO</a>
-      <a href="category.html?cat=sme">SME IPO</a>
-    </div>
-  </div>
+  <div class="main" id="latest-news"></div>
+  <div class="sidebar">
+    <h3>Category</h3>
+    <div class="category-item" onclick="toggleSub(this)">Equity
+      <div class="sub"><span>Large Cap</span><span>Mid Cap</span><span>Small Cap</span></div>
+    </div>
+    <div class="category-item" onclick="toggleSub(this)">IPO
+      <div class="sub"><span>Mainboard</span><span>SME</span></div>
+    </div>
+  </div>
 </div>
 
 <footer>© 2025 Capital Edge | Educational Purpose Only</footer>
@@ -126,14 +168,24 @@ footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:3
 <script src="news.js"></script>
 <script>
 function toggleMenu(){
-  const menu=document.getElementById('mobileMenu');
-  const ham=document.querySelector('.hamburger');
-  ham.classList.toggle('active');
-  menu.style.display = menu.style.display==='block'?'none':'block';
-  document.body.classList.toggle('menu-open');
+  const menu = document.getElementById('mobileMenu');
+  const ham = document.querySelector('.hamburger');
+  ham.classList.toggle('active');
+  menu.style.display = menu.style.display==='block' ? 'none' : 'block';
+}
+
+function toggleSub(el){
+  document.querySelectorAll('.category-item').forEach(item=>{
+    if(item!==el){
+      item.classList.remove('active');
+      item.querySelector('.sub').style.maxHeight=null;
+    }
+  });
+  el.classList.toggle('active');
+  const sub=el.querySelector('.sub');
+  sub.style.maxHeight = sub.style.maxHeight ? null : sub.scrollHeight+'px';
 }
 </script>
 
 </body>
 </html>
-
