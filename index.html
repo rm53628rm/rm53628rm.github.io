@@ -164,6 +164,24 @@ body.menu-open .container{
 .mobile-menu .new-badge{
   display: none !important;
 }
+  /* ==============================
+   FOOTER OVERLAP FIX
+================================ */
+
+/* Container ko height force karo */
+.container::after{
+  content: "";
+  display: block;
+  clear: both;
+}
+
+/* Footer ko alag layer me rakho */
+footer{
+  clear: both;
+  position: relative;
+  z-index: 1;
+  margin-top: 30px;
+}
   
   
   
