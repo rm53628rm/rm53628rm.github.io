@@ -58,37 +58,37 @@ header p{margin:6px 0 0;font-size:14px}
 .sub{max-height:0;overflow:hidden;transition:.3s;padding:0 12px;background:#f7f9fc;border-left:3px solid #ff9f1c;border-radius:6px}
 .sub span{display:block;padding:6px 0;font-size:13px}
  /* ==============================
-   SUB CATEGORY – LINK FIX
-   (structure bilkul same rahega)
+   SUB CATEGORY FINAL FIX
 ================================ */
 
-/* a ko span jaisa behave karwao */
+.sub{
+  padding: 6px 12px;
+}
+
+/* a ko bilkul span jaisa bana diya */
 .sub a{
   display: block;
   padding: 6px 0;
   font-size: 13px;
-  color: inherit;
+  font-weight: normal;
+  color: #083154;
   text-decoration: none;
-  font-weight: inherit;
 }
 
-/* hover sirf color change */
+/* hover effect */
 .sub a:hover{
   color: #ff9f1c;
 }
 
-/* mobile blue tap remove */
+/* mobile blue touch remove */
 .sub a,
 .sub a:focus,
 .sub a:active{
   outline: none;
+  background: transparent;
   -webkit-tap-highlight-color: transparent;
 }
   
-
-  
-  
-
 /* NEW badge sirf news card ke liye */
 .news-card .new-badge {
   display: inline-block;
