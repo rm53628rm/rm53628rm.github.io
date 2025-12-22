@@ -15,24 +15,63 @@ header h1{margin:0;font-size:32px}
 header p{margin:6px 0 0;font-size:14px}
 
 /* NAVBAR */
-.navbar{background:linear-gradient(90deg,#062743,#0a3d62);display:flex;align-items:center;gap:10px;padding:10px}
-.top-links{margin-left:20px;display:flex;gap:10px;flex-wrap:wrap}
-.top-links a{color:#eaf3ff;text-decoration:none;font-weight:700;font-size:10px;padding:5px 10px;border-radius:16px;background:rgba(255,255,255,.08)}
+.navbar{
+  background:linear-gradient(90deg,#062743,#0a3d62);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 16px;
+  position:relative;
+}
+
+.top-links{
+  margin-left:20px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.top-links a{
+  color:#eaf3ff;
+  text-decoration:none;
+  font-weight:700;
+  font-size:12px;
+  padding:5px 10px;
+  border-radius:16px;
+  background:rgba(255,255,255,.08);
+}
 .top-links a:hover{background:#ffecd1;color:#083154}
 
-.hamburger{width:34px;height:26px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer}
-.hamburger span{height:3px;width:100%;background:#fff;border-radius:4px}
+/* HAMBURGER */
+.hamburger{
+  width:34px;height:26px;
+  display:flex;flex-direction:column;
+  justify-content:space-between;
+  cursor:pointer;
+  z-index:1000;
+}
+.hamburger span{
+  height:3px;width:100%;
+  background:#fff;border-radius:4px;
+  transition:.35s;
+}
 .hamburger.active span:nth-child(1){transform:translateY(11px) rotate(45deg)}
 .hamburger.active span:nth-child(2){opacity:0}
 .hamburger.active span:nth-child(3){transform:translateY(-11px) rotate(-45deg)}
 
+/* MOBILE MENU */
 .mobile-menu{
-  position:absolute;top:100%;left:12px;width:260px;
+  position:absolute;
+  top:60px; /* header ke neeche */
+  left:0;
+  right:0;
+  width:100%;
+  max-width:300px;
+  margin:0 auto;
   background:#f4f7fb;
   border-radius:16px;
   box-shadow:0 16px 40px rgba(0,0,0,.18);
   display:none;
-  z-index:999;
+  z-index:9999;
 }
 .mobile-menu a{
   display:block;
@@ -41,6 +80,10 @@ header p{margin:6px 0 0;font-size:14px}
   color:#083154;
   text-decoration:none;
   border-bottom:1px solid #ddd;
+  background:rgba(255,255,255,0.95);
+  margin:6px 10px;
+  border-radius:12px;
+  box-shadow:0 6px 16px rgba(0,0,0,0.08);
 }
 .mobile-menu a:last-child{border-bottom:none}
 
@@ -84,7 +127,7 @@ footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:3
 
 /* MOBILE */
 @media(max-width:768px){
-  .top-links{display:none}
+  .top-links{display:none} /* mobile me hide top links */
 }
 </style>
 </head>
@@ -110,6 +153,11 @@ footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:3
   </nav>
 
   <div class="mobile-menu" id="mobileMenu">
+    <a href="#">Investment</a>
+    <a href="#">Old News</a>
+    <a href="#">Stock Analysis</a>
+    <a href="#">IPO</a>
+    <a href="#">Indicators</a>
     <a href="#">About Us</a>
     <a href="#">Contact Us</a>
     <a href="#">Privacy Policy</a>
@@ -131,7 +179,7 @@ function toggleMenu(){
   const menu=document.getElementById('mobileMenu');
   const ham=document.querySelector('.hamburger');
   ham.classList.toggle('active');
-  menu.style.display=menu.style.display==='block'?'none':'block';
+  menu.style.display = (menu.style.display==='block') ? 'none' : 'block';
 }
 </script>
 
