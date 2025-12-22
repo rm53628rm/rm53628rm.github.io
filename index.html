@@ -7,194 +7,84 @@
 
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f4f6f9;
-  color:#333;
-  overflow-x:hidden;
-}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#333;overflow-x:hidden}
 
-/* ================= HEADER ================= */
-header{
-  background:#0a3d62;
-  color:#fff;
-  padding:22px 16px;
-  text-align:center
-}
+/* HEADER */
+header{background:#0a3d62;color:#fff;padding:22px 16px;text-align:center}
 header h1{margin:0;font-size:32px}
 header p{margin:6px 0 0;font-size:14px}
 
-/* ================= NAVBAR ================= */
-.navbar{
-  background:linear-gradient(90deg,#062743,#0a3d62);
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:10px;
-  position:relative;
-}
+/* NAVBAR */
+.navbar{background:linear-gradient(90deg,#062743,#0a3d62);display:flex;align-items:center;gap:10px;padding:10px}
+.top-links{margin-left:20px;display:flex;gap:10px;flex-wrap:wrap}
+.top-links a{color:#eaf3ff;text-decoration:none;font-weight:700;font-size:10px;padding:5px 10px;border-radius:16px;background:rgba(255,255,255,.08)}
+.top-links a:hover{background:#ffecd1;color:#083154}
 
-.top-links{
-  margin-left:20px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap
-}
-.top-links a{
-  color:#eaf3ff;
-  text-decoration:none;
-  font-weight:700;
-  font-size:10px;
-  padding:5px 10px;
-  border-radius:16px;
-  background:rgba(255,255,255,.08)
-}
+.hamburger{width:34px;height:26px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer}
+.hamburger span{height:3px;width:100%;background:#fff;border-radius:4px}
+.hamburger.active span:nth-child(1){transform:translateY(11px) rotate(45deg)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:translateY(-11px) rotate(-45deg)}
 
-.hamburger{
-  width:34px;
-  height:26px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  cursor:pointer;
-}
-.hamburger span{
-  height:3px;
-  width:100%;
-  background:#fff;
-  border-radius:4px
-}
-
-/* ================= MOBILE MENU ================= */
 .mobile-menu{
-  position:absolute;
-  top:100%;
-  left:12px;
-  width:260px;
+  position:absolute;top:100%;left:12px;width:260px;
   background:#f4f7fb;
-  border-radius:18px;
-  box-shadow:0 20px 40px rgba(0,0,0,.18);
+  border-radius:16px;
+  box-shadow:0 16px 40px rgba(0,0,0,.18);
   display:none;
-  padding:6px;
-  z-index:9999;
+  z-index:999;
 }
 .mobile-menu a{
   display:block;
-  background:#fff;
-  margin:6px;
-  padding:10px 14px;
-  border-radius:12px;
-  text-decoration:none;
+  padding:12px 16px;
   font-weight:700;
   color:#083154;
-  box-shadow:0 6px 16px rgba(0,0,0,.08);
+  text-decoration:none;
+  border-bottom:1px solid #ddd;
 }
+.mobile-menu a:last-child{border-bottom:none}
 
-/* ================= LAYOUT ================= */
+/* CONTAINER */
 .container{
   max-width:1200px;
   margin:20px auto;
-  display:flex;
-  align-items:flex-start;
-  gap:20px;
   padding:0 16px;
 }
 
-/* ================= MAIN NEWS ================= */
+/* MAIN NEWS FULL WIDTH */
 .main{
-  flex:1;
   background:#fff;
   padding:14px;
   border-radius:8px;
 }
+
+/* NEWS CARD */
 .news-card{
   border:1px solid #e6e6e6;
   border-radius:8px;
-  padding:10px 12px;
+  padding:12px;
   margin-bottom:10px;
-  background:#fff;
+  box-shadow:0 4px 10px rgba(0,0,0,0.04)
 }
-.news-card h3{
-  margin:0 0 6px;
-  color:#083154;
-}
-.news-meta{
-  font-size:12px;
-  color:#777;
-  margin-bottom:6px;
-}
+.news-card h3{margin:0 0 6px;color:#083154}
+.news-meta{font-size:12px;color:#777}
+.news-card p{font-size:14px}
 .read-more{
   display:inline-block;
-  padding:5px 10px;
+  padding:6px 10px;
   background:#ff9f1c;
   color:#fff;
   border-radius:4px;
+  text-decoration:none;
   font-size:13px;
-  text-decoration:none;
 }
 
-/* ================= SIDEBAR (FIXED) ================= */
-.sidebar{
-  flex:0 0 280px;
-  width:280px;
-  max-width:280px;
-  display:block;
-}
+/* FOOTER */
+footer{background:#0a3d62;color:#fff;text-align:center;padding:14px;margin-top:30px}
 
-/* category card */
-.ce-category{
-  background:#f7f9fc;
-  border-radius:14px;
-  padding:10px;
-  margin-bottom:16px;
-  border:1px solid #e2e6ee;
-}
-
-/* category title */
-.ce-title{
-  background:#083154;
-  color:#fff;
-  padding:10px 14px;
-  border-radius:10px;
-  font-weight:700;
-  margin-bottom:10px;
-  font-size:15px;
-}
-
-/* sub category links */
-.ce-category a{
-  display:block;
-  padding:10px 14px;
-  margin-bottom:8px;
-  background:#fff;
-  border-radius:10px;
-  font-size:14px;
-  font-weight:600;
-  color:#083154;
-  text-decoration:none;
-  box-shadow:0 4px 10px rgba(0,0,0,.08);
-  -webkit-tap-highlight-color:transparent;
-}
-.ce-category a:last-child{margin-bottom:0}
-.ce-category a:hover{background:#ffecd1}
-
-/* ================= FOOTER ================= */
-footer{
-  background:#0a3d62;
-  color:#fff;
-  text-align:center;
-  padding:14px;
-  margin-top:30px
-}
-
-/* ================= MOBILE ================= */
+/* MOBILE */
 @media(max-width:768px){
-  .container{flex-direction:column}
-  .sidebar{
-    width:100%;
-    max-width:100%;
-  }
+  .top-links{display:none}
 }
 </style>
 </head>
@@ -202,8 +92,8 @@ footer{
 <body>
 
 <header>
-  <h1>Capital Edge</h1>
-  <p>Finance | Stock Market | Investment News</p>
+<h1>Capital Edge</h1>
+<p>Finance | Stock Market | Investment News</p>
 </header>
 
 <div class="navbar">
@@ -216,51 +106,32 @@ footer{
     <a href="#">Old News</a>
     <a href="#">Stock Analysis</a>
     <a href="#">IPO</a>
+    <a href="#">Indicators</a>
   </nav>
 
   <div class="mobile-menu" id="mobileMenu">
     <a href="#">About Us</a>
-    <a href="#">Contact</a>
+    <a href="#">Contact Us</a>
     <a href="#">Privacy Policy</a>
+    <a href="#">Disclaimer</a>
   </div>
 </div>
 
 <div class="container">
-
-  <!-- MAIN NEWS -->
   <div class="main" id="latest-news">
-    <div class="news-card">
-      <h3>Market Hits New High</h3>
-      <div class="news-meta">Stock Market | 20 Dec 2025</div>
-      <a class="read-more" href="#">Read More</a>
-    </div>
-  </div>
-
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-
-    <div class="ce-category">
-      <div class="ce-title">Equity</div>
-      <a href="category.html?cat=large">Large Cap</a>
-      <a href="category.html?cat=mid">Mid Cap</a>
-      <a href="category.html?cat=small">Small Cap</a>
-    </div>
-
-    <div class="ce-category">
-      <div class="ce-title">IPO</div>
-      <a href="category.html?cat=mainboard">Mainboard IPO</a>
-      <a href="category.html?cat=sme">SME IPO</a>
-    </div>
-
+    <!-- news.js yahan news inject karega -->
   </div>
 </div>
 
 <footer>© 2025 Capital Edge | Educational Purpose Only</footer>
 
+<script src="news.js"></script>
 <script>
 function toggleMenu(){
-  const m=document.getElementById("mobileMenu");
-  m.style.display = m.style.display==="block"?"none":"block";
+  const menu=document.getElementById('mobileMenu');
+  const ham=document.querySelector('.hamburger');
+  ham.classList.toggle('active');
+  menu.style.display=menu.style.display==='block'?'none':'block';
 }
 </script>
 
