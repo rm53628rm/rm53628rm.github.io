@@ -1,125 +1,73 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Capital Edge | Stock Market News</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>StockPulse</title>
 
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:'Segoe UI',Arial;
-  background:#f1f5f9;
-  color:#0f172a;
-}
+body{margin:0;font-family:Arial;background:#f5f7fb}
 
 /* HEADER */
 header{
-  background:linear-gradient(135deg,#020617,#0f172a);
-  color:#fff;
-  padding:18px 0;
+ display:flex;align-items:center;gap:12px;
+ padding:14px;background:#fff;
+ box-shadow:0 2px 10px rgba(0,0,0,.08)
 }
-.header-inner{
-  max-width:1200px;
-  margin:auto;
-  padding:0 15px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+.menu-btn{font-size:22px;cursor:pointer}
+.logo{font-size:20px;font-weight:700;color:#1d4ed8}
+
+/* MOBILE MENU */
+.mobile-menu{
+ position:fixed;top:0;left:-100%;
+ width:80%;height:100%;
+ background:linear-gradient(#fff,#eef2ff);
+ padding:20px;transition:.3s;
+ box-shadow:4px 0 20px rgba(0,0,0,.2);
+ z-index:1000
 }
-.logo{font-size:26px;font-weight:800}
-nav a{
-  color:#cbd5f5;
-  text-decoration:none;
-  margin-left:20px;
-  font-weight:600;
+.mobile-menu.active{left:0}
+.mobile-menu .close{font-size:18px;margin-bottom:20px;cursor:pointer}
+.mobile-menu a{
+ display:block;margin-bottom:10px;
+ padding:14px;border-radius:12px;
+ background:#fff;color:#111;
+ text-decoration:none;font-weight:600;
+ box-shadow:0 4px 10px rgba(0,0,0,.05)
 }
 
-/* LAYOUT */
-.container{
-  max-width:1200px;
-  margin:25px auto;
-  padding:0 15px;
-  display:grid;
-  grid-template-columns:3fr 1fr;
-  gap:25px;
-}
+/* SECTION */
+.section{padding:16px}
+.section h2{margin-bottom:10px}
 
 /* NEWS CARD */
+.news-list{display:grid;gap:12px}
 .news-card{
-  display:flex;
-  gap:18px;
-  background:#fff;
-  border-radius:14px;
-  margin-bottom:20px;
-  cursor:pointer;
-  overflow:hidden;
-  box-shadow:0 10px 25px rgba(0,0,0,.08);
-  transition:.25s;
+ display:flex;gap:12px;
+ background:#fff;padding:12px;
+ border-radius:16px;height:110px;
+ box-shadow:0 6px 18px rgba(0,0,0,.08);
+ cursor:pointer
 }
-.news-card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 18px 40px rgba(0,0,0,.15);
+.news-card img{
+ width:90px;height:90px;
+ border-radius:14px;object-fit:cover
 }
-
-.news-img{
-  width:240px;
-  flex-shrink:0;
-}
-.news-img img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+.news-title{font-size:14px;font-weight:700}
+.news-meta{font-size:11px;color:#64748b;margin:4px 0}
+.news-summary{
+ font-size:12px;color:#334155;
+ max-height:34px;overflow:hidden
 }
 
-.news-content{
-  padding:16px 18px;
-}
-.category{
-  color:#2563eb;
-  font-weight:700;
-  font-size:12px;
-  text-transform:uppercase;
-}
-.date{
-  font-size:12px;
-  color:#64748b;
-  margin-left:10px;
-}
-.news-content h2{
-  font-size:20px;
-  margin:6px 0 8px;
-  line-height:1.4;
-}
-.summary{
-  font-size:15px;
-  color:#475569;
-}
+/* VIEW ALL */
+.view-all{text-align:right;margin-top:8px}
+.view-all a{text-decoration:none;color:#1d4ed8;font-weight:600}
 
-/* SIDEBAR */
-.sidebar{
-  background:#fff;
-  border-radius:14px;
-  padding:18px;
-  box-shadow:0 10px 25px rgba(0,0,0,.08);
-}
-
-/* FOOTER */
-footer{
-  background:#020617;
-  color:#94a3b8;
-  text-align:center;
-  padding:18px;
-  margin-top:40px;
-}
-
-/* MOBILE */
-@media(max-width:900px){
-  .container{grid-template-columns:1fr}
-  .news-card{flex-direction:column}
-  .news-img{width:100%;height:200px}
-  nav{display:none}
+@media(min-width:768px){
+ .news-list{grid-template-columns:repeat(2,1fr)}
 }
 </style>
 </head>
@@ -127,60 +75,74 @@ footer{
 <body>
 
 <header>
-  <div class="header-inner">
-    <div class="logo">Capital Edge</div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="archive.html">Archive</a>
-    </nav>
-  </div>
+ <div class="menu-btn" onclick="openMenu()">☰</div>
+ <div class="logo">StockPulse</div>
 </header>
 
-<div class="container">
-
-  <!-- NEWS -->
-  <div id="newsContainer"></div>
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <h3>Market Snapshot</h3>
-    <p>Nifty <b style="color:green">+0.62%</b></p>
-    <p>Sensex <b style="color:green">+0.55%</b></p>
-    <p>Bank Nifty <b style="color:red">-0.21%</b></p>
-  </aside>
-
+<div class="mobile-menu" id="menu">
+ <div class="close" onclick="closeMenu()">✖ Close</div>
+ <a href="index.html">Latest News</a>
+ <a href="category.html?cat=earnings">Earnings</a>
+ <a href="category.html?cat=dividend">Dividend</a>
 </div>
 
-<footer>
-  © 2025 Capital Edge · Finance & Stock Market News
-</footer>
+<div class="section">
+ <h2>Latest Stock News</h2>
+ <div class="news-list" id="latestNews"></div>
+ <div class="view-all"><a href="category.html?cat=latest">View All →</a></div>
+</div>
 
-<script src="news.js"></script>
+<div class="section">
+ <h2>Earnings Update</h2>
+ <div class="news-list" id="earningsNews"></div>
+ <div class="view-all"><a href="category.html?cat=earnings">View All →</a></div>
+</div>
+
+<div class="section">
+ <h2>Dividend Update</h2>
+ <div class="news-list" id="dividendNews"></div>
+ <div class="view-all"><a href="category.html?cat=dividend">View All →</a></div>
+</div>
+
+<script src="data/latest.js"></script>
+<script src="data/earning.js"></script>
+<script src="data/dividend.js"></script>
+
 <script>
-const box=document.getElementById("newsContainer");
+function openMenu(){menu.classList.add("active")}
+function closeMenu(){menu.classList.remove("active")}
 
-newsData.slice(0,10).forEach(item=>{
-  const div=document.createElement("div");
-  div.className="news-card";
-  div.onclick=()=>window.location.href=item.link;
+/* MERGE FOR LATEST */
+const allLatest=[
+ ...latestNews.map(n=>({...n,cat:"latest"})),
+ ...earningNews.map(n=>({...n,cat:"earnings"})),
+ ...dividendNews.map(n=>({...n,cat:"dividend"}))
+].sort((a,b)=>new Date(b.date)-new Date(a.date));
 
-  div.innerHTML=`
-    <div class="news-img">
-      <img src="${item.image}">
-    </div>
-    <div class="news-content">
-      <div>
-        <span class="category">${item.category}</span>
-        <span class="date">${item.date}</span>
-      </div>
-      <h2>${item.title}</h2>
-      <p class="summary">${item.summary}</p>
-    </div>
-  `;
-  box.appendChild(div);
-});
+function render(id,data,limit){
+ const box=document.getElementById(id);
+ box.innerHTML="";
+ data.slice(0,limit).forEach(n=>{
+  box.innerHTML+=`
+  <div class="news-card" onclick="openNews('${n.id}','${n.cat}')">
+   <img src="${n.image}">
+   <div>
+    <div class="news-title">${n.title}</div>
+    <div class="news-meta">${n.date} | ${n.cat}</div>
+    <div class="news-summary">${n.summary}</div>
+   </div>
+  </div>`;
+ });
+}
+
+render("latestNews",allLatest,10);
+render("earningsNews",earningNews,5);
+render("dividendNews",dividendNews,5);
+
+function openNews(id,cat){
+ location.href=`news.html?id=${id}&cat=${cat}`;
+}
 </script>
 
 </body>
 </html>
-
