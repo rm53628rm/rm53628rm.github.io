@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,7 +28,7 @@ header{
  z-index:1000
 }
 .mobile-menu.active{left:0}
-.mobile-menu .close{font-size:18px;margin-bottom:20px;cursor:pointer}
+.mobile-menu .close{margin-bottom:20px;cursor:pointer}
 .mobile-menu a{
  display:block;margin-bottom:10px;
  padding:14px;border-radius:12px;
@@ -112,7 +111,6 @@ header{
 function openMenu(){menu.classList.add("active")}
 function closeMenu(){menu.classList.remove("active")}
 
-/* MERGE FOR LATEST */
 const allLatest=[
  ...latestNews.map(n=>({...n,cat:"latest"})),
  ...earningNews.map(n=>({...n,cat:"earnings"})),
@@ -124,7 +122,7 @@ function render(id,data,limit){
  box.innerHTML="";
  data.slice(0,limit).forEach(n=>{
   box.innerHTML+=`
-  <div class="news-card" onclick="openNews('${n.id}','${n.cat}')">
+  <div class="news-card" onclick="location.href='${n.link}'">
    <img src="${n.image}">
    <div>
     <div class="news-title">${n.title}</div>
@@ -138,11 +136,8 @@ function render(id,data,limit){
 render("latestNews",allLatest,10);
 render("earningsNews",earningNews,5);
 render("dividendNews",dividendNews,5);
-
-function openNews(id,cat){
- location.href=`news.html?id=${id}&cat=${cat}`;
-}
 </script>
 
 </body>
 </html>
+
