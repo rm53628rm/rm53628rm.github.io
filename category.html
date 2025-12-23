@@ -5,8 +5,11 @@
 <title>Category</title>
 <style>
 body{font-family:Arial;background:#f5f7fb;padding:16px}
-.news-card{background:#fff;padding:12px;margin-bottom:10px;
-border-radius:14px;cursor:pointer}
+.news-card{
+ background:#fff;padding:12px;
+ margin-bottom:10px;border-radius:14px;
+ cursor:pointer
+}
 </style>
 </head>
 
@@ -30,13 +33,12 @@ let data=
 data.sort((a,b)=>new Date(b.date)-new Date(a.date))
 .forEach(n=>{
  list.innerHTML+=`
- <div class="news-card"
- onclick="location.href='news.html?id=${n.id}&cat=${cat}'">
- <b>${n.title}</b><br><small>${n.date}</small>
+ <div class="news-card" onclick="location.href='${n.link}'">
+  <b>${n.title}</b><br>
+  <small>${n.date}</small>
  </div>`;
 });
 </script>
 </body>
-</html>
 </html>
 
