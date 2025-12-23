@@ -1,5 +1,5 @@
 
-const dividendNews=[
+const  dividendNews=[
 {
  title:"Market hits new high",
  summary:"Sensex and Nifty touched new record today.",
