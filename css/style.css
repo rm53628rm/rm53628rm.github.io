@@ -22,9 +22,9 @@ section{margin-bottom:25px}
 display:flex;
 background:#fff;
 border-radius:14px;
-padding:8px;
-margin-bottom:10px;
-height:110px;
+padding:1px;
+margin-bottom:6px;
+height:90px;
 overflow:hidden;
 cursor:pointer;
 box-shadow:0 2px 8px rgba(0,0,0,.08)
@@ -44,10 +44,24 @@ overflow:hidden
 }
 
 .view-all{
-display:block;text-align:center;
-background:#eef1ff;padding:8px;
-border-radius:8px;text-decoration:none
+  display:inline-block;
+  margin:10px auto 0;
+  padding:10px 22px;
+  background:linear-gradient(135deg,#6a11cb,#2575fc);
+  color:#fff;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:bold;
+  border-radius:25px;
+  box-shadow:0 4px 12px rgba(0,0,0,.2);
+  transition:.3s;
 }
+
+.view-all:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 16px rgba(0,0,0,.25);
+}
+
 
 footer{text-align:center;padding:15px;background:#fff}
 
