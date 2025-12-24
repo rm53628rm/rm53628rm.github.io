@@ -200,81 +200,79 @@ section h2{
   transform:translateY(-1px);
 }
 /* =========================
-   FOOTER – PREMIUM
+   FOOTER BASE
 ========================= */
-.site-footer{
-  background:linear-gradient(180deg,#062743,#0a3d62);
-  color:#e5edff;
-  margin-top:30px;
+footer{
+  background:#0b1c2d;
+  color:#ffffff;
+  padding:18px 10px;
+  margin-top:auto;
 }
 
-/* FOOTER INNER */
-.footer-inner{
-  padding:22px 16px;
-  display:flex;
-  flex-direction:column;
-  gap:18px;
+.footer-container{
+  max-width:1200px;
+  margin:auto;
   text-align:center;
 }
 
-/* BRAND */
-.footer-brand h3{
-  margin:0 0 6px;
-  font-size:20px;
-  color:#ffffff;
-}
-
-.footer-brand p{
-  font-size:13px;
-  color:#dbeafe;
-  line-height:1.5;
-}
-
-/* LINKS */
+/* =========================
+   FOOTER LINKS
+========================= */
 .footer-links{
   display:flex;
-  justify-content:center;
   flex-wrap:wrap;
-  gap:12px;
+  justify-content:center;
+  gap:10px;
+  margin-bottom:8px;
 }
 
 .footer-links a{
+  color:#ffffff;
   text-decoration:none;
-  color:#e5edff;
+  padding:6px 14px;
   font-size:13px;
-  padding:6px 12px;
+  background:rgba(255,255,255,0.14);
   border-radius:16px;
-  background:rgba(255,255,255,0.12);
-  transition:.25s ease;
+  line-height:1.2;
+  transition:0.25s;
 }
 
 .footer-links a:hover{
-  background:#ffecd1;
-  color:#083154;
+  background:#1e90ff;
 }
 
-/* BOTTOM BAR */
+/* =========================
+   FOOTER BOTTOM TEXT
+========================= */
 .footer-bottom{
-  text-align:center;
   font-size:12px;
-  padding:10px;
-  background:rgba(0,0,0,0.25);
-  color:#c7d2fe;
+  opacity:0.8;
+  line-height:1.4;
 }
 
-/* DESKTOP FOOTER */
-@media(min-width:768px){
-  .footer-inner{
-    flex-direction:row;
-    justify-content:space-between;
-    text-align:left;
-    max-width:900px;
-    margin:auto;
+/* =========================
+   DESKTOP COMPACT FIX
+========================= */
+@media (min-width:768px){
+
+  footer{
+    padding:14px 10px;     /* 🔥 extra vertical space remove */
   }
 
   .footer-links{
-    justify-content:flex-end;
+    gap:8px;               /* 🔥 gap kam */
+    margin-bottom:6px;
+  }
+
+  .footer-links a{
+    padding:4px 10px;      /* 🔥 box height kam */
+    font-size:12.5px;
+    border-radius:14px;
+    background:rgba(255,255,255,0.12);
+  }
+
+  .footer-bottom{
+    font-size:11.5px;
   }
 }
-
 
