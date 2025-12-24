@@ -278,4 +278,37 @@ footer{
     margin:0 auto;
   }
 }
+/* =========================
+   CATEGORY TITLE BAR
+========================= */
+.category-title-bar{
+  padding:12px 14px;
+  background:linear-gradient(135deg,#eef2ff,#dbeafe);
+  border-bottom:1px solid #e5e7eb;
+}
+
+.category-title-bar h2{
+  margin:0;
+  font-size:15.5px;
+  font-weight:700;
+  color:#1e3a8a;
+  text-transform:uppercase;
+}
+
+/* CATEGORY LIST SPACING */
+#list{
+  padding:12px;
+}
+
+/* DESKTOP */
+@media(min-width:768px){
+  .category-title-bar{
+    padding:14px 24px;
+  }
+
+  #list{
+    max-width:900px;
+    margin:auto;
+  }
+}
 
