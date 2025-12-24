@@ -1,5 +1,6 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -9,45 +10,76 @@
 
 <body>
 
+<!-- SAME HEADER AS INDEX -->
 <header>
-  
-  <a href="index.html" class="back">← Back</a>
-  <h1 id="title"></h1>
+  <div class="menu-btn" onclick="openMenu()">☰</div>
+  <div class="logo">StockNews</div>
+  <div class="search-box">
+    <input type="text" placeholder="Search stock news...">
+  </div>
 </header>
+<div class="category-title-bar">
+  <h2 id="categoryTitle"></h2>
+</div>
+  
+<!-- SAME MOBILE MENU -->
+<div id="mobileMenu" class="mobile-menu">
+  <span class="close" onclick="closeMenu()">✕</span>
+  <a href="index.html">Home</a>
+  <a href="category.html?cat=latest">Latest News</a>
+  <a href="category.html?cat=earnings">Earnings</a>
+  <a href="category.html?cat=dividend">Dividend</a>
+</div>
 
+<!-- CATEGORY CONTENT -->
 <main id="list"></main>
+
+<!-- SAME FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="#">About Us</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms & Conditions</a>
+    <a href="#">Contact</a>
+  </div>
+  <div class="footer-bottom">
+    © 2025 StockNews. All rights reserved.
+  </div>
+</footer>
 
 <script src="js/latest.js"></script>
 <script src="js/earning.js"></script>
 <script src="js/dividend.js"></script>
 
 <script>
-const cat=new URLSearchParams(location.search).get("cat");
-const title=document.getElementById("title");
-const list=document.getElementById("list");
+function openMenu(){
+  mobileMenu.classList.add("show");
+}
+function closeMenu(){
+  mobileMenu.classList.remove("show");
+}
 
+const cat = new URLSearchParams(location.search).get("cat");
 let data=[];
+
 if(cat==="latest") data=latestNews;
 if(cat==="earnings") data=earningNews;
 if(cat==="dividend") data=dividendNews;
 
-title.innerText=cat.toUpperCase()+" NEWS";
-
 data.sort((a,b)=>new Date(b.date)-new Date(a.date));
 
 data.forEach(n=>{
- list.innerHTML+=`
- <div class="news-card" onclick="location.href='${n.link}'">
-   <img src="${n.image}">
-   <div class="news-text">
-     <div class="news-title">${n.title}</div>
-     <div class="news-meta">${n.date}</div>
-     <div class="news-summary">${n.summary}</div>
-   </div>
- </div>`;
+  list.innerHTML+=`
+  <div class="news-card" onclick="location.href='${n.link}'">
+    <img src="${n.image}">
+    <div class="news-text">
+      <div class="news-title">${n.title}</div>
+      <div class="news-meta">${n.date}</div>
+      <div class="news-summary">${n.summary}</div>
+    </div>
+  </div>`;
 });
 </script>
 
 </body>
 </html>
-
