@@ -50,7 +50,17 @@
 <script src="js/latest.js"></script>
 <script src="js/earning.js"></script>
 <script src="js/dividend.js"></script>
+<script>
+const cat = new URLSearchParams(location.search).get("cat");
+const categoryTitle = document.getElementById("categoryTitle");
 
+/* Safety check */
+if(categoryTitle && cat){
+  categoryTitle.innerText =
+    cat.charAt(0).toUpperCase() + cat.slice(1) + " News";
+}
+</script>
+  
 <script>
 function openMenu(){
   mobileMenu.classList.add("show");
