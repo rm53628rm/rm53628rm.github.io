@@ -89,7 +89,7 @@ section h2{
   background:#ffffff;
   border-radius:18px;
   margin-bottom:12px;
-  height:120px;          /* FIXED HEIGHT */
+  height:92px;          /* FIXED HEIGHT */
   overflow:hidden;
   cursor:pointer;
   box-shadow:0 4px 14px rgba(0,0,0,.08);
