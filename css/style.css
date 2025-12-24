@@ -174,3 +174,32 @@ footer{
     margin:auto;
   }
 }
+/* SEARCH BOX */
+.search-box{
+  margin-left:auto;
+}
+
+.search-box input{
+  width:160px;
+  padding:7px 14px;
+  border-radius:20px;
+  border:1px solid #e5e7eb;
+  background:#f8fafc;
+  font-size:13px;
+  outline:none;
+  transition:.3s;
+}
+
+.search-box input:focus{
+  width:200px;
+  background:#ffffff;
+  border-color:#93c5fd;
+  box-shadow:0 0 0 3px rgba(59,130,246,.15);
+}
+
+/* MOBILE ADJUST */
+@media(max-width:600px){
+  .search-box input{
+    width:120px;
+  }
+}
