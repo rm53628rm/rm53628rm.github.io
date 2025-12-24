@@ -7,4 +7,6 @@ const dividendNews=[
  link:"/news/market-high.html"
 }
 ];
+document.getElementById("categoryTitle").innerText =
+  cat.charAt(0).toUpperCase() + cat.slice(1) + " News";
 
