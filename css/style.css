@@ -12,14 +12,104 @@ body{
   color:#222;
 }
 
-/* HEADER */
-header{
+/* =========================
+   NAVY BLUE GLASS HEADER
+========================= */
+header.glass-header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+
   display:flex;
   align-items:center;
-  padding:12px 14px;
-  background:#ffffff;
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  gap:14px;
+
+  padding:14px 18px;
+
+  /* Glassmorphism */
+  background:linear-gradient(
+    135deg,
+    rgba(12,23,45,0.75),
+    rgba(25,39,68,0.65)
+  );
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+
+  border-bottom:1px solid rgba(255,255,255,0.18);
+  box-shadow:0 10px 30px rgba(2,6,23,.45);
 }
+
+/* MENU ICON */
+header.glass-header .menu-btn{
+  font-size:22px;
+  cursor:pointer;
+  color:#e5e7eb;
+}
+
+/* LOGO */
+header.glass-header .logo{
+  margin:auto;
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:.4px;
+  color:#f8fafc;
+  animation:logoFade 1.2s ease;
+}
+
+/* LOGO ANIMATION */
+@keyframes logoFade{
+  from{
+    opacity:0;
+    transform:translateY(-6px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* LOGO HOVER */
+header.glass-header .logo:hover{
+  text-shadow:0 0 14px rgba(147,197,253,.8);
+}
+
+/* SEARCH BOX */
+header.glass-header .search-box{
+  margin-left:auto;
+}
+
+header.glass-header .search-box input{
+  width:160px;
+  padding:7px 14px;
+  border-radius:20px;
+
+  background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.25);
+
+  color:#f8fafc;
+  font-size:13px;
+  outline:none;
+  transition:.3s;
+}
+
+header.glass-header .search-box input::placeholder{
+  color:#cbd5f5;
+}
+
+header.glass-header .search-box input:focus{
+  width:200px;
+  background:rgba(255,255,255,.22);
+  border-color:#93c5fd;
+  box-shadow:0 0 0 3px rgba(147,197,253,.25);
+}
+
+/* MOBILE SEARCH WIDTH */
+@media(max-width:600px){
+  header.glass-header .search-box input{
+    width:120px;
+  }
+}
+
 
 .logo{
   margin:auto;
