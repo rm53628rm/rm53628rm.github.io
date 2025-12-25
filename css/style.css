@@ -311,24 +311,4 @@ footer{
     margin:auto;
   }
 }
-.news-card, a, button, .menu-btn {
-  position: relative;
-  overflow: hidden;
-}
-
-.click-ripple {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.15);
-  transform: scale(0);
-  animation: ripple 0.6s linear;
-  pointer-events: none;
-}
-
-@keyframes ripple {
-  to {
-    transform: scale(4);
-    opacity: 0;
-  }
-}
 
