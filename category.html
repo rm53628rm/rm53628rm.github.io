@@ -13,12 +13,8 @@
 <header>
   <div class="menu-btn" onclick="openMenu()">☰</div>
   <div class="logo">StockNews</div>
-  <div class="search-icon" onclick="toggleSearch()">🔍</div>
   
 </header>
-<div class="search-overlay" id="searchOverlay">
-  <input type="text" id="searchInput" placeholder="Search stock news...">
-</div>
   
 <!-- MOBILE MENU -->
 <div id="mobileMenu" class="mobile-menu">
@@ -139,19 +135,6 @@ function goPage(page){
 
 /* INITIAL RENDER */
 renderPage(currentPage);
-
-  function toggleSearch(){
-  document.getElementById("searchOverlay").classList.toggle("show");
-}
-
-/* LIVE SEARCH */
-document.getElementById("searchInput").addEventListener("keyup",function(){
-  const v=this.value.toLowerCase();
-  document.querySelectorAll(".news-card").forEach(card=>{
-    card.style.display=card.innerText.toLowerCase().includes(v)
-      ?"flex":"none";
-  });
-});
   
 </script>
 
