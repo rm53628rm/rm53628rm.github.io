@@ -85,55 +85,7 @@ data = data.map(n=>({...n, category: n.category || cat.toUpperCase()}));
 data.sort((a,b)=>new Date(b.date)-new Date(a.date));
 
 /* =========================
-   PAGINATION SETTINGS
-========================= */
-let currentPage = 1;
-const perPage = 10;
-
-function renderPage(page){
-  const list = document.getElementById("list");
-  const pagination = document.getElementById("pagination");
-  list.innerHTML = "";
-
-  const start = (page-1)*perPage;
-  const end = start+perPage;
-
-  data.slice(start,end).forEach(n=>{
-    list.innerHTML += `
-    <div class="news-card" onclick="location.href='${n.link}'">
-      <img src="${n.image}" alt="">
-      <div class="news-text">
-        <div class="news-title">${n.title}</div>
-        <div class="news-meta">${n.date} | ${n.category}</div>
-        <div class="news-summary">${n.summary}</div>
-      </div>
-    </div>`;
-  });
-
-  renderPagination();
-}
-
-function renderPagination(){
-  const pagination = document.getElementById("pagination");
-  pagination.innerHTML = "";
-  const totalPages = Math.ceil(data.length/perPage);
-
-  if(totalPages<=1) return;
-
-  if(currentPage>1) pagination.innerHTML += `<button onclick="goPage(${currentPage-1})">← Prev</button>`;
-  pagination.innerHTML += `<span>Page ${currentPage} of ${totalPages}</span>`;
-  if(currentPage<totalPages) pagination.innerHTML += `<button onclick="goPage(${currentPage+1})">Next →</button>`;
-}
-
-function goPage(page){
-  currentPage = page;
-  window.scrollTo({top:0, behavior:"smooth"});
-  renderPage(currentPage);
-}
-
-/* INITIAL RENDER */
-renderPage(currentPage);
-</script>
+   
 
 </body>
 </html>
