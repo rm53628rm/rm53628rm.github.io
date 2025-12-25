@@ -309,4 +309,34 @@ footer{
     margin:auto;
   }
 }
+/* =========================
+   NEW BADGE
+========================= */
+.new-badge {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: bold;
+  color: #fff;
+  background: #e60000;       /* Red color for attention */
+  border-radius: 4px;
+  animation: blink 1s infinite; /* Blinking effect */
+  vertical-align: middle;
+  text-transform: uppercase;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Optional: adjust spacing if badge is at top of card */
+.news-card .news-text {
+  display: flex;
+  flex-direction: column;
+}
+
 
