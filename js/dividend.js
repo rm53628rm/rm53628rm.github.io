@@ -15,7 +15,7 @@ dividendNews.push(
 {
  title:"HDFC Bank Dividend",
  summary:"₹15 dividend announced",
- date:"2025-01-19",
+ date: "2025-12-25T22:00:00",
  category:"Dividend",
  image:"/images/market.jpg",
  link:"/news/hdfc.html"
