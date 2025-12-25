@@ -279,6 +279,20 @@ footer{
   }
 }
 /* =========================
+   MOBILE MENU HEADER
+========================= */
+.menu-header{
+  text-align:center;
+  font-size:18px;
+  font-weight:700;
+  color:#1e3a8a;
+  padding:12px 0 18px;
+  margin-bottom:14px;
+  border-bottom:1px solid #e5e7eb;
+  letter-spacing:0.5px;
+}
+
+/* =========================
    CATEGORY TITLE BAR
 ========================= */
 .category-title-bar{
