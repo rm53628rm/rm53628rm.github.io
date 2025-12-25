@@ -50,44 +50,12 @@
 </footer>
 
 <!-- JS FILES -->
+  <script src="js/common.js"></script>
 <script src="js/latest.js"></script>
 <script src="js/earning.js"></script>
 <script src="js/dividend.js"></script>
 
-<script>
-  function bindClickEffect() {
-  const clickableElements = document.querySelectorAll(
-    '.news-card, a, .menu-btn, .back, .view-all'
-  );
 
-  clickableElements.forEach(el => {
-    el.addEventListener('click', function(e){
-      const ripple = document.createElement('span');
-      ripple.classList.add('click-ripple');
-      const rect = el.getBoundingClientRect();
-      const size = Math.max(rect.width, rect.height);
-      ripple.style.width = ripple.style.height = size + 'px';
-      ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
-      ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
-      el.appendChild(ripple);
-      setTimeout(()=>ripple.remove(), 600);
-    });
-
-    if(getComputedStyle(el).position === 'static'){
-      el.style.position = 'relative';
-    }
-  });
-}
-
-// Initial bind
-bindClickEffect();
-
-// After pagination render, call bindClickEffect() again
-function renderPage(page){
-  /* ... render news cards ... */
-  bindClickEffect(); // ← bind ripple on newly added cards
-}
-  
 /* =========================
    MOBILE MENU
 ========================= */
