@@ -17,7 +17,7 @@ dividendNews.push(
  summary:"₹15 dividend announced",
  date:"2025-01-19",
  category:"Dividend",
- image:"/images/hdfc.jpg",
+ image:"/images/market.jpg",
  link:"/news/hdfc.html"
 }
 );
