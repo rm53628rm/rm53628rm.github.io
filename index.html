@@ -82,10 +82,11 @@ function closeMenu(){document.getElementById('mobileMenu').classList.remove("sho
 ========================= */
 function isNew(dateStr){
   const newsDate = new Date(dateStr);
-  const today = new Date();
-  const diffDays = (today - newsDate)/(1000*60*60*24);
-  return diffDays <= 2; // last 2 days
+  const now = new Date();
+  const diffHours = (now - newsDate) / (1000 * 60 * 60); // hours difference
+  return diffHours <= 24; // 24 ghante
 }
+  
 
 /* =========================
    RENDER FUNCTION
