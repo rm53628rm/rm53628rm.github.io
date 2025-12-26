@@ -24,21 +24,18 @@
   </div>
   
   <a href="index.html">Home</a>
-  <a href="category.html?cat=latest">Latest News</a>
-  <a href="category.html?cat=earnings">Earnings</a>
-  <a href="category.html?cat=dividend">Dividend</a>
-    <a href="index.html">Home</a>
-  <a href="category.html?cat=latest">Latest News</a>
-  <a href="category.html?cat=earnings">Earnings</a>
-  <a href="category.html?cat=dividend">Dividend</a>
-    <a href="index.html">Home</a>
-  <a href="category.html?cat=latest">Latest News</a>
-  <a href="category.html?cat=earnings">Earnings</a>
-  <a href="category.html?cat=dividend">Dividend</a>
-    <a href="index.html">Home</a>
-  <a href="category.html?cat=latest">Latest News</a>
-  <a href="category.html?cat=earnings">Earnings</a>
-  <a href="category.html?cat=dividend">Dividend</a>
+<!-- Accordion Button -->
+  <div class="menu-accordion" onclick="toggleCat()">
+    News Categories
+    <span id="arrow">▼</span>
+  </div>
+
+  <!-- Accordion Content -->
+  <div id="catMenu" class="submenu">
+    <a href="category.html?cat=latest">Latest News</a>
+    <a href="category.html?cat=earnings">Earnings</a>
+    <a href="category.html?cat=dividend">Dividend</a>
+  </div>
 </div>
 
 <!-- CATEGORY TITLE BAR -->
@@ -147,6 +144,21 @@ function goPage(page){
 
 /* INITIAL RENDER */
 renderPage(currentPage);
+  <script>
+function toggleCat(){
+  const menu = document.getElementById("catMenu");
+  const arrow = document.getElementById("arrow");
+
+  if(menu.style.maxHeight){
+    menu.style.maxHeight = null;
+    arrow.innerText = "▼";
+  }else{
+    menu.style.maxHeight = menu.scrollHeight + "px";
+    arrow.innerText = "▲";
+  }
+}
+</script>
+  
   
 </script>
 
