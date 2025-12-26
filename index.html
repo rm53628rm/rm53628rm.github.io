@@ -88,9 +88,6 @@ function isNew(dateStr){
 }
   
 
-/* =========================
-   RENDER FUNCTION
-========================= */
 function render(id, data, limit){
   const box = document.getElementById(id);
   box.innerHTML = "";
@@ -102,8 +99,10 @@ function render(id, data, limit){
 
     box.innerHTML += `
     <div class="news-card" onclick="location.href='${n.link}'">
-      ${newBadge}
-      <img src="${n.image}" alt="">
+      <div class="news-image">
+        ${newBadge}
+        <img src="${n.image}" alt="">
+      </div>
       <div class="news-text">
         <div class="news-title">${n.title}</div>
         <div class="news-meta">${n.date} | ${n.category}</div>
@@ -112,6 +111,7 @@ function render(id, data, limit){
     </div>`;
   });
 }
+  
   
 /* =========================
    RENDER ALL NEWS
