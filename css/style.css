@@ -64,7 +64,9 @@ header{
   border-top-right-radius:20px;
   border-bottom-right-radius:20px;
 }
-
+overflow-y:auto;                 /* ✅ ADD THIS */
+  -webkit-overflow-scrolling:touch;/* ✅ ADD THIS */
+}
 .mobile-menu.show{
   left:0;
 }
@@ -340,5 +342,33 @@ footer{
   0%{opacity:1}
   50%{opacity:.25}
   100%{opacity:1}
+}
+/* =========================
+   MOBILE MENU ACCORDION
+========================= */
+
+.menu-accordion{
+  padding:14px;
+  margin-bottom:12px;
+  background:#eef2ff;
+  border-radius:14px;
+  font-weight:600;
+  color:#1e3a8a;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  cursor:pointer;
+}
+
+.submenu{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .35s ease;
+  margin-bottom:10px;
+}
+
+.submenu a{
+  background:#f8faff;
+  margin:6px 0;
 }
 
