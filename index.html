@@ -99,18 +99,18 @@ function render(id, data, limit){
 
     box.innerHTML += `
     <div class="news-card" onclick="location.href='${n.link}'">
-      <div class="news-image">
-        ${newBadge}
-        <img src="${n.image}" alt="">
-      </div>
+      <img src="${n.image}" alt="">
       <div class="news-text">
-        <div class="news-title">${n.title}</div>
+        <div class="news-title">
+          ${newBadge}${n.title}
+        </div>
         <div class="news-meta">${n.date} | ${n.category}</div>
         <div class="news-summary">${n.summary}</div>
       </div>
     </div>`;
   });
 }
+  
   
   
 /* =========================
