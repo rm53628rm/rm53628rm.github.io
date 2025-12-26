@@ -94,13 +94,17 @@ function isNew(dateStr){
 function render(id, data, limit){
   const box = document.getElementById(id);
   box.innerHTML = "";
+
   data.slice(0, limit).forEach(n=>{
-    const newBadge = isNew(n.date) ? `<span class="new-badge">NEW</span>` : "";
+    const newBadge = isNew(n.date)
+      ? `<span class="new-badge">NEW</span>`
+      : "";
+
     box.innerHTML += `
     <div class="news-card" onclick="location.href='${n.link}'">
+      ${newBadge}
       <img src="${n.image}" alt="">
       <div class="news-text">
-        ${newBadge}
         <div class="news-title">${n.title}</div>
         <div class="news-meta">${n.date} | ${n.category}</div>
         <div class="news-summary">${n.summary}</div>
@@ -108,7 +112,7 @@ function render(id, data, limit){
     </div>`;
   });
 }
-
+  
 /* =========================
    RENDER ALL NEWS
 ========================= */
