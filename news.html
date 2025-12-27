@@ -1,172 +1,159 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>News | Capital Edge</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>News | StockNews</title>
 
-<style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Segoe UI,Arial,sans-serif;
-  background:#f4f6f9;
-  color:#222;
-}
-
-/* HEADER */
-header{
-  background:linear-gradient(90deg,#062743,#0a3d62);
-  color:#fff;
-  padding:22px 16px;
-  text-align:center;
-}
-header h1{margin:0;font-size:32px}
-header p{margin:6px 0 0;font-size:14px}
-
-/* CONTAINER */
-.container{
-  max-width:900px;
-  margin:25px auto;
-  padding:0 16px;
-}
-
-/* ARTICLE */
-.article{
-  background:#fff;
-  padding:22px;
-  border-radius:14px;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
-}
-
-.article h2{
-  font-size:26px;
-  color:#083154;
-  margin:0 0 10px;
-  line-height:1.3;
-}
-
-.article-meta{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  font-size:13px;
-  color:#666;
-  margin-bottom:18px;
-}
-
-.article-meta span{
-  background:#eef3f8;
-  padding:5px 10px;
-  border-radius:20px;
-  font-weight:600;
-}
-
-.article-content{
-  font-size:16px;
-  line-height:1.75;
-  color:#333;
-}
-
-.article-content p{
-  margin-bottom:16px;
-}
-
-/* BACK BUTTON */
-.back-btn{
-  display:inline-block;
-  margin-top:20px;
-  padding:10px 16px;
-  background:#ff9f1c;
-  color:#fff;
-  text-decoration:none;
-  border-radius:6px;
-  font-weight:700;
-}
-
-/* FOOTER */
-footer{
-  background:#0a3d62;
-  color:#fff;
-  text-align:center;
-  padding:14px;
-  margin-top:40px;
-}
-
-/* MOBILE */
-@media(max-width:600px){
-  .article h2{font-size:22px}
-  .article-content{font-size:15px}
-}
-</style>
+<link rel="stylesheet" href="../css/style.css">
 </head>
-
 <body>
 
+<!-- HEADER (SAME AS INDEX) -->
 <header>
-  <h1>Capital Edge</h1>
-  <p>Finance | Stock Market | Investment News</p>
+  <div class="menu-btn" onclick="openMenu()">☰</div>
+  <div class="logo">StockNews</div>
 </header>
 
-<div class="container">
-  <div class="article" id="news-detail">
-    <!-- News load hogi yahan -->
+<!-- MOBILE MENU -->
+<div id="mobileMenu" class="mobile-menu">
+  <span class="close" onclick="closeMenu()">✕</span>
+  <div class="menu-header">Stock Edge</div>
+
+  <div class="menu-accordion" onclick="toggleCat()">
+    News Categories <span id="arrow">▼</span>
+  </div>
+
+  <div id="catMenu" class="submenu">
+    <a href="../category.html?cat=latest">Latest News</a>
+    <a href="../category.html?cat=earnings">Earnings</a>
+    <a href="../category.html?cat=dividend">Dividend</a>
   </div>
 </div>
 
-<footer>© 2025 Capital Edge | Educational Purpose Only</footer>
+<!-- ================= NEWS DETAIL ================= -->
+<main>
 
-<script src="news.js"></script>
+<div class="news-detail-box">
+
+  <h1 id="newsTitle">HDFC Bank Dividend</h1>
+
+  <div class="news-detail-meta">
+    <span id="newsDate"></span>
+    <span id="newsCategory"></span>
+  </div>
+
+  <img id="newsImage" class="news-detail-image" src="" alt="">
+
+  <!-- 🔴 FULL NEWS CONTENT YAHA MANUALLY LIKHE -->
+  <div class="news-full-content">
+    <p>
+      HDFC Bank ne apne shareholders ke liye ₹15 per share dividend announce
+      kiya hai. Bank ke board ne financial performance ke baad is dividend
+      ko approve kiya.
+    </p>
+
+    <p>
+      Record date aur payment date jald hi announce ki jayegi.
+      Investors ko is announcement se short term me positive impact
+      dekhne ko mil sakta hai.
+    </p>
+  </div>
+
+  <!-- BACK BUTTON -->
+  <a href="../index.html" class="back-btn">← Back to Home</a>
+
+</div>
+
+<!-- ================= RELATED NEWS ================= -->
+<section>
+  <h2>Related News</h2>
+  <div id="relatedNews"></div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>StockNews</h3>
+      <p>Latest stock market news, earnings, dividends & updates.</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2025 StockNews • Educational Purpose Only
+  </div>
+</footer>
+
+<!-- ================= JS ================= -->
+<script src="../js/latest.js"></script>
+<script src="../js/earning.js"></script>
+<script src="../js/dividend.js"></script>
+
 <script>
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
-
-const news = allNews.find(n => n.id == id);
-const box = document.getElementById("news-detail");
-
-if(news){
-  box.innerHTML = `
-    <h2>${news.title}</h2>
-
-    <div class="article-meta">
-      <span>${news.date}</span>
-      <span>${news.category}</span>
-    </div>
-
-    <div class="article-content">
-      <p>${news.content}</p>
-    </div>
-
-    <a href="index.html" class="back-btn">← Back to Home</a>
-  `;
-}else{
-  box.innerHTML = "<p><b>News not found</b></p>";
+/* MOBILE MENU */
+function openMenu(){
+  document.getElementById("mobileMenu").classList.add("show");
+}
+function closeMenu(){
+  document.getElementById("mobileMenu").classList.remove("show");
+}
+function toggleCat(){
+  const menu = document.getElementById("catMenu");
+  const arrow = document.getElementById("arrow");
+  if(menu.style.maxHeight){
+    menu.style.maxHeight = null;
+    arrow.innerText = "▼";
+  }else{
+    menu.style.maxHeight = menu.scrollHeight + "px";
+    arrow.innerText = "▲";
+  }
 }
 
-  
-/* assume allNews array already loaded */
-const randomBox = document.getElementById("randomNews");
+/* =====================
+   LOAD DATA FROM JS
+===================== */
+const allNews = [...latestNews, ...earningNews, ...dividendNews];
 
-const randomNews = allNews
-  .filter(n => n.id !== news.id)   // current news hata do
-  .sort(() => 0.5 - Math.random())
-  .slice(0,4);                     // sirf 4 cards
+// current page link
+const current = location.pathname;
 
-randomNews.forEach(n=>{
-  randomBox.innerHTML += `
-    <div class="news-card" onclick="location.href='news.html?id=${n.id}'">
-      <img src="${n.image}">
-      <div class="news-text">
-        <div class="news-title">${n.title}</div>
-        <div class="news-meta">${n.date} | ${n.category}</div>
-        <div class="news-summary">${n.summary}</div>
-      </div>
-    </div>
-  `;
-});
-  
+// find matching news
+const news = allNews.find(n => current.includes(n.link));
+
+if(news){
+  document.getElementById("newsTitle").innerText = news.title;
+  document.getElementById("newsCategory").innerText = news.category;
+  document.getElementById("newsImage").src = news.image;
+
+  const d = new Date(news.date);
+  document.getElementById("newsDate").innerText = d.toDateString();
+}
+
+/* =====================
+   RELATED NEWS
+===================== */
+function renderRelated(){
+  const box = document.getElementById("relatedNews");
+  allNews
+    .filter(n => !current.includes(n.link))
+    .slice(0,4)
+    .forEach(n=>{
+      box.innerHTML += `
+      <div class="news-card" onclick="location.href='${n.link}'">
+        <img src="${n.image}">
+        <div class="news-text">
+          <div class="news-title">${n.title}</div>
+          <div class="news-meta">${n.category}</div>
+        </div>
+      </div>`;
+    });
+}
+
+renderRelated();
 </script>
 
 </body>
 </html>
+
