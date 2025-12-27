@@ -143,6 +143,29 @@ if(news){
 }else{
   box.innerHTML = "<p><b>News not found</b></p>";
 }
+
+  
+/* assume allNews array already loaded */
+const randomBox = document.getElementById("randomNews");
+
+const randomNews = allNews
+  .filter(n => n.id !== news.id)   // current news hata do
+  .sort(() => 0.5 - Math.random())
+  .slice(0,4);                     // sirf 4 cards
+
+randomNews.forEach(n=>{
+  randomBox.innerHTML += `
+    <div class="news-card" onclick="location.href='news.html?id=${n.id}'">
+      <img src="${n.image}">
+      <div class="news-text">
+        <div class="news-title">${n.title}</div>
+        <div class="news-meta">${n.date} | ${n.category}</div>
+        <div class="news-summary">${n.summary}</div>
+      </div>
+    </div>
+  `;
+});
+  
 </script>
 
 </body>
