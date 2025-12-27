@@ -18,10 +18,18 @@
 <div id="mobileMenu" class="mobile-menu">
   <span class="close" onclick="closeMenu()">✕</span>
   <div class="menu-header">Stock Edge</div>
-  <a href="index.html">Home</a>
-  <a href="category.html?cat=latest">Latest News</a>
-  <a href="category.html?cat=earnings">Earnings</a>
-  <a href="category.html?cat=dividend">Dividend</a>
+  <!-- Accordion Button -->
+  <div class="menu-accordion" onclick="toggleCat()">
+    News Categories
+    <span id="arrow">▼</span>
+  </div>
+
+  <!-- Accordion Content -->
+  <div id="catMenu" class="submenu">
+    <a href="category.html?cat=latest">Latest News</a>
+    <a href="category.html?cat=earnings">Earnings</a>
+    <a href="category.html?cat=dividend">Dividend</a>
+  </div>
 </div>
 
 <main>
@@ -74,8 +82,25 @@
 /* =========================
    MOBILE MENU
 ========================= */
-function openMenu(){document.getElementById('mobileMenu').classList.add("show");}
-function closeMenu(){document.getElementById('mobileMenu').classList.remove("show");}
+  function openMenu(){
+  document.getElementById("mobileMenu").classList.add("show");
+}
+
+function closeMenu(){
+  document.getElementById("mobileMenu").classList.remove("show");
+}
+function toggleCat(){
+  const menu = document.getElementById("catMenu");
+  const arrow = document.getElementById("arrow");
+
+  if(menu.style.maxHeight){
+    menu.style.maxHeight = null;
+    arrow.innerText = "▼";
+  }else{
+    menu.style.maxHeight = menu.scrollHeight + "px";
+    arrow.innerText = "▲";
+  }
+}
 
 /* =========================
    AUTO NEW BADGE
