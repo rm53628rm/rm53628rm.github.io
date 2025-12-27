@@ -7,7 +7,7 @@ dividendNews.push(
  date: "2025-12-25T22:00:00",
  category:"Dividend",
  image:"/images/market.jpg",
- link:"/news/hdfc.html"
+ link:"/news.html"
 }
 );
 dividendNews.push(
@@ -17,6 +17,6 @@ dividendNews.push(
  date:"2025-01-15",
  category:"Dividend",
  image:"/images/infosys.jpg",
- link:"/news/infosys.html"
+ link:"/news.html"
 }
 );
