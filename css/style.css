@@ -371,3 +371,11 @@ footer{
   margin:6px 0;
 }
 
+.related{
+  margin-top:40px;
+}
+
+.related h3{
+  font-size:18px;
+  margin-bottom:12px;
+}
