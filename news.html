@@ -81,6 +81,15 @@
       <p>Latest stock market news, earnings, dividends & updates.</p>
     </div>
   </div>
+  <div class="share-box">
+  <span class="share-label">Share:</span>
+
+  <a id="shareWhatsapp" target="_blank" class="share-btn wa">WhatsApp</a>
+  <a id="shareFacebook" target="_blank" class="share-btn fb">Facebook</a>
+  <a id="shareTelegram" target="_blank" class="share-btn tg">Telegram</a>
+  <a id="shareTwitter" target="_blank" class="share-btn tw">Twitter</a>
+  </div>
+  
   <div class="footer-bottom">
     © 2025 StockNews • Educational Purpose Only
   </div>
@@ -131,7 +140,24 @@ if(news){
   const d = new Date(news.date);
   document.getElementById("newsDate").innerText = d.toDateString();
 }
+  
+const shareUrl = encodeURIComponent(window.location.href);
+const shareTitle = encodeURIComponent(
+  document.getElementById("newsTitle")?.innerText || "Stock News"
+);
 
+document.getElementById("shareWhatsapp").href =
+  `https://wa.me/?text=${shareTitle}%20${shareUrl}`;
+
+document.getElementById("shareFacebook").href =
+  `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
+
+document.getElementById("shareTelegram").href =
+  `https://t.me/share/url?url=${shareUrl}&text=${shareTitle}`;
+
+document.getElementById("shareTwitter").href =
+  `https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareTitle}`;
+  
 /* ======================
    RELATED + RANDOM NEWS
 ====================== */
