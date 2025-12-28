@@ -135,24 +135,74 @@ if(news){
 /* =====================
    RELATED NEWS
 ===================== */
-function renderRelated(){
-  const box = document.getElementById("relatedNews");
-  allNews
-    .filter(n => !current.includes(n.link))
-    .slice(0,4)
-    .forEach(n=>{
-      box.innerHTML += `
+// Combine all news
+const allNews = [...latestNews, ...earningNews, ...dividendNews];
+
+// Get current news ID from URL
+const params = new URLSearchParams(location.search);
+const currentId = params.get("id");
+
+// Related news container
+const relatedBox = document.getElementById("relatedNews");
+
+// Function to shuffle array
+function shuffleArray(array) {
+  return array.sort(() => Math.random() - 0.5);
+}
+
+// Render Related News (same category)
+function renderRelatedNews() {
+  if(!relatedBox) return;
+
+  // Find current news object
+  const currentNews = allNews.find(n => n.id == currentId);
+  if(!currentNews) return;
+
+  // Related news: same category, exclude current
+  const related = allNews
+    .filter(n => n.category === currentNews.category && n.id != currentId)
+    .slice(0,4);
+
+  // Random news: exclude current + related
+  const excludeIds = [currentId, ...related.map(n=>n.id)];
+  const random = shuffleArray(allNews.filter(n => !excludeIds.includes(n.id))).slice(0,4);
+
+  relatedBox.innerHTML = "";
+
+  // Section title: Related News
+  relatedBox.innerHTML += `<h3>Related News</h3>`;
+
+  related.forEach(n => {
+    relatedBox.innerHTML += `
       <div class="news-card" onclick="location.href='${n.link}'">
-        <img src="${n.image}">
+        <img src="${n.image}" alt="">
         <div class="news-text">
           <div class="news-title">${n.title}</div>
           <div class="news-meta">${n.category}</div>
         </div>
-      </div>`;
-    });
+      </div>
+    `;
+  });
+
+  // Section title: Random News
+  relatedBox.innerHTML += `<h3>Random News</h3>`;
+
+  random.forEach(n => {
+    relatedBox.innerHTML += `
+      <div class="news-card" onclick="location.href='${n.link}'">
+        <img src="${n.image}" alt="">
+        <div class="news-text">
+          <div class="news-title">${n.title}</div>
+          <div class="news-meta">${n.category}</div>
+        </div>
+      </div>
+    `;
+  });
 }
 
-renderRelated();
+// Call render function
+renderRelatedNews();
+  
 </script>
 
 </body>
