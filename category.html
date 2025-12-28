@@ -92,51 +92,42 @@ function toggleCat(){
   
 /* =========================
    CATEGORY TITLE
-========================= */
+========================= 
 const cat = new URLSearchParams(location.search).get("cat");
-const categoryTitle = document.getElementById("categoryTitle");
-if(categoryTitle && cat){
-  categoryTitle.innerText = cat.charAt(0).toUpperCase() + cat.slice(1) + " News";
-}
+document.getElementById("categoryTitle").innerText =
+  cat ? cat.toUpperCase() + " NEWS" : "NEWS";
 
-/* =========================
-   DATA SELECTION
-========================= */
-let data=[];
-if(cat==="latest") data=latestNews;
-if(cat==="earnings") data=earningNews;
-if(cat==="dividend") data=dividendNews;
-
-/* ADD CATEGORY IF MISSING */
-data = data.map(n=>({...n, category: n.category || cat.toUpperCase()}));
+/* DATA PICK */
+let data = [];
+if(cat === "latest") data = latestNews;
+if(cat === "earnings") data = earningNews;
+if(cat === "dividend") data = dividendNews;
 
 /* SORT BY DATE */
-data.sort((a,b)=>new Date(b.date)-new Date(a.date));
+data.sort((a,b)=> new Date(b.date) - new Date(a.date));
 
-/* =========================
-   PAGINATION SETTINGS
-========================= */
+/* PAGINATION */
 let currentPage = 1;
 const perPage = 10;
 
 function renderPage(page){
   const list = document.getElementById("list");
-  const pagination = document.getElementById("pagination");
   list.innerHTML = "";
 
-  const start = (page-1)*perPage;
-  const end = start+perPage;
+  const start = (page - 1) * perPage;
+  const end = start + perPage;
 
-  data.slice(start,end).forEach(n=>{
+  data.slice(start, end).forEach(n=>{
     list.innerHTML += `
-    <div class="news-card" onclick="location.href='${n.link}'">
-      <img src="${n.image}" alt="">
-      <div class="news-text">
-        <div class="news-title">${n.title}</div>
-        <div class="news-meta">${n.date} | ${n.category}</div>
-        <div class="news-summary">${n.summary}</div>
+      <div class="news-card" onclick="location.href='${n.link}'">
+        <img src="${n.image}" alt="">
+        <div class="news-text">
+          <div class="news-title">${n.title}</div>
+          <div class="news-meta">${n.date} | ${n.category}</div>
+          <div class="news-summary">${n.summary || ""}</div>
+        </div>
       </div>
-    </div>`;
+    `;
   });
 
   renderPagination();
@@ -145,26 +136,28 @@ function renderPage(page){
 function renderPagination(){
   const pagination = document.getElementById("pagination");
   pagination.innerHTML = "";
-  const totalPages = Math.ceil(data.length/perPage);
 
-  if(totalPages<=1) return;
+  const totalPages = Math.ceil(data.length / perPage);
+  if(totalPages <= 1) return;
 
-  if(currentPage>1) pagination.innerHTML += `<button onclick="goPage(${currentPage-1})">← Prev</button>`;
-  pagination.innerHTML += `<span>Page ${currentPage} of ${totalPages}</span>`;
-  if(currentPage<totalPages) pagination.innerHTML += `<button onclick="goPage(${currentPage+1})">Next →</button>`;
+  if(currentPage > 1){
+    pagination.innerHTML += `<button onclick="goPage(${currentPage-1})">Prev</button>`;
+  }
+
+  pagination.innerHTML += ` Page ${currentPage} of ${totalPages} `;
+
+  if(currentPage < totalPages){
+    pagination.innerHTML += `<button onclick="goPage(${currentPage+1})">Next</button>`;
+  }
 }
 
-function goPage(page){
-  currentPage = page;
-  window.scrollTo({top:0, behavior:"smooth"});
+function goPage(p){
+  currentPage = p;
+  window.scrollTo({top:0});
   renderPage(currentPage);
 }
 
-/* INITIAL RENDER */
+/* INITIAL LOAD */
 renderPage(currentPage);
-  
 </script>
-
-</body>
-</html>
-
+  
