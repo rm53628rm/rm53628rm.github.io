@@ -504,3 +504,32 @@ footer{
   }
 }
 
+.share-box{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+
+.share-label{
+  font-size: 14px;
+  color: #555;
+}
+
+.share-btn{
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.share-btn.wa{ background:#25D366; }
+.share-btn.fb{ background:#1877F2; }
+.share-btn.tg{ background:#0088cc; }
+.share-btn.tw{ background:#000000; }
+
+.share-btn:hover{ opacity: 0.9; }
+
