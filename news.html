@@ -132,46 +132,34 @@ if(news){
   document.getElementById("newsDate").innerText = d.toDateString();
 }
 
-/* =====================
-   RELATED NEWS
-===================== */
-// Combine all news
-const allNews = [...latestNews, ...earningNews, ...dividendNews];
-
-// Get current news ID from URL
-const params = new URLSearchParams(location.search);
-const currentId = params.get("id");
-
-// Related news container
+// ======================
+// RELATED + RANDOM NEWS
+// ======================
 const relatedBox = document.getElementById("relatedNews");
 
-// Function to shuffle array
-function shuffleArray(array) {
+// Shuffle function
+function shuffleArray(array){
   return array.sort(() => Math.random() - 0.5);
 }
 
-// Render Related News (same category)
+// Render Related + Random News
 function renderRelatedNews() {
-  if(!relatedBox) return;
+  if(!relatedBox || !news) return;
 
-  // Find current news object
-  const currentNews = allNews.find(n => n.id == currentId);
-  if(!currentNews) return;
-
-  // Related news: same category, exclude current
+  // 4 Related news (same category, exclude current)
   const related = allNews
-    .filter(n => n.category === currentNews.category && n.id != currentId)
+    .filter(n => n.category === news.category && n.id != news.id)
     .slice(0,4);
 
-  // Random news: exclude current + related
-  const excludeIds = [currentId, ...related.map(n=>n.id)];
+  // 4 Random news (exclude current + related)
+  const excludeIds = [news.id, ...related.map(n=>n.id)];
   const random = shuffleArray(allNews.filter(n => !excludeIds.includes(n.id))).slice(0,4);
 
+  // Clear container
   relatedBox.innerHTML = "";
 
-  // Section title: Related News
+  // Related News Section
   relatedBox.innerHTML += `<h3>Related News</h3>`;
-
   related.forEach(n => {
     relatedBox.innerHTML += `
       <div class="news-card" onclick="location.href='${n.link}'">
@@ -184,9 +172,8 @@ function renderRelatedNews() {
     `;
   });
 
-  // Section title: Random News
+  // Random News Section
   relatedBox.innerHTML += `<h3>Random News</h3>`;
-
   random.forEach(n => {
     relatedBox.innerHTML += `
       <div class="news-card" onclick="location.href='${n.link}'">
@@ -200,8 +187,9 @@ function renderRelatedNews() {
   });
 }
 
-// Call render function
+// Call function
 renderRelatedNews();
+  
   
 </script>
 
