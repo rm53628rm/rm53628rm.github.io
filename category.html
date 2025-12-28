@@ -9,28 +9,23 @@
 
 <body>
 
-<!-- HEADER SAME AS INDEX -->
+<!-- HEADER -->
 <header>
   <div class="menu-btn" onclick="openMenu()">☰</div>
   <div class="logo">StockNews</div>
-  
 </header>
-  
+
 <!-- MOBILE MENU -->
 <div id="mobileMenu" class="mobile-menu">
   <span class="close" onclick="closeMenu()">✕</span>
-  <div class="menu-header">
-  Stock Edge
-  </div>
-  
+  <div class="menu-header">Stock Edge</div>
+
   <a href="index.html">Home</a>
-<!-- Accordion Button -->
+
   <div class="menu-accordion" onclick="toggleCat()">
-    News Categories
-    <span id="arrow">▼</span>
+    News Categories <span id="arrow">▼</span>
   </div>
 
-  <!-- Accordion Content -->
   <div id="catMenu" class="submenu">
     <a href="category.html?cat=latest">Latest News</a>
     <a href="category.html?cat=earnings">Earnings</a>
@@ -38,16 +33,16 @@
   </div>
 </div>
 
-<!-- CATEGORY TITLE BAR -->
+<!-- CATEGORY TITLE -->
 <div class="category-title-bar">
-  <h2 id="categoryTitle"></h2>
+  <h2 id="categoryTitle">Category</h2>
 </div>
 
 <!-- NEWS LIST -->
 <main id="list"></main>
 <div id="pagination" class="pagination"></div>
 
-<!-- FOOTER SAME AS INDEX -->
+<!-- FOOTER -->
 <footer>
   <div class="footer-links">
     <a href="#">About Us</a>
@@ -66,21 +61,12 @@
 <script src="js/dividend.js"></script>
 
 <script>
-/* =========================
-   MOBILE MENU
-========================= */
-
-function openMenu(){
-  document.getElementById("mobileMenu").classList.add("show");
-}
-
-function closeMenu(){
-  document.getElementById("mobileMenu").classList.remove("show");
-}
+/* MOBILE MENU */
+function openMenu(){ document.getElementById("mobileMenu").classList.add("show"); }
+function closeMenu(){ document.getElementById("mobileMenu").classList.remove("show"); }
 function toggleCat(){
   const menu = document.getElementById("catMenu");
   const arrow = document.getElementById("arrow");
-
   if(menu.style.maxHeight){
     menu.style.maxHeight = null;
     arrow.innerText = "▼";
@@ -89,24 +75,24 @@ function toggleCat(){
     arrow.innerText = "▲";
   }
 }
-  
-/* =========================
-   CATEGORY TITLE
-========================= 
-const cat = new URLSearchParams(location.search).get("cat");
-document.getElementById("categoryTitle").innerText =
-  cat ? cat.toUpperCase() + " NEWS" : "NEWS";
 
-/* DATA PICK */
-let data = [];
-if(cat === "latest") data = latestNews;
-if(cat === "earnings") data = earningNews;
-if(cat === "dividend") data = dividendNews;
+/* CATEGORY TITLE */
+const cat = new URLSearchParams(location.search).get("cat");
+const categoryTitle = document.getElementById("categoryTitle");
+if(cat){
+  categoryTitle.innerText = cat.charAt(0).toUpperCase() + cat.slice(1) + " News";
+}
+
+/* DATA SELECTION */
+let data=[];
+if(cat==="latest") data = latestNews;
+if(cat==="earnings") data = earningNews;
+if(cat==="dividend") data = dividendNews;
 
 /* SORT BY DATE */
 data.sort((a,b)=> new Date(b.date) - new Date(a.date));
 
-/* PAGINATION */
+/* PAGINATION SETTINGS */
 let currentPage = 1;
 const perPage = 10;
 
@@ -114,10 +100,10 @@ function renderPage(page){
   const list = document.getElementById("list");
   list.innerHTML = "";
 
-  const start = (page - 1) * perPage;
-  const end = start + perPage;
+  const start = (page-1)*perPage;
+  const end = start+perPage;
 
-  data.slice(start, end).forEach(n=>{
+  data.slice(start,end).forEach(n=>{
     list.innerHTML += `
       <div class="news-card" onclick="location.href='${n.link}'">
         <img src="${n.image}" alt="">
@@ -136,28 +122,24 @@ function renderPage(page){
 function renderPagination(){
   const pagination = document.getElementById("pagination");
   pagination.innerHTML = "";
+  const totalPages = Math.ceil(data.length/perPage);
+  if(totalPages<=1) return;
 
-  const totalPages = Math.ceil(data.length / perPage);
-  if(totalPages <= 1) return;
-
-  if(currentPage > 1){
-    pagination.innerHTML += `<button onclick="goPage(${currentPage-1})">Prev</button>`;
-  }
-
-  pagination.innerHTML += ` Page ${currentPage} of ${totalPages} `;
-
-  if(currentPage < totalPages){
-    pagination.innerHTML += `<button onclick="goPage(${currentPage+1})">Next</button>`;
-  }
+  if(currentPage>1) pagination.innerHTML += `<button onclick="goPage(${currentPage-1})">← Prev</button>`;
+  pagination.innerHTML += `<span>Page ${currentPage} of ${totalPages}</span>`;
+  if(currentPage<totalPages) pagination.innerHTML += `<button onclick="goPage(${currentPage+1})">Next →</button>`;
 }
 
-function goPage(p){
-  currentPage = p;
-  window.scrollTo({top:0});
+function goPage(page){
+  currentPage = page;
+  window.scrollTo({top:0, behavior:"smooth"});
   renderPage(currentPage);
 }
 
-/* INITIAL LOAD */
+/* INITIAL RENDER */
 renderPage(currentPage);
 </script>
-  
+
+</body>
+</html>
+
