@@ -379,3 +379,28 @@ footer{
   font-size:18px;
   margin-bottom:12px;
 }
+/* =========================
+   NEWS SHOW PAGE IMAGE
+========================= */
+
+.news-show-image {
+  width: 100%;
+  max-height: 420px;        /* desktop limit */
+  object-fit: cover;        /* image stretch nahi hogi */
+  border-radius: 14px;
+  margin: 15px 0;
+}
+
+/* MOBILE VIEW */
+@media (max-width: 768px) {
+  .news-show-image {
+    max-height: 220px;
+    border-radius: 10px;
+  }
+}
+.news-show-box {
+  background: #fff;
+  padding: 18px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
