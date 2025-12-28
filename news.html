@@ -117,10 +117,11 @@ function toggleCat(){
 const allNews = [...latestNews, ...earningNews, ...dividendNews];
 
 // current page link
-const current = location.pathname;
+const params = new URLSearchParams(window.location.search);
+const newsId = params.get("id");
 
-// find matching news
-const news = allNews.find(n => current.includes(n.link));
+const news = allNews.find(n => n.id == newsId);
+  
 
 if(news){
   document.getElementById("newsTitle").innerText = news.title;
