@@ -2,6 +2,7 @@ const dividendNews = [];
 
 dividendNews.push(
 {
+ id: 2,
  title:"HDFC Bank Dividend",
  summary:"₹15 dividend announced",
  date: "2025-12-25T22:00:00",
@@ -12,6 +13,7 @@ dividendNews.push(
 );
 dividendNews.push(
 {
+ id: 1,
  title:"Infosys Dividend Declared",
  summary:"₹18 per share announced",
  date:"2025-01-15",
