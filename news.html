@@ -156,35 +156,10 @@ function renderRelatedNews(){
     n.category === news.category && n.id != news.id
   ).slice(0,4);
 
-  /* ===== 4 RANDOM NEWS ===== */
-  const excludeIds = [news.id, ...related.map(n => n.id)];
-
-  const random = shuffleArray(
-    allNews.filter(n => !excludeIds.includes(n.id))
-  ).slice(0,4);
-
-  relatedBox.innerHTML = "";
-
   /* ----- RELATED ----- */
   relatedBox.innerHTML += `<h3>Related News</h3>`;
 
   related.forEach(n => {
-    relatedBox.innerHTML += `
-      <div class="news-card" onclick="location.href='${n.link}'">
-        <img src="${n.image}" alt="">
-        <div class="news-text">
-          <div class="news-title">${n.title}</div>
-          <div class="news-meta">${n.category}</div>
-          <div class="news-summary">${n.summary || ""}</div>
-        </div>
-      </div>
-    `;
-  });
-
-  /* ----- RANDOM ----- */
-  relatedBox.innerHTML += `<h3>Random News</h3>`;
-
-  random.forEach(n => {
     relatedBox.innerHTML += `
       <div class="news-card" onclick="location.href='${n.link}'">
         <img src="${n.image}" alt="">
