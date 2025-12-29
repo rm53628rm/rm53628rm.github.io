@@ -116,7 +116,7 @@ section h2{
   background:#ffffff;
   border-radius:18px;
   margin-bottom:12px;
-  height:92px;
+  height:82px;
   overflow:hidden;
   cursor:pointer;
   box-shadow:0 4px 14px rgba(0,0,0,.08);
@@ -124,8 +124,8 @@ section h2{
 
 /* IMAGE */
 .news-card img{
-  width:92px;
-  height:92px;
+  width:82px;
+  height:82px;
   border-radius:16px;
   object-fit:cover;
   flex-shrink:0;
