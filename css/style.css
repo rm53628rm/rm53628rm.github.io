@@ -81,7 +81,7 @@ overflow-y:auto;                 /* ✅ ADD THIS */
 /* MENU LINKS */
 .mobile-menu a{
   display:block;
-  padding:14px;
+  padding:8px;
   margin-bottom:12px;
   background:#f3f6ff;
   border-radius:14px;
@@ -347,7 +347,7 @@ footer{
 ========================= */
 
 .menu-accordion{
-  padding:7px;
+  padding:12px;
   margin-bottom:12px;
   background:#eef2ff;
   border-radius:14px;
