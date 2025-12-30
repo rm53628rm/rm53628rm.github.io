@@ -9,28 +9,7 @@
 <body>
 
 <!-- HEADER -->
-<header>
-  <div class="menu-btn" onclick="openMenu()">☰</div>
-  <div class="logo">StockNews</div>
-</header>
-
-<!-- MOBILE MENU -->
-<div id="mobileMenu" class="mobile-menu">
-  <span class="close" onclick="closeMenu()">✕</span>
-  <div class="menu-header">Stock Edge</div>
-  <!-- Accordion Button -->
-  <div class="menu-accordion" onclick="toggleCat()">
-    News Categories
-    <span id="arrow">▼</span>
-  </div>
-
-  <!-- Accordion Content -->
-  <div id="catMenu" class="submenu">
-    <a href="category.html?cat=latest">Latest News</a>
-    <a href="category.html?cat=earnings">Earnings</a>
-    <a href="category.html?cat=dividend">Dividend</a>
-  </div>
-</div>
+<div id="header"></div>
 
 <main>
 
@@ -72,35 +51,22 @@
     © 2025 StockNews • Educational Purpose Only
   </div>
 </footer>
-
+<script>
+fetch("/partials/header.html")
+  .then(res => res.text())
+  .then(data => document.getElementById("header").innerHTML = data);
+</script>
 <!-- JS FILES -->
 <script src="js/latest.js"></script>
 <script src="js/earning.js"></script>
 <script src="js/dividend.js"></script>
+  <script src="/js/menu.js"></script>
 
 <script>
 /* =========================
    MOBILE MENU
 ========================= */
-  function openMenu(){
-  document.getElementById("mobileMenu").classList.add("show");
-}
 
-function closeMenu(){
-  document.getElementById("mobileMenu").classList.remove("show");
-}
-function toggleCat(){
-  const menu = document.getElementById("catMenu");
-  const arrow = document.getElementById("arrow");
-
-  if(menu.style.maxHeight){
-    menu.style.maxHeight = null;
-    arrow.innerText = "▼";
-  }else{
-    menu.style.maxHeight = menu.scrollHeight + "px";
-    arrow.innerText = "▲";
-  }
-}
 
 /* =========================
    AUTO NEW BADGE
