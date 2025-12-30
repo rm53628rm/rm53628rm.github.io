@@ -1,1 +1,22 @@
 
+<header class="site-header">
+  <div class="menu-btn" onclick="openMenu()">☰</div>
+  <div class="logo">StockNews</div>
+</header>
+
+<!-- MOBILE MENU -->
+<div id="mobileMenu" class="mobile-menu">
+  <span class="close" onclick="closeMenu()">✕</span>
+
+  <div class="menu-header">Stock Edge</div>
+
+  <div class="menu-accordion" onclick="toggleCat()">
+    News Categories <span id="arrow">▼</span>
+  </div>
+
+  <div id="catMenu" class="submenu">
+    <a href="/category.html?cat=latest">Latest News</a>
+    <a href="/category.html?cat=earnings">Earnings</a>
+    <a href="/category.html?cat=dividend">Dividend</a>
+  </div>
+</div>
