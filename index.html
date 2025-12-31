@@ -12,7 +12,14 @@
 <div id="header"></div>
 
 <main>
-
+<!-- TradingView Widget BEGIN -->
+<div class="tradingview-widget-container">
+  <div class="tradingview-widget-container__widget"></div>
+  <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/markets/stocks-usa/" rel="noopener nofollow" target="_blank"><span class="blue-text">Stocks today</span></a><span class="trademark"> by TradingView</span></div>
+  
+</div>
+<!-- 
+  
 <section>
   <h2>Latest News</h2>
   <div id="latestNews"></div>
@@ -50,9 +57,30 @@ fetch("/partials/footer.html")
   <script src="/js/menu.js"></script>
 
 <script>
-/* =========================
-   MOBILE MENU
-========================= */
+<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-hotlists.js" async>
+  {
+  "exchange": "BSE",
+  "colorTheme": "light",
+  "dateRange": "1D",
+  "showChart": true,
+  "locale": "en",
+  "largeChartUrl": "",
+  "isTransparent": false,
+  "showSymbolLogo": false,
+  "showFloatingTooltip": true,
+  "plotLineColorGrowing": "rgba(41, 98, 255, 1)",
+  "plotLineColorFalling": "rgba(41, 98, 255, 1)",
+  "gridLineColor": "rgba(240, 243, 250, 0)",
+  "scaleFontColor": "#0F0F0F",
+  "belowLineFillColorGrowing": "rgba(41, 98, 255, 0.12)",
+  "belowLineFillColorFalling": "rgba(41, 98, 255, 0.12)",
+  "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
+  "belowLineFillColorFallingBottom": "rgba(41, 98, 255, 0)",
+  "symbolActiveColor": "rgba(41, 98, 255, 0.12)",
+  "width": "400",
+  "height": "550"
+}
+  </script>
 
 
 /* =========================
