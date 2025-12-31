@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,13 +7,14 @@
 <title>Stock Market News</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
 <!-- HEADER -->
 <div id="header"></div>
-  
+
 <main>
-  
+
 <section>
   <h2>Latest News</h2>
   <div id="latestNews"></div>
@@ -35,34 +37,45 @@
 
 <!-- FOOTER -->
 <div id="footer"></div>
+
+<!-- LOAD HEADER & FOOTER -->
 <script>
 fetch("/partials/header.html")
   .then(res => res.text())
   .then(data => document.getElementById("header").innerHTML = data);
+
 fetch("/partials/footer.html")
   .then(res => res.text())
   .then(data => document.getElementById("footer").innerHTML = data);
 </script>
-<!-- JS FILES -->
+
+<!-- DATA FILES -->
 <script src="js/latest.js"></script>
 <script src="js/earning.js"></script>
 <script src="js/dividend.js"></script>
-  <script src="/js/menu.js"></script>
 
+<!-- MENU -->
+<script src="/js/menu.js"></script>
 
+<!-- MAIN LOGIC -->
+<script>
 /* =========================
    AUTO NEW BADGE
 ========================= */
 function isNew(dateStr){
   const newsDate = new Date(dateStr);
   const now = new Date();
-  const diffHours = (now - newsDate) / (1000 * 60 * 60); // hours difference
-  return diffHours <= 24; // 24 ghante
+  const diffHours = (now - newsDate) / (1000 * 60 * 60);
+  return diffHours <= 24;
 }
-  
 
+/* =========================
+   RENDER FUNCTION
+========================= */
 function render(id, data, limit){
   const box = document.getElementById(id);
+  if(!box) return;
+
   box.innerHTML = "";
 
   data.slice(0, limit).forEach(n=>{
@@ -83,9 +96,7 @@ function render(id, data, limit){
     </div>`;
   });
 }
-  
-  
-  
+
 /* =========================
    RENDER ALL NEWS
 ========================= */
@@ -96,4 +107,3 @@ render("dividendNews", dividendNews, 5);
 
 </body>
 </html>
-
