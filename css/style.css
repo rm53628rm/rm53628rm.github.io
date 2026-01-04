@@ -47,49 +47,109 @@ header{
   color:#ffffff;
 }
 
-/* =========================
-   MOBILE MENU
-========================= */
-.mobile-menu{
-  position:fixed;
-  top:0;
-  left:-100%;
-  width:80%;
-  height:100%;
-  background:#ffffff;
-  padding:20px;
-  transition:.35s ease;
-  z-index:2000;
-  box-shadow:4px 0 20px rgba(0,0,0,.25);
-  border-top-right-radius:20px;
-  border-bottom-right-radius:20px;
-overflow-y:auto;                 /* ✅ ADD THIS */
-  -webkit-overflow-scrolling:touch;/* ✅ ADD THIS */
+/* ===============================
+   MOBILE MENU CONTAINER
+================================ */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 85%;
+  max-width: 360px;
+  height: 100vh;
+  background: #020617; /* Dark premium */
+  color: #e5edff;
+  z-index: 9999;
+  transition: left 0.4s ease;
+  overflow-y: auto;
+  box-shadow: 0 0 40px rgba(0,0,0,0.6);
 }
-.mobile-menu.show{
-  left:0;
+
+/* SHOW MENU */
+.mobile-menu.show {
+  left: 0;
 }
+
+/* ===============================
+   HEADER INSIDE MENU
 
 /* CLOSE BUTTON */
-.close{
-  font-size:22px;
-  float:right;
-  cursor:pointer;
-  color:#333;
+.close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 22px;
+  cursor: pointer;
+  color: #ffffff;
 }
 
-/* MENU LINKS */
-.mobile-menu a{
-  display:block;
-  padding:8px;
-  margin-bottom:12px;
-  background:#f3f6ff;
-  border-radius:14px;
-  text-decoration:none;
-  color:#8d6e00;
-  font-weight:600;
-  box-shadow:0 4px 10px rgba(0,0,0,.08);
+/* ===============================
+   ACCORDION MENU
+================================ */
+.menu-accordion {
+  padding: 14px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
+
+.menu-accordion.active {
+  background: rgba(255,255,255,0.05);
+}
+
+/* ===============================
+   SUB MENU
+================================ */
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  padding-left: 25px;
+  transition: max-height 0.35s ease;
+}
+
+.submenu.open {
+  max-height: 600px;
+  padding-bottom: 10px;
+}
+
+/* SUBMENU LINKS */
+.submenu a {
+  display: block;
+  padding: 8px 0;
+  font-size: 14px;
+  color: #c7d2fe;
+  text-decoration: none;
+}
+
+.submenu a:hover {
+  color: #ffffff;
+}
+
+/* ===============================
+   ARROW ICON
+================================ */
+.arrow {
+  font-size: 13px;
+  transition: transform 0.3s ease;
+}
+
+.arrow.rotate {
+  transform: rotate(180deg);
+}
+
+/* ===============================
+   MOBILE OPTIMIZATION
+================================ */
+@media (min-width: 769px) {
+  .mobile-menu {
+    display: none;
+  }
+}
+
 
 /* =========================
    MAIN CONTENT
@@ -342,46 +402,7 @@ footer{
   50%{opacity:.25}
   100%{opacity:1}
 }
-/* =========================
-   MOBILE MENU ACCORDION
-========================= */
 
-.menu-accordion{
-  padding:12px;
-  margin-bottom:12px;
-  background:#eef2ff;
-  border-radius:14px;
-  font-weight:600;
-  color:#1e3a8a;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  cursor:pointer;
-}
-
-.submenu{
-  max-height:0;
-  overflow:hidden;
-  transition:max-height .35s ease;
-  margin-bottom:10px;
-}
-
-.submenu a{
-  background:#f8faff;
-  margin:6px 0;
-}
-
-.related{
-  margin-top:40px;
-}
-
-.related h3{
-  font-size:18px;
-  margin-bottom:12px;
-}
-/* =========================
-   NEWS SHOW PAGE IMAGE
-========================= */
 
 /* =========================
    NEWS SHOW PAGE PREMIUM CSS
