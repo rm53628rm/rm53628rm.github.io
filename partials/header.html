@@ -1,60 +1,37 @@
-
-<header class="site-header">
-  <div class="menu-btn" onclick="openMenu()">☰</div>
-  <div class="logo">StockNews</div>
-</header>
-
-
 <!-- MOBILE MENU -->
 <div id="mobileMenu" class="mobile-menu">
-  <span class="close" onclick="closeMenu()">✕</span>
 
+  <span class="close" onclick="closeMenu()">✕</span>
   <div class="menu-header">Stock Edge</div>
 
-  <div class="menu-accordion" onclick="toggleCat()">
-    Learn Stock Market(Beginners)  <span id="arrow">▼</span>
+  <!-- DEFAULT OPEN -->
+  <div class="menu-accordion active" onclick="toggleMenu(this)">
+    Learn Stock Market (Beginners)
+    <span class="arrow rotate">▼</span>
+  </div>
+  <div class="submenu open">
+    <a href="#">Stock Market Basics</a>
+    <a href="#">NSE & BSE</a>
+    <a href="#">Demat & Trading Account</a>
   </div>
 
-  <div id="catMenu" class="submenu">
-    <a href="/category.html?cat=latest">Stock Market Basics</a>
-    <a href="/category.html?cat=Market Indices (Nifty 50, Sensex, Bank Nifty"></a>
-    <a href="/category.html?cat=dvidend">What Is Exchanges ( NSE & BSE) </a>
-<a href="/category.html?cat=dvidend">What Is Exchanges ( NSE & BSE) </a>
-<a href="/category.html?cat=dvidend">What Is Exchanges ( NSE & BSE) </a>
-<a href="/category.html?cat=dvidend">What Is Demat & Trading Account </a>
-<a href="/category.html?cat=dvidend">Trading VS Investment</a>
-<a href="/category.html?cat=dvidend">Short Term VS Long Term </a>
-<a href="/category.html?cat=dvidend">How To Markets Up And Down </a>
+  <div class="menu-accordion" onclick="toggleMenu(this)">
+    Technical Analysis
+    <span class="arrow">▼</span>
   </div>
-  <div class="menu-accordion" onclick="toggleCat()">
-    Learn Stock Market(Beginners)  <span id="arrow">▼</span>
+  <div class="submenu">
+    <a href="#">Chart Patterns</a>
+    <a href="#">Indicators</a>
   </div>
 
-  <div id="catMenu" class="submenu">
-    <a href="/category.html?cat=latest">Stock Market Basics</a>
-    <a href="/category.html?cat=Market Indices (Nifty 50, Sensex, Bank Nifty"></a>
-    <a href="/category.html?cat=dvidend">What Is Exchanges ( NSE & BSE) </a>
-<a href="/category.html?cat=dvidend">What Is Exchanges ( NSE & BSE) </a>
-<a href="/category.html?cat=dvidend">What Is Exchanges ( NSE & BSE) </a>
-<a href="/category.html?cat=dvidend">What Is Demat & Trading Account </a>
-<a href="/category.html?cat=dvidend">Trading VS Investment</a>
-<a href="/category.html?cat=dvidend">Short Term VS Long Term </a>
-<a href="/category.html?cat=dvidend">How To Markets Up And Down </a>
+  <div class="menu-accordion" onclick="toggleMenu(this)">
+    Trading Strategies
+    <span class="arrow">▼</span>
   </div>
-  <div class="menu-accordion" onclick="toggleCat()">
-    Learn Stock Market(Beginners)  <span id="arrow">▼</span>
+  <div class="submenu">
+    <a href="#">Intraday</a>
+    <a href="#">Swing Trading</a>
   </div>
 
-  <div id="catMenu" class="submenu">
-    <a href="/category.html?cat=latest">Stock Market Basics</a>
-    <a href="/category.html?cat=Market Indices (Nifty 50, Sensex, Bank Nifty"></a>
-    <a href="/category.html?cat=dvidend">What Is Exchanges ( NSE & BSE) </a>
-<a href="/category.html?cat=dvidend">What Is Exchanges ( NSE & BSE) </a>
-<a href="/category.html?cat=dvidend">What Is Exchanges ( NSE & BSE) </a>
-<a href="/category.html?cat=dvidend">What Is Demat & Trading Account </a>
-<a href="/category.html?cat=dvidend">Trading VS Investment</a>
-<a href="/category.html?cat=dvidend">Short Term VS Long Term </a>
-<a href="/category.html?cat=dvidend">How To Markets Up And Down </a>
-  </div>
 </div>
 
