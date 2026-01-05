@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dear Lottery Result</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+*{box-sizing:border-box;font-family:Segoe UI,Arial}
+body{margin:0;background:#f4f6fb;color:#222}
+
+/* HEADER */
+header{
+  background:linear-gradient(135deg,#0a2a66,#123d9c);
+  color:#fff;
+  padding:14px 16px;
+  display:flex;
+  align-items:center;
+}
+.menu-btn{font-size:26px;cursor:pointer}
+.header-text{flex:1;text-align:center}
+.header-text h1{margin:0;font-size:22px}
+.header-text p{margin:4px 0 0;font-size:13px;opacity:.9}
+
+/* MOBILE MENU */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:9}
+.side-menu{
+  position:fixed;top:0;left:-260px;
+  width:260px;height:100%;
+  background:#0a2a66;padding:20px;
+  transition:.3s;z-index:10
+}
+.side-menu.active{left:0}
+.side-menu a{
+  display:block;color:#fff;text-decoration:none;
+  padding:12px 0;border-bottom:1px solid rgba(255,255,255,.25)
+}
+.menu-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px;margin-bottom:10px;
+  border-radius:14px;background:rgba(255,255,255,.15)
+}
+.menu-logo{
+  width:42px;height:42px;border-radius:50%;
+  background:#fff;color:#0a2a66;
+  display:flex;align-items:center;justify-content:center;font-weight:700
+}
+.menu-close{font-size:32px;color:#fff;cursor:pointer}
+
+/* CONTENT */
+.container{max-width:1100px;margin:auto;padding:15px}
+.section-title{font-size:18px;font-weight:700;color:#0a2a66;margin:20px 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:15px}
+
+/* CARD */
+.card{
+  background:#fff;border-radius:16px;padding:15px;
+  text-align:center;box-shadow:0 10px 25px rgba(0,0,0,.08)
+}
+.card h3{margin:0;color:#0a2a66}
+.date-show{margin-top:6px;font-size:13px;color:#555}
+.card img{
+  width:100%;margin-top:12px;border-radius:12px;
+  display:none;aspect-ratio:4/3;object-fit:cover
+}
+.status{
+  margin-top:18px;font-size:22px;
+  font-weight:700;color:#d4af37;display:none
+}
+.refresh-btn{
+  margin-top:14px;padding:10px 24px;
+  border:none;border-radius:25px;
+  background:#0a2a66;color:#fff;
+  cursor:pointer;display:none
+}
+
+/* CALENDAR */
+.calendar-box{
+  background:#fff;padding:18px;border-radius:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08)
+}
+.date-wrap{position:relative}
+.calendar-box input{
+  width:100%;padding:14px;font-size:16px;
+  border-radius:12px;border:1px solid #ccc
+}
+.date-placeholder{
+  position:absolute;left:16px;top:50%;
+  transform:translateY(-50%);
+  color:#888;font-size:15px;pointer-events:none
+}
+
+/* ADD TO HOME */
+#a2hs-btn{
+  position:fixed;bottom:20px;right:20px;
+  padding:12px 20px;background:#0a2a66;
+  color:#fff;border:none;border-radius:25px;
+  cursor:pointer;z-index:9999
+}
+
+/* FOOTER */
+footer{text-align:center;font-size:12px;color:#777;padding:20px}
+
+/* RESPONSIVE */
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="menu-btn" onclick="openMenu()">☰</div>
+  <div class="header-text">
+    <h1>Dear Lottery Result</h1>
+    <p>Fast & Trusted Result Portal</p>
+  </div>
+</header>
+
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+<div class="side-menu" id="menu">
+  <div class="menu-header">
+    <div class="menu-logo">🎯</div>
+    <div style="color:#fff">Dear Lottery</div>
+    <div class="menu-close" onclick="closeMenu()">×</div>
+  </div>
+  <a href="#">About Us</a>
+  <a href="#">Contact Us</a>
+  <a href="#">Privacy Policy</a>
+  <a href="#">Disclaimer</a>
+</div>
+
+<div class="container">
+
+  <div class="section-title">🔥 Today Result</div>
+  <div class="grid" id="todayResults"></div>
+
+  <div class="section-title">📅 Old Results</div>
+  <div class="calendar-box">
+    <div class="date-wrap">
+      <input type="date" id="oldDate">
+      <span class="date-placeholder">Please select date</span>
+    </div>
+  </div>
+  <div class="grid" id="oldResults"></div>
+
+</div>
+
+<footer>© 2026 Dear Lottery</footer>
+<button id="a2hs-btn">Add to Home Screen</button>
+
+<script>
+const base="results/";
+const draws=[
+  {title:"🌅 Morning",prefix:"md"},
+  {title:"☀️ Day",prefix:"dd"},
+  {title:"🌙 Night",prefix:"nd"}
+];
+
+function code(d){
+  return String(d.getDate()).padStart(2,"0")+
+         String(d.getMonth()+1).padStart(2,"0")+
+         String(d.getFullYear()).slice(-2);
+}
+function smart(src){return src+"?t="+Date.now()}
+
+/* TODAY RESULT */
+function loadToday(){
+  todayResults.innerHTML="";
+  const d=new Date();
+
+  draws.forEach(x=>{
+    const c=document.createElement("div");
+    c.className="card";
+    c.innerHTML=`<h3>${x.title}</h3><div class="date-show">${d.toDateString()}</div>`;
+
+    const img=new Image();
+    const st=document.createElement("div");
+    const btn=document.createElement("button");
+
+    st.className="status";
+    btn.className="refresh-btn";
+    btn.textContent="Refresh";
+
+    btn.onclick=()=>{
+      img.src = smart(base+x.prefix+code(d)+".jpg");
+    };
+
+    img.src = smart(base+x.prefix+code(d)+".jpg");
+
+    img.onload=()=>{
+      img.style.display="block";
+      st.style.display="none";
+      btn.style.display="none";
+    };
+
+    img.onerror=()=>{
+      st.style.display="block";
+      st.textContent="Result Not Published";
+      btn.style.display="inline-block";
+    };
+
+    c.append(img,st,btn);
+    todayResults.appendChild(c);
+  });
+}
+
+/* OLD RESULT */
+oldDate.addEventListener("change",()=>{
+  oldResults.innerHTML="";
+  if(!oldDate.value) return;
+  const d=new Date(oldDate.value);
+
+  draws.forEach(x=>{
+    const c=document.createElement("div");
+    c.className="card";
+    c.innerHTML=`<h3>${x.title}</h3><div class="date-show">${oldDate.value}</div>`;
+
+    const img=new Image();
+    const st=document.createElement("div");
+    const btn=document.createElement("button");
+
+    st.className="status";
+    btn.className="refresh-btn";
+    btn.textContent="Refresh";
+
+    btn.onclick=()=>{
+      img.src = smart(base+x.prefix+code(d)+".jpg");
+    };
+
+    img.src = smart(base+x.prefix+code(d)+".jpg");
+
+    img.onload=()=>{
+      img.style.display="block";
+      st.style.display="none";
+      btn.style.display="none";
+    };
+
+    img.onerror=()=>{
+      st.style.display="block";
+      st.textContent="Result Not Published";
+      btn.style.display="inline-block";
+    };
+
+    c.append(img,st,btn);
+    oldResults.appendChild(c);
+  });
+});
+
+/* MENU */
+function openMenu(){menu.classList.add("active");overlay.style.display="block"}
+function closeMenu(){menu.classList.remove("active");overlay.style.display="none"}
+
+/* LOAD */
+loadToday();
+
+/* ADD TO HOME SCREEN */
+let deferredPrompt;
+window.addEventListener("beforeinstallprompt",e=>{
+  e.preventDefault();deferredPrompt=e;
+});
+document.getElementById("a2hs-btn").onclick=()=>{
+  if(deferredPrompt) deferredPrompt.prompt();
+  else alert("Open this site on mobile browser to add to Home Screen");
+};
+</script>
+
+</body>
+</html>
