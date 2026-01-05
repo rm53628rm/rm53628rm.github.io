@@ -1,1 +1,83 @@
+*{box-sizing:border-box;font-family:Segoe UI,Arial}
+body{margin:0;background:#f4f6fb;color:#222}
+
+/* HEADER */
+header{
+  background:linear-gradient(135deg,#0a2a66,#123d9c);
+  color:#fff;
+  padding:14px 16px;
+  display:flex;
+  align-items:center;
+}
+.menu-btn{font-size:26px;cursor:pointer}
+.header-text{flex:1;text-align:center}
+.header-text h1{margin:0;font-size:22px}
+.header-text p{margin:4px 0 0;font-size:13px;opacity:.9}
+
+/* MOBILE MENU */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:9}
+.side-menu{
+  position:fixed;top:0;left:-260px;
+  width:260px;height:100%;
+  background:#0a2a66;padding:20px;
+  transition:.3s;z-index:10
+}
+.side-menu.active{left:0}
+.side-menu a{
+  display:block;color:#fff;text-decoration:none;
+  padding:12px 0;border-bottom:1px solid rgba(255,255,255,.25)
+}
+.menu-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px;margin-bottom:10px;
+  border-radius:14px;background:rgba(255,255,255,.15)
+}
+.menu-logo{
+  width:42px;height:42px;border-radius:50%;
+  background:#fff;color:#0a2a66;
+  display:flex;align-items:center;justify-content:center;font-weight:700
+}
+.menu-close{font-size:32px;color:#fff;cursor:pointer}
+
+/* CONTENT */
+.container{max-width:1100px;margin:auto;padding:15px}
+.section-title{font-size:18px;font-weight:700;color:#0a2a66;margin:20px 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:15px}
+
+/* CARD */
+.card{
+  background:#fff;border-radius:16px;padding:15px;
+  text-align:center;box-shadow:0 10px 25px rgba(0,0,0,.08)
+}
+.card h3{margin:0;color:#0a2a66}
+.date-show{margin-top:6px;font-size:13px;color:#555}
+.card img{
+  width:100%;margin-top:12px;border-radius:12px;
+  display:none;aspect-ratio:4/3;object-fit:cover
+}
+.status{
+  margin-top:18px;font-size:22px;
+  font-weight:700;color:#d4af37;display:none
+}
+.refresh-btn{
+  margin-top:14px;padding:10px 24px;
+  border:none;border-radius:25px;
+  background:#0a2a66;color:#fff;
+  cursor:pointer;display:none
+}
+
+/* CALENDAR */
+.calendar-box{
+  background:#fff;padding:18px;border-radius:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08)
+}
+.calendar-box input{
+  width:100%;padding:14px;font-size:16px;
+  border-radius:12px;border:1px solid #ccc
+}
+
+/* FOOTER */
+footer{text-align:center;font-size:12px;color:#777;padding:20px}
+
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
 
