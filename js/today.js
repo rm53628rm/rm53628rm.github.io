@@ -1,4 +1,4 @@
-const BASE_URL = "https://yourdomain.com/results/";
+const BASE_URL = "/images/";
 
 const draws=[
   {title:"🌅 Morning",prefix:"md"},
