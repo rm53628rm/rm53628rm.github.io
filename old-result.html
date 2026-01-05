@@ -1,1 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Old Dear Lottery Result | Previous Results</title>
+
+<meta name="description" content="Check old Dear Lottery results date wise for Morning, Day and Night draws.">
+<meta name="keywords" content="old dear lottery result, previous lottery result">
+<meta name="robots" content="index,follow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="canonical" href="https://yourdomain.com/old-result.html">
+<link rel="stylesheet" href="css/lottery.css">
+</head>
+
+<body>
+
+<header>
+<div class="menu-btn" onclick="openMenu()">☰</div>
+<div class="header-text">
+<h1>Old Lottery Result</h1>
+<p>Date Wise Results</p>
+</div>
+</header>
+
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+<div class="side-menu" id="menu">
+<a href="index.html">Today Result</a>
+<a href="old-result.html">Old Result</a>
+</div>
+
+<div class="container">
+<div class="calendar-box">
+<input type="date" id="oldDate">
+</div>
+<div class="grid" id="oldResults"></div>
+</div>
+
+<footer>© 2026 Dear Lottery</footer>
+
+<script src="js/old.js"></script>
+<script>
+function openMenu(){menu.classList.add("active");overlay.style.display="block"}
+function closeMenu(){menu.classList.remove("active");overlay.style.display="none"}
+</script>
+</body>
+</html>
 
