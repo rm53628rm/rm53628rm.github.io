@@ -6,17 +6,24 @@ const draws=[
   {title:"🌙 Night",prefix:"nd"}
 ];
 
+function getISTDate(){
+  const now = new Date();
+  const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+  return new Date(utc + (5.5 * 60 * 60 * 1000));
+}
+
 function code(d){
   return String(d.getDate()).padStart(2,"0")+
          String(d.getMonth()+1).padStart(2,"0")+
          String(d.getFullYear()).slice(-2);
 }
+
 function smart(src){return src+"?t="+Date.now()}
 
 function loadToday(){
   const wrap=document.getElementById("todayResults");
   wrap.innerHTML="";
-  const d=new Date();
+  const d=getISTDate(); // ✅ FIXED
 
   draws.forEach(x=>{
     const c=document.createElement("div");
@@ -35,8 +42,17 @@ function loadToday(){
     btn.onclick=()=>img.src=smart(BASE_URL+x.prefix+code(d)+".jpg");
     img.src=smart(BASE_URL+x.prefix+code(d)+".jpg");
 
-    img.onload=()=>{img.style.display="block";st.style.display="none";btn.style.display="none";}
-    img.onerror=()=>{st.textContent="Result Not Published";st.style.display="block";btn.style.display="inline-block";}
+    img.onload=()=>{
+      img.style.display="block";
+      st.style.display="none";
+      btn.style.display="none";
+    };
+
+    img.onerror=()=>{
+      st.textContent="Result Not Published";
+      st.style.display="block";
+      btn.style.display="inline-block";
+    };
 
     c.append(img,st,btn);
     wrap.appendChild(c);
