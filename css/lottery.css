@@ -76,6 +76,23 @@ header{
   border-radius:12px;border:1px solid #ccc
 }
 
+.old-btn-wrap{
+  text-align:center;
+  margin:30px 0 10px;
+}
+
+.old-btn{
+  display:inline-block;
+  padding:14px 32px;
+  border-radius:30px;
+  background:linear-gradient(135deg,#123d9c,#0a2a66);
+  color:#fff;
+  font-weight:600;
+  text-decoration:none;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+.old-btn:active{transform:scale(.97)}
+
 /* FOOTER */
 footer{text-align:center;font-size:12px;color:#777;padding:20px}
 
