@@ -1,43 +1,39 @@
 const BASE_URL = "/images/";
 
-const draws = [
-  { title: "🌅 Morning", prefix: "md" },
-  { title: "☀️ Day",     prefix: "dd" },
-  { title: "🌙 Night",   prefix: "nd" }
-];
-
-/* 🔒 INDIA DATE – NO FALLBACK */
 function getTodayIST(){
   return new Date(
-    new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" })
+    new Date().toLocaleString("en-US", {
+      timeZone: "Asia/Kolkata"
+    })
   );
 }
 
-/* FILE CODE: DDMMYY */
 function fileCode(d){
-  return String(d.getDate()).padStart(2,"0") +
-         String(d.getMonth()+1).padStart(2,"0") +
-         String(d.getFullYear()).slice(-2);
+  const dd = String(d.getDate()).padStart(2,"0");
+  const mm = String(d.getMonth()+1).padStart(2,"0");
+  const yy = String(d.getFullYear()).slice(-2);
+  return dd + mm + yy;
 }
 
-/* CACHE KILL */
-function smart(src){
-  return src + "?v=" + Date.now();
+function checkFile(url, ok, fail){
+  fetch(url, { method:"HEAD", cache:"no-store" })
+    .then(r => r.ok ? ok() : fail())
+    .catch(fail);
 }
 
 function loadToday(){
   const wrap = document.getElementById("todayResults");
   wrap.innerHTML = "";
 
-  const today = getTodayIST(); // 🔥 STRICT TODAY
+  const today = getTodayIST();
 
   draws.forEach(draw=>{
     const card = document.createElement("div");
-    card.className = "card";
+    card.className = "result-card";
 
     card.innerHTML = `
       <h3>${draw.title}</h3>
-      <div class="date-show">${today.toDateString()}</div>
+      <div class="date">${today.toDateString()}</div>
     `;
 
     const img = new Image();
@@ -45,29 +41,31 @@ function loadToday(){
     const btn = document.createElement("button");
 
     status.className = "status";
+    status.textContent = "Result Not Published";
+
     btn.className = "refresh-btn";
     btn.textContent = "Refresh";
+    btn.onclick = ()=> img.src = file + "?v=" + Date.now();
 
-    const fileName =
+    const file =
       BASE_URL + draw.prefix + fileCode(today) + ".jpg";
 
-    btn.onclick = () => {
-      img.src = smart(fileName);
-    };
+    checkFile(
+      file,
+      ()=> img.src = file + "?v=" + Date.now(),
+      ()=> {}
+    );
 
-    img.src = smart(fileName);
-
-    img.onload = () => {
-      img.style.display = "block";
+    img.onload = ()=>{
       status.style.display = "none";
       btn.style.display = "none";
+      img.style.display = "block";
     };
 
-    img.onerror = () => {
-      img.style.display = "none";
-      status.textContent = "Result Not Published";
+    img.onerror = ()=>{
       status.style.display = "block";
       btn.style.display = "inline-block";
+      img.style.display = "none";
     };
 
     card.append(img, status, btn);
@@ -75,5 +73,5 @@ function loadToday(){
   });
 }
 
-loadToday();
+document.addEventListener("DOMContentLoaded", loadToday);
 
