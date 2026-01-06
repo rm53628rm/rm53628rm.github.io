@@ -1,44 +1,71 @@
-const BASE_URL = "https://yourdomain.com/results/";
+const BASE_URL = "/images/";
 
-const draws=[
-  {title:"🌅 Morning",prefix:"md"},
-  {title:"☀️ Day",prefix:"dd"},
-  {title:"🌙 Night",prefix:"nd"}
+const draws = [
+  { title:"🌅 Morning", prefix:"md" },
+  { title:"☀️ Day", prefix:"dd" },
+  { title:"🌙 Night", prefix:"nd" }
 ];
 
 function code(d){
-  return String(d.getDate()).padStart(2,"0")+
-         String(d.getMonth()+1).padStart(2,"0")+
+  return String(d.getDate()).padStart(2,"0") +
+         String(d.getMonth()+1).padStart(2,"0") +
          String(d.getFullYear()).slice(-2);
 }
-function smart(src){return src+"?t="+Date.now()}
 
-document.getElementById("oldDate").addEventListener("change",()=>{
-  const wrap=document.getElementById("oldResults");
-  wrap.innerHTML="";
-  const d=new Date(oldDate.value);
+/* CACHE SAFE IMAGE LOADER */
+async function loadOldImage(img, file, status, btn){
+  try{
+    const res = await fetch(file, { method:"HEAD", cache:"no-store" });
+    if(!res.ok) throw "NF";
+
+    img.src = file + "?v=" + Date.now();
+    img.onload = ()=>{
+      img.style.display="block";
+      status.style.display="none";
+      btn.style.display="none";
+    };
+  }catch{
+    status.textContent="Result Not Published";
+    status.style.display="block";
+    btn.style.display="inline-block";
+  }
+}
+
+const oldDateInput = document.getElementById("oldDate");
+const wrap = document.getElementById("oldResults");
+
+oldDateInput.addEventListener("change", ()=>{
+
+  if(!oldDateInput.value) return;   // ✅ safety
+
+  wrap.innerHTML = "";
+
+  const d = new Date(oldDateInput.value);
 
   draws.forEach(x=>{
-    const c=document.createElement("div");
-    c.className="card";
-    c.innerHTML=`<h3>${x.title}</h3>
-    <div class="date-show">${oldDate.value}</div>`;
 
-    const img=new Image();
-    const st=document.createElement("div");
-    const btn=document.createElement("button");
+    const c = document.createElement("div");
+    c.className = "card";
+    c.innerHTML = `
+      <h3>${x.title}</h3>
+      <div class="date-show">${oldDateInput.value}</div>
+    `;
 
-    st.className="status";
-    btn.className="refresh-btn";
-    btn.textContent="Refresh";
+    const img = new Image();
+    const st = document.createElement("div");
+    const btn = document.createElement("button");
 
-    btn.onclick=()=>img.src=smart(BASE_URL+x.prefix+code(d)+".jpg");
-    img.src=smart(BASE_URL+x.prefix+code(d)+".jpg");
+    st.className = "status";
+    btn.className = "refresh-btn";
+    btn.textContent = "Refresh";
 
-    img.onload=()=>{img.style.display="block";st.style.display="none";btn.style.display="none";}
-    img.onerror=()=>{st.textContent="Result Not Published";st.style.display="block";btn.style.display="inline-block";}
+    const file = BASE_URL + x.prefix + code(d) + ".jpg";
 
-    c.append(img,st,btn);
+    btn.onclick = ()=> loadOldImage(img, file, st, btn);
+
+    loadOldImage(img, file, st, btn);
+
+    c.append(img, st, btn);
     wrap.appendChild(c);
   });
 });
