@@ -25,6 +25,25 @@ function smart(src){
   return src + "?v=" + Date.now();
 }
 
+/* 🔍 MODAL ELEMENTS */
+const modal = document.getElementById("imgModal");
+const modalImg = document.getElementById("modalImg");
+const closeModal = document.querySelector(".close-modal");
+
+/* OPEN MODAL */
+function openModal(src){
+  modalImg.src = src;
+  modal.classList.add("show");
+}
+
+/* CLOSE MODAL */
+closeModal.onclick = () => modal.classList.remove("show");
+modal.onclick = (e) => {
+  if(e.target === modal){
+    modal.classList.remove("show");
+  }
+};
+
 function loadToday(){
   const wrap = document.getElementById("todayResults");
   wrap.innerHTML = "";
@@ -41,6 +60,8 @@ function loadToday(){
     `;
 
     const img = new Image();
+    img.className = "zoom-img"; // ✅ ZOOM CLASS
+
     const status = document.createElement("div");
     const btn = document.createElement("button");
 
@@ -69,6 +90,9 @@ function loadToday(){
       status.style.display = "block";
       btn.style.display = "inline-block";
     };
+
+    /* 🔥 TAP TO FULL SCREEN */
+    img.onclick = () => openModal(img.src);
 
     card.append(img, status, btn);
     wrap.appendChild(card);
