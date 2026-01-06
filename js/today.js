@@ -1,10 +1,35 @@
 const BASE_URL = "/images/";
 
+const draws = [
+  { title: "🌅 Morning", prefix: "md" },
+  { title: "☀️ Day",     prefix: "dd" },
+  { title: "🌙 Night",   prefix: "nd" }
+];
+
+/* 🔒 INDIA DATE – NO FALLBACK */
+function getTodayIST(){
+  return new Date(
+    new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" })
+  );
+}
+
+/* FILE CODE: DDMMYY */
+function fileCode(d){
+  return String(d.getDate()).padStart(2,"0") +
+         String(d.getMonth()+1).padStart(2,"0") +
+         String(d.getFullYear()).slice(-2);
+}
+
+/* CACHE KILL */
+function smart(src){
+  return src + "?v=" + Date.now();
+}
+
 function loadToday(){
   const wrap = document.getElementById("todayResults");
   wrap.innerHTML = "";
 
-  const today = getTodayIST();
+  const today = getTodayIST(); // 🔥 STRICT TODAY
 
   draws.forEach(draw=>{
     const card = document.createElement("div");
@@ -23,32 +48,22 @@ function loadToday(){
     btn.className = "refresh-btn";
     btn.textContent = "Refresh";
 
-    const file =
+    const fileName =
       BASE_URL + draw.prefix + fileCode(today) + ".jpg";
 
-    const loadImage = ()=>{
-      img.src = file + "?nocache=" + Date.now();
+    btn.onclick = () => {
+      img.src = smart(fileName);
     };
 
-    btn.onclick = loadImage;
+    img.src = smart(fileName);
 
-    checkFile(
-      file,
-      () => loadImage(),
-      () => {
-        status.textContent = "Result Not Published";
-        status.style.display = "block";
-        btn.style.display = "inline-block";
-      }
-    );
-
-    img.onload = ()=>{
+    img.onload = () => {
       img.style.display = "block";
       status.style.display = "none";
       btn.style.display = "none";
     };
 
-    img.onerror = ()=>{
+    img.onerror = () => {
       img.style.display = "none";
       status.textContent = "Result Not Published";
       status.style.display = "block";
@@ -59,4 +74,6 @@ function loadToday(){
     wrap.appendChild(card);
   });
 }
+
+loadToday();
 
