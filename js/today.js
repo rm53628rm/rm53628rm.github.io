@@ -1,26 +1,5 @@
 const BASE_URL = "/images/";
 
-function getTodayIST(){
-  return new Date(
-    new Date().toLocaleString("en-US", {
-      timeZone: "Asia/Kolkata"
-    })
-  );
-}
-
-function fileCode(d){
-  const dd = String(d.getDate()).padStart(2,"0");
-  const mm = String(d.getMonth()+1).padStart(2,"0");
-  const yy = String(d.getFullYear()).slice(-2);
-  return dd + mm + yy;
-}
-
-function checkFile(url, ok, fail){
-  fetch(url, { method:"HEAD", cache:"no-store" })
-    .then(r => r.ok ? ok() : fail())
-    .catch(fail);
-}
-
 function loadToday(){
   const wrap = document.getElementById("todayResults");
   wrap.innerHTML = "";
@@ -29,11 +8,11 @@ function loadToday(){
 
   draws.forEach(draw=>{
     const card = document.createElement("div");
-    card.className = "result-card";
+    card.className = "card";
 
     card.innerHTML = `
       <h3>${draw.title}</h3>
-      <div class="date">${today.toDateString()}</div>
+      <div class="date-show">${today.toDateString()}</div>
     `;
 
     const img = new Image();
@@ -41,37 +20,43 @@ function loadToday(){
     const btn = document.createElement("button");
 
     status.className = "status";
-    status.textContent = "Result Not Published";
-
     btn.className = "refresh-btn";
     btn.textContent = "Refresh";
-    btn.onclick = ()=> img.src = file + "?v=" + Date.now();
 
     const file =
       BASE_URL + draw.prefix + fileCode(today) + ".jpg";
 
+    const loadImage = ()=>{
+      img.src = file + "?nocache=" + Date.now();
+    };
+
+    btn.onclick = loadImage;
+
     checkFile(
       file,
-      ()=> img.src = file + "?v=" + Date.now(),
-      ()=> {}
+      () => loadImage(),
+      () => {
+        status.textContent = "Result Not Published";
+        status.style.display = "block";
+        btn.style.display = "inline-block";
+      }
     );
 
     img.onload = ()=>{
+      img.style.display = "block";
       status.style.display = "none";
       btn.style.display = "none";
-      img.style.display = "block";
     };
 
     img.onerror = ()=>{
+      img.style.display = "none";
+      status.textContent = "Result Not Published";
       status.style.display = "block";
       btn.style.display = "inline-block";
-      img.style.display = "none";
     };
 
     card.append(img, status, btn);
     wrap.appendChild(card);
   });
 }
-
-document.addEventListener("DOMContentLoaded", loadToday);
 
