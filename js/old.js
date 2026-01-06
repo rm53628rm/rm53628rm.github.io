@@ -31,12 +31,32 @@ async function loadOldImage(img, file, status, btn){
   }
 }
 
+/* ====== 👇 YAHAN SE IMPORTANT PART ====== */
+
 const oldDateInput = document.getElementById("oldDate");
+const datePlaceholder = document.getElementById("datePlaceholder");
+
+/* page load pe show */
+if(datePlaceholder){
+  datePlaceholder.style.display = "block";
+}
+
+/* select hone pe hide / show */
+oldDateInput.addEventListener("change", ()=>{
+  if(oldDateInput.value){
+    datePlaceholder.style.display = "none";
+  }else{
+    datePlaceholder.style.display = "block";
+  }
+});
+
+/* ====== 👆 YAHAN TAK ADD KARNA HAI ====== */
+
 const wrap = document.getElementById("oldResults");
 
 oldDateInput.addEventListener("change", ()=>{
 
-  if(!oldDateInput.value) return;   // ✅ safety
+  if(!oldDateInput.value) return;
 
   wrap.innerHTML = "";
 
@@ -62,7 +82,6 @@ oldDateInput.addEventListener("change", ()=>{
     const file = BASE_URL + x.prefix + code(d) + ".jpg";
 
     btn.onclick = ()=> loadOldImage(img, file, st, btn);
-
     loadOldImage(img, file, st, btn);
 
     c.append(img, st, btn);
