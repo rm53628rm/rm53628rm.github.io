@@ -37,7 +37,7 @@ function initCards(){
 
     img.style.display = "none";
     status.className = "status";
-    status.textContent = "Please select date";
+    status.textContent = "Please select old result date";
 
     btn.className = "refresh-btn";
     btn.textContent = "Refresh";
