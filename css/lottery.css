@@ -106,7 +106,7 @@ header{
 
 .date-placeholder{
   position:absolute;
-  left:16px;
+  left:25px;
   top:50%;
   transform:translateY(-50%);
   color:#888;
