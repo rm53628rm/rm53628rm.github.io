@@ -31,11 +31,12 @@ async function pdfExists(url){
 }
 
 /* ===== LOAD PDF WITH RETRY ===== */
-async function loadPDF(card, iframe, status, retryBtn, pdfUrl){
+async function loadPDF(iframe, status, retryBtn, downloadBtn, pdfUrl){
 
   status.textContent = "Loading Result...";
   status.style.display = "block";
   retryBtn.style.display = "none";
+  downloadBtn.style.display = "none";
   iframe.style.display = "none";
 
   const exists = await pdfExists(pdfUrl);
@@ -45,7 +46,6 @@ async function loadPDF(card, iframe, status, retryBtn, pdfUrl){
     return;
   }
 
-  // 👇 CACHE KILL + FORCE RELOAD
   iframe.src =
     "https://docs.google.com/gview?embedded=true&url=" +
     encodeURIComponent(pdfUrl) +
@@ -58,19 +58,22 @@ async function loadPDF(card, iframe, status, retryBtn, pdfUrl){
     iframe.style.display = "block";
     status.style.display = "none";
     retryBtn.style.display = "none";
+    downloadBtn.style.display = "inline-block";
   };
 
-  // ⏱️ SAFETY TIMER (iframe silently fail case)
+  // ⏱️ silent fail safety
   setTimeout(()=>{
     if(!loaded){
-      status.textContent = "Result loaded but not displayed";
+      status.textContent = "Result available but not visible";
       retryBtn.style.display = "inline-block";
+      downloadBtn.style.display = "inline-block";
     }
   }, 6000);
 }
 
 /* ===== MAIN ===== */
 function loadTodayPDF(){
+
   const wrap = document.getElementById("todayResults");
   wrap.innerHTML = "";
 
@@ -96,18 +99,25 @@ function loadTodayPDF(){
     retryBtn.className = "refresh-btn";
     retryBtn.textContent = "Retry";
 
+    const downloadBtn = document.createElement("a");
+    downloadBtn.className = "refresh-btn";
+    downloadBtn.textContent = "Download PDF";
+    downloadBtn.target = "_blank";
+
     const pdfUrl =
       BASE_URL + draw.prefix + fileCode(today) + ".PDF";
 
+    downloadBtn.href = pdfUrl + "&t=" + Date.now();
+
     retryBtn.onclick = ()=>{
-      loadPDF(card, iframe, status, retryBtn, pdfUrl);
+      loadPDF(iframe, status, retryBtn, downloadBtn, pdfUrl);
     };
 
-    card.append(iframe, status, retryBtn);
+    card.append(iframe, status, retryBtn, downloadBtn);
     wrap.appendChild(card);
 
-    // 🔥 AUTO LOAD
-    loadPDF(card, iframe, status, retryBtn, pdfUrl);
+    // 🔥 auto load
+    loadPDF(iframe, status, retryBtn, downloadBtn, pdfUrl);
   });
 }
 
