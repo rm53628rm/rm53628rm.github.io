@@ -6,60 +6,70 @@ const draws = [
   { title:"🌙 Night",   prefix:"EN" }
 ];
 
-/* DDMMYY */
+/* ===== INDIA DATE (STRICT) ===== */
+function getTodayIST(){
+  return new Date(
+    new Date().toLocaleDateString("en-CA",{ timeZone:"Asia/Kolkata" })
+  );
+}
+
+/* ===== DDMMYY ===== */
 function fileCode(d){
   return String(d.getDate()).padStart(2,"0") +
          String(d.getMonth()+1).padStart(2,"0") +
          String(d.getFullYear()).slice(-2);
 }
 
-/* INDIA DATE */
-function getTodayIST(){
-  return new Date(
-    new Date().toLocaleDateString("en-CA",{timeZone:"Asia/Kolkata"})
-  );
+/* ===== CHECK PDF EXISTS ===== */
+async function pdfExists(url){
+  try{
+    const r = await fetch(url,{ method:"HEAD", cache:"no-store" });
+    return r.ok;
+  }catch{
+    return false;
+  }
 }
 
-/* LOAD SINGLE PDF (WITH RETRY) */
-function loadPDF(card, draw, date){
-  const status = card.querySelector(".status");
-  const iframe = card.querySelector("iframe");
-  const retryBtn = card.querySelector(".retry-btn");
+/* ===== LOAD PDF WITH RETRY ===== */
+async function loadPDF(card, iframe, status, retryBtn, pdfUrl){
 
+  status.textContent = "Loading Result...";
   status.style.display = "block";
-  status.textContent = "Loading PDF...";
-  iframe.style.display = "block";
   retryBtn.style.display = "none";
+  iframe.style.display = "none";
 
-  const fileName =
-    BASE_URL + draw.prefix + fileCode(date) + ".PDF";
+  const exists = await pdfExists(pdfUrl);
 
-  // FORCE RELOAD (important)
-  iframe.src = "";
-  setTimeout(()=>{
-    iframe.src =
-      "https://docs.google.com/gview?url=" +
-      encodeURIComponent(fileName) +
-      "&embedded=true";
-  }, 300);
+  if(!exists){
+    status.textContent = "Result Not Published";
+    return;
+  }
+
+  // 👇 CACHE KILL + FORCE RELOAD
+  iframe.src =
+    "https://docs.google.com/gview?embedded=true&url=" +
+    encodeURIComponent(pdfUrl) +
+    "&t=" + Date.now();
 
   let loaded = false;
 
   iframe.onload = ()=>{
     loaded = true;
+    iframe.style.display = "block";
     status.style.display = "none";
+    retryBtn.style.display = "none";
   };
 
-  // SAFETY TIMEOUT (random missing fix)
+  // ⏱️ SAFETY TIMER (iframe silently fail case)
   setTimeout(()=>{
     if(!loaded){
-      iframe.style.display = "none";
-      status.textContent = "Result Not Published";
+      status.textContent = "Result loaded but not displayed";
       retryBtn.style.display = "inline-block";
     }
   }, 6000);
 }
 
+/* ===== MAIN ===== */
 function loadTodayPDF(){
   const wrap = document.getElementById("todayResults");
   wrap.innerHTML = "";
@@ -70,28 +80,36 @@ function loadTodayPDF(){
 
     const card = document.createElement("div");
     card.className = "card";
+
     card.innerHTML = `
       <h3>${draw.title}</h3>
       <div class="date-show">${today.toDateString()}</div>
-
-      <iframe class="pdf-frame"></iframe>
-
-      <div class="status">Loading PDF...</div>
-
-      <button class="retry-btn" style="display:none">
-        🔄 Retry
-      </button>
     `;
 
+    const iframe = document.createElement("iframe");
+    iframe.className = "pdf-frame";
+
+    const status = document.createElement("div");
+    status.className = "status";
+
+    const retryBtn = document.createElement("button");
+    retryBtn.className = "refresh-btn";
+    retryBtn.textContent = "Retry";
+
+    const pdfUrl =
+      BASE_URL + draw.prefix + fileCode(today) + ".PDF";
+
+    retryBtn.onclick = ()=>{
+      loadPDF(card, iframe, status, retryBtn, pdfUrl);
+    };
+
+    card.append(iframe, status, retryBtn);
     wrap.appendChild(card);
 
-    loadPDF(card, draw, today);
-
-    card.querySelector(".retry-btn").onclick = ()=>{
-      loadPDF(card, draw, today);
-    };
+    // 🔥 AUTO LOAD
+    loadPDF(card, iframe, status, retryBtn, pdfUrl);
   });
 }
 
-document.addEventListener("DOMContentLoaded", loadTodayPDF);
+loadTodayPDF();
 
