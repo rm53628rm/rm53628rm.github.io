@@ -6,132 +6,103 @@ const draws = [
   { title:"🌙 Night",   prefix:"nd" }
 ];
 
-/* FILE CODE: DDMMYY */
+/* FILE NAME CODE */
 function code(d){
   return String(d.getDate()).padStart(2,"0") +
          String(d.getMonth()+1).padStart(2,"0") +
          String(d.getFullYear()).slice(-2);
 }
 
-/* CACHE SAFE IMAGE LOADER */
-async function loadOldImage(img, file, status, btn){
-  try{
-    const res = await fetch(file, { method:"HEAD", cache:"no-store" });
-    if(!res.ok) throw "NF";
-
-    img.src = file + "?v=" + Date.now();
-
-    img.onload = ()=>{
-      img.style.display="block";
-      status.style.display="none";
-      btn.style.display="none";
-    };
-
-  }catch{
-    img.style.display="none";
-    status.textContent = "Result Not Published";
-    status.style.display="block";
-    btn.style.display="inline-block";
-  }
-}
-
-/* ================= ELEMENTS ================= */
-
+/* ELEMENTS */
 const oldDateInput    = document.getElementById("oldDate");
 const datePlaceholder = document.getElementById("datePlaceholder");
 const wrap            = document.getElementById("oldResults");
 
-/* ================= MODAL ZOOM ================= */
-
-const modal    = document.getElementById("imgModal");
-const modalImg = document.getElementById("modalImg");
-const closeBtn = document.querySelector(".close-modal");
-
-function openModal(src){
-  modalImg.src = src;
-  modal.style.display = "flex";
-}
-
-closeBtn.onclick = ()=> modal.style.display="none";
-modal.onclick = e=>{
-  if(e.target === modal) modal.style.display="none";
-};
-
-/* ================= INIT CARDS (ALWAYS SHOW) ================= */
-
+/* ===== INIT CARDS (ALWAYS SHOW) ===== */
 function initCards(){
   wrap.innerHTML = "";
 
   draws.forEach(x=>{
-
     const card = document.createElement("div");
     card.className = "card";
+
     card.innerHTML = `
       <h3>${x.title}</h3>
       <div class="date-show">Select a date</div>
     `;
 
     const img = new Image();
-    const st  = document.createElement("div");
+    const status = document.createElement("div");
     const btn = document.createElement("button");
 
     img.style.display = "none";
-    st.className  = "status";
+    status.className = "status";
+    status.textContent = "Please select date";
+
     btn.className = "refresh-btn";
     btn.textContent = "Refresh";
-
-    st.textContent = "Please select date";
     btn.style.display = "none";
 
-    card.append(img, st, btn);
+    card.append(img, status, btn);
     wrap.appendChild(card);
 
     /* store refs */
     card._img = img;
-    card._status = st;
+    card._status = status;
     card._btn = btn;
     card._prefix = x.prefix;
   });
 }
 
-/* ================= DATE CHANGE ================= */
+/* ===== LOAD IMAGE ===== */
+function loadImage(card, date){
+  const img = card._img;
+  const status = card._status;
+  const btn = card._btn;
 
+  const file =
+    BASE_URL + card._prefix + code(date) + ".jpg";
+
+  img.src = file + "?v=" + Date.now();
+
+  img.onload = ()=>{
+    img.style.display = "block";
+    status.style.display = "none";
+    btn.style.display = "none";
+  };
+
+  img.onerror = ()=>{
+    img.style.display = "none";
+    status.textContent = "Result Not Published";
+    status.style.display = "block";
+    btn.style.display = "inline-block";
+  };
+
+  btn.onclick = ()=> img.src = file + "?v=" + Date.now();
+}
+
+/* ===== DATE CHANGE ===== */
 oldDateInput.addEventListener("change", ()=>{
 
-  datePlaceholder.style.display =
-    oldDateInput.value ? "none" : "block";
-
   if(!oldDateInput.value){
+    datePlaceholder.style.display = "block";
     initCards();
     return;
   }
 
+  datePlaceholder.style.display = "none";
+
   const d = new Date(oldDateInput.value);
 
   [...wrap.children].forEach(card=>{
-
-    const img = card._img;
-    const st  = card._status;
-    const btn = card._btn;
-
     card.querySelector(".date-show").textContent =
       oldDateInput.value;
 
-    const file =
-      BASE_URL + card._prefix + code(d) + ".jpg";
-
-    btn.onclick = ()=> loadOldImage(img, file, st, btn);
-    loadOldImage(img, file, st, btn);
-
-    img.onclick = ()=> openModal(img.src);
+    loadImage(card, d);
   });
 });
 
-/* ================= START ================= */
-
-if(datePlaceholder){
-  datePlaceholder.style.display = "block";
-}
-
+/* ===== START ===== */
+datePlaceholder.style.display = "block";
 initCards();
 
