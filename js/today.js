@@ -6,7 +6,7 @@ const draws = [
   { title:"🌙 Night",   prefix:"EN" }
 ];
 
-/* ===== INDIA DATE (STRICT) ===== */
+/* ===== INDIA DATE (FIXED) ===== */
 function getTodayIST(){
   return new Date(
     new Date().toLocaleDateString("en-CA",{ timeZone:"Asia/Kolkata" })
@@ -20,20 +20,31 @@ function fileCode(d){
          String(d.getFullYear()).slice(-2);
 }
 
-/* ===== CHECK PDF EXISTS ===== */
+/* ===== CHECK PDF EXISTS (REAL) ===== */
 async function pdfExists(url){
   try{
-    const r = await fetch(url,{ method:"HEAD", cache:"no-store" });
-    return r.ok;
+    const r = await fetch(url,{
+      method:"HEAD",
+      cache:"no-store",
+      mode:"no-cors"   // 🔥 Chrome safe
+    });
+    return true; // agar server reply diya → file hai
   }catch{
     return false;
   }
 }
 
-/* ===== LOAD PDF WITH RETRY ===== */
-async function loadPDF(card, iframe, status, retryBtn, pdfUrl){
+/* ===== FORCE LOAD PDF (NO MISS) ===== */
+async function loadPDF({
+  iframe,
+  status,
+  retryBtn,
+  pdfUrl,
+  attempt = 1,
+  maxAttempt = 3
+}){
 
-  status.textContent = "Loading Result...";
+  status.textContent = `Loading Result${attempt>1?" (retry "+attempt+")":""}...`;
   status.style.display = "block";
   retryBtn.style.display = "none";
   iframe.style.display = "none";
@@ -45,11 +56,17 @@ async function loadPDF(card, iframe, status, retryBtn, pdfUrl){
     return;
   }
 
-  // 👇 CACHE KILL + FORCE RELOAD
-  iframe.src =
-    "https://docs.google.com/gview?embedded=true&url=" +
-    encodeURIComponent(pdfUrl) +
-    "&t=" + Date.now();
+  /* 🔥 HARD RESET IFRAME */
+  iframe.src = "about:blank";
+
+  setTimeout(()=>{
+
+    iframe.src =
+      "https://docs.google.com/gview?embedded=true&url=" +
+      encodeURIComponent(pdfUrl) +
+      "&t=" + Date.now();
+
+  }, 150);
 
   let loaded = false;
 
@@ -60,17 +77,31 @@ async function loadPDF(card, iframe, status, retryBtn, pdfUrl){
     retryBtn.style.display = "none";
   };
 
-  // ⏱️ SAFETY TIMER (iframe silently fail case)
+  /* ===== FAIL SAFE ===== */
   setTimeout(()=>{
     if(!loaded){
-      status.textContent = "Result loaded but not displayed";
-      retryBtn.style.display = "inline-block";
+
+      if(attempt < maxAttempt){
+        loadPDF({
+          iframe,
+          status,
+          retryBtn,
+          pdfUrl,
+          attempt: attempt + 1,
+          maxAttempt
+        });
+      }else{
+        status.textContent = "Result available but not loaded";
+        retryBtn.style.display = "inline-block";
+      }
+
     }
   }, 6000);
 }
 
 /* ===== MAIN ===== */
 function loadTodayPDF(){
+
   const wrap = document.getElementById("todayResults");
   wrap.innerHTML = "";
 
@@ -80,6 +111,7 @@ function loadTodayPDF(){
 
     const card = document.createElement("div");
     card.className = "card";
+    card.style.overflow = "hidden";
 
     card.innerHTML = `
       <h3>${draw.title}</h3>
@@ -88,6 +120,10 @@ function loadTodayPDF(){
 
     const iframe = document.createElement("iframe");
     iframe.className = "pdf-frame";
+    iframe.style.width = "100%";
+    iframe.style.height = "420px";
+    iframe.style.border = "0";
+    iframe.style.display = "none";
 
     const status = document.createElement("div");
     status.className = "status";
@@ -100,14 +136,26 @@ function loadTodayPDF(){
       BASE_URL + draw.prefix + fileCode(today) + ".PDF";
 
     retryBtn.onclick = ()=>{
-      loadPDF(card, iframe, status, retryBtn, pdfUrl);
+      loadPDF({
+        iframe,
+        status,
+        retryBtn,
+        pdfUrl,
+        attempt: 1
+      });
     };
 
     card.append(iframe, status, retryBtn);
     wrap.appendChild(card);
 
-    // 🔥 AUTO LOAD
-    loadPDF(card, iframe, status, retryBtn, pdfUrl);
+    /* AUTO LOAD */
+    loadPDF({
+      iframe,
+      status,
+      retryBtn,
+      pdfUrl,
+      attempt: 1
+    });
   });
 }
 
