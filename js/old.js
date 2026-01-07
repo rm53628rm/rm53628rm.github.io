@@ -2,10 +2,11 @@ const BASE_URL = "/images/";
 
 const draws = [
   { title:"🌅 Morning", prefix:"md" },
-  { title:"☀️ Day", prefix:"dd" },
-  { title:"🌙 Night", prefix:"nd" }
+  { title:"☀️ Day",     prefix:"dd" },
+  { title:"🌙 Night",   prefix:"nd" }
 ];
 
+/* FILE CODE: DDMMYY */
 function code(d){
   return String(d.getDate()).padStart(2,"0") +
          String(d.getMonth()+1).padStart(2,"0") +
@@ -19,73 +20,118 @@ async function loadOldImage(img, file, status, btn){
     if(!res.ok) throw "NF";
 
     img.src = file + "?v=" + Date.now();
+
     img.onload = ()=>{
       img.style.display="block";
       status.style.display="none";
       btn.style.display="none";
     };
+
   }catch{
-    status.textContent="Result Not Published";
+    img.style.display="none";
+    status.textContent = "Result Not Published";
     status.style.display="block";
     btn.style.display="inline-block";
   }
 }
 
-/* ====== 👇 YAHAN SE IMPORTANT PART ====== */
+/* ================= ELEMENTS ================= */
 
-const oldDateInput = document.getElementById("oldDate");
+const oldDateInput    = document.getElementById("oldDate");
 const datePlaceholder = document.getElementById("datePlaceholder");
+const wrap            = document.getElementById("oldResults");
 
-/* page load pe show */
-if(datePlaceholder){
-  datePlaceholder.style.display = "block";
+/* ================= MODAL ZOOM ================= */
+
+const modal    = document.getElementById("imgModal");
+const modalImg = document.getElementById("modalImg");
+const closeBtn = document.querySelector(".close-modal");
+
+function openModal(src){
+  modalImg.src = src;
+  modal.style.display = "flex";
 }
 
-/* select hone pe hide / show */
-oldDateInput.addEventListener("change", ()=>{
-  if(oldDateInput.value){
-    datePlaceholder.style.display = "none";
-  }else{
-    datePlaceholder.style.display = "block";
-  }
-});
+closeBtn.onclick = ()=> modal.style.display="none";
+modal.onclick = e=>{
+  if(e.target === modal) modal.style.display="none";
+};
 
-/* ====== 👆 YAHAN TAK ADD KARNA HAI ====== */
+/* ================= INIT CARDS (ALWAYS SHOW) ================= */
 
-const wrap = document.getElementById("oldResults");
-
-oldDateInput.addEventListener("change", ()=>{
-
-  if(!oldDateInput.value) return;
-
+function initCards(){
   wrap.innerHTML = "";
-
-  const d = new Date(oldDateInput.value);
 
   draws.forEach(x=>{
 
-    const c = document.createElement("div");
-    c.className = "card";
-    c.innerHTML = `
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
       <h3>${x.title}</h3>
-      <div class="date-show">${oldDateInput.value}</div>
+      <div class="date-show">Select a date</div>
     `;
 
     const img = new Image();
-    const st = document.createElement("div");
+    const st  = document.createElement("div");
     const btn = document.createElement("button");
 
-    st.className = "status";
+    img.style.display = "none";
+    st.className  = "status";
     btn.className = "refresh-btn";
     btn.textContent = "Refresh";
 
-    const file = BASE_URL + x.prefix + code(d) + ".jpg";
+    st.textContent = "Please select date";
+    btn.style.display = "none";
+
+    card.append(img, st, btn);
+    wrap.appendChild(card);
+
+    /* store refs */
+    card._img = img;
+    card._status = st;
+    card._btn = btn;
+    card._prefix = x.prefix;
+  });
+}
+
+/* ================= DATE CHANGE ================= */
+
+oldDateInput.addEventListener("change", ()=>{
+
+  datePlaceholder.style.display =
+    oldDateInput.value ? "none" : "block";
+
+  if(!oldDateInput.value){
+    initCards();
+    return;
+  }
+
+  const d = new Date(oldDateInput.value);
+
+  [...wrap.children].forEach(card=>{
+
+    const img = card._img;
+    const st  = card._status;
+    const btn = card._btn;
+
+    card.querySelector(".date-show").textContent =
+      oldDateInput.value;
+
+    const file =
+      BASE_URL + card._prefix + code(d) + ".jpg";
 
     btn.onclick = ()=> loadOldImage(img, file, st, btn);
     loadOldImage(img, file, st, btn);
 
-    c.append(img, st, btn);
-    wrap.appendChild(c);
+    img.onclick = ()=> openModal(img.src);
   });
 });
+
+/* ================= START ================= */
+
+if(datePlaceholder){
+  datePlaceholder.style.display = "block";
+}
+
+initCards();
 
