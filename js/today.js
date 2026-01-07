@@ -6,7 +6,7 @@ const draws = [
   { title:"🌙 Night",   prefix:"EN" }
 ];
 
-/* ===== INDIA DATE (STRICT) ===== */
+/* ===== INDIA DATE ===== */
 function getTodayIST(){
   return new Date(
     new Date().toLocaleDateString("en-CA",{ timeZone:"Asia/Kolkata" })
@@ -20,31 +20,14 @@ function fileCode(d){
          String(d.getFullYear()).slice(-2);
 }
 
-/* ===== CHECK PDF EXISTS ===== */
-async function pdfExists(url){
-  try{
-    const r = await fetch(url,{ method:"HEAD", cache:"no-store" });
-    return r.ok;
-  }catch{
-    return false;
-  }
-}
-
-/* ===== LOAD PDF WITH RETRY ===== */
-async function loadPDF(iframe, status, retryBtn, downloadBtn, pdfUrl){
+/* ===== LOAD PDF ===== */
+function loadPDF(iframe, status, retryBtn, downloadBtn, pdfUrl){
 
   status.textContent = "Loading Result...";
   status.style.display = "block";
+  iframe.style.display = "none";
   retryBtn.style.display = "none";
   downloadBtn.style.display = "none";
-  iframe.style.display = "none";
-
-  const exists = await pdfExists(pdfUrl);
-
-  if(!exists){
-    status.textContent = "Result Not Published";
-    return;
-  }
 
   iframe.src =
     "https://docs.google.com/gview?embedded=true&url=" +
@@ -57,14 +40,13 @@ async function loadPDF(iframe, status, retryBtn, downloadBtn, pdfUrl){
     loaded = true;
     iframe.style.display = "block";
     status.style.display = "none";
-    retryBtn.style.display = "none";
     downloadBtn.style.display = "inline-block";
   };
 
-  // ⏱️ silent fail safety
+  // ⏱️ fallback if iframe blank
   setTimeout(()=>{
     if(!loaded){
-      status.textContent = "Result available but not visible";
+      status.textContent = "Result available. Click Retry or Download.";
       retryBtn.style.display = "inline-block";
       downloadBtn.style.display = "inline-block";
     }
@@ -116,7 +98,7 @@ function loadTodayPDF(){
     card.append(iframe, status, retryBtn, downloadBtn);
     wrap.appendChild(card);
 
-    // 🔥 auto load
+    // auto load
     loadPDF(iframe, status, retryBtn, downloadBtn, pdfUrl);
   });
 }
