@@ -16,17 +16,22 @@ function fileCode(d){
 /* INDIA DATE */
 function getTodayIST(){
   return new Date(
-    new Date().toLocaleDateString("en-CA",{timeZone:"Asia/Kolkata"})
+    new Date().toLocaleDateString("en-CA",{ timeZone:"Asia/Kolkata" })
   );
 }
 
-function loadTodayPDF(){
+/* ⏳ delay helper */
+function wait(ms){
+  return new Promise(r=>setTimeout(r, ms));
+}
+
+async function loadTodayPDF(){
   const wrap = document.getElementById("todayResults");
   wrap.innerHTML = "";
 
   const today = getTodayIST();
 
-  draws.forEach(draw=>{
+  for(const draw of draws){
 
     const card = document.createElement("div");
     card.className = "card";
@@ -41,27 +46,36 @@ function loadTodayPDF(){
 
     const iframe = document.createElement("iframe");
     iframe.className = "pdf-frame";
+    iframe.loading = "lazy";
 
-    const fileName =
+    const pdfURL =
       BASE_URL + draw.prefix + fileCode(today) + ".PDF";
 
+    /* Google Viewer */
     iframe.src =
       "https://docs.google.com/gview?url=" +
-      encodeURIComponent(fileName) +
+      encodeURIComponent(pdfURL) +
       "&embedded=true";
 
     iframe.onload = ()=>{
       status.style.display="none";
     };
 
-    iframe.onerror = ()=>{
-      iframe.style.display="none";
-      status.textContent="Result Not Published";
-    };
+    /* fallback text (iframe error unreliable) */
+    setTimeout(()=>{
+      if(status.style.display !== "none"){
+        status.innerHTML =
+          `PDF not loading?
+          <br><a href="${pdfURL}" target="_blank">Open PDF</a>`;
+      }
+    }, 4000);
 
     card.append(iframe, status);
     wrap.appendChild(card);
-  });
+
+    /* 🔒 VERY IMPORTANT */
+    await wait(1200);   // one-by-one load
+  }
 }
 
 loadTodayPDF();
