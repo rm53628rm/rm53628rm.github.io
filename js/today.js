@@ -16,67 +16,82 @@ function fileCode(d){
 /* INDIA DATE */
 function getTodayIST(){
   return new Date(
-    new Date().toLocaleDateString("en-CA",{ timeZone:"Asia/Kolkata" })
+    new Date().toLocaleDateString("en-CA",{timeZone:"Asia/Kolkata"})
   );
 }
 
-/* ⏳ delay helper */
-function wait(ms){
-  return new Promise(r=>setTimeout(r, ms));
+/* LOAD SINGLE PDF (WITH RETRY) */
+function loadPDF(card, draw, date){
+  const status = card.querySelector(".status");
+  const iframe = card.querySelector("iframe");
+  const retryBtn = card.querySelector(".retry-btn");
+
+  status.style.display = "block";
+  status.textContent = "Loading PDF...";
+  iframe.style.display = "block";
+  retryBtn.style.display = "none";
+
+  const fileName =
+    BASE_URL + draw.prefix + fileCode(date) + ".PDF";
+
+  // FORCE RELOAD (important)
+  iframe.src = "";
+  setTimeout(()=>{
+    iframe.src =
+      "https://docs.google.com/gview?url=" +
+      encodeURIComponent(fileName) +
+      "&embedded=true";
+  }, 300);
+
+  let loaded = false;
+
+  iframe.onload = ()=>{
+    loaded = true;
+    status.style.display = "none";
+  };
+
+  // SAFETY TIMEOUT (random missing fix)
+  setTimeout(()=>{
+    if(!loaded){
+      iframe.style.display = "none";
+      status.textContent = "Result Not Published";
+      retryBtn.style.display = "inline-block";
+    }
+  }, 6000);
 }
 
-async function loadTodayPDF(){
+function loadTodayPDF(){
   const wrap = document.getElementById("todayResults");
   wrap.innerHTML = "";
 
   const today = getTodayIST();
 
-  for(const draw of draws){
+  draws.forEach(draw=>{
 
     const card = document.createElement("div");
     card.className = "card";
     card.innerHTML = `
       <h3>${draw.title}</h3>
       <div class="date-show">${today.toDateString()}</div>
+
+      <iframe class="pdf-frame"></iframe>
+
+      <div class="status">Loading PDF...</div>
+
+      <button class="retry-btn" style="display:none">
+        🔄 Retry
+      </button>
     `;
 
-    const status = document.createElement("div");
-    status.className = "status";
-    status.textContent = "Loading PDF...";
-
-    const iframe = document.createElement("iframe");
-    iframe.className = "pdf-frame";
-    iframe.loading = "lazy";
-
-    const pdfURL =
-      BASE_URL + draw.prefix + fileCode(today) + ".PDF";
-
-    /* Google Viewer */
-    iframe.src =
-      "https://docs.google.com/gview?url=" +
-      encodeURIComponent(pdfURL) +
-      "&embedded=true";
-
-    iframe.onload = ()=>{
-      status.style.display="none";
-    };
-
-    /* fallback text (iframe error unreliable) */
-    setTimeout(()=>{
-      if(status.style.display !== "none"){
-        status.innerHTML =
-          `PDF not loading?
-          <br><a href="${pdfURL}" target="_blank">Open PDF</a>`;
-      }
-    }, 4000);
-
-    card.append(iframe, status);
     wrap.appendChild(card);
 
-    /* 🔒 VERY IMPORTANT */
-    await wait(1200);   // one-by-one load
-  }
+    loadPDF(card, draw, today);
+
+    card.querySelector(".retry-btn").onclick = ()=>{
+      loadPDF(card, draw, today);
+    };
+  });
 }
 
-loadTodayPDF();
+document.addEventListener("DOMContentLoaded", loadTodayPDF);
 
