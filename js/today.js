@@ -3,7 +3,7 @@ const BASE_URL = "https://www.dhankesari.com/download.php?filename=";
 const draws = [
   { title:"🌅 Morning", prefix:"MN" },
   { title:"☀️ Day",     prefix:"DN" },
-  { title:"🌙 Night",   prefix:"NN" }
+  { title:"🌙 Night",   prefix:"EN" }
 ];
 
 /* DDMMYY */
