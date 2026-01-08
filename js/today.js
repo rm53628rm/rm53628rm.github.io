@@ -1,4 +1,3 @@
-
 const BASE_URL = "https://www.dhankesari.com/download.php?filename=";
 
 const draws = [
@@ -7,78 +6,129 @@ const draws = [
   { title:"🌙 Night",   prefix:"EN" }
 ];
 
-// India date
+/* ===== INDIA DATE ===== */
 function getTodayIST(){
   return new Date(
     new Date().toLocaleDateString("en-CA",{ timeZone:"Asia/Kolkata" })
   );
 }
 
-// DDMMYY
+/* ===== DDMMYY ===== */
 function fileCode(d){
   return String(d.getDate()).padStart(2,"0") +
          String(d.getMonth()+1).padStart(2,"0") +
          String(d.getFullYear()).slice(-2);
 }
 
-// PDF → IMAGE
-async function pdfToImage(img, status, pdfUrl){
+/* ===== AUTO RETRY PDF (4x background) ===== */
+function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
+
+  let attempt = 0;
+  const maxRetry = 4;
+  let loaded = false;
+
+  retryBtn.style.display = "none";
+  downloadBtn.style.display = "none";
+  iframe.style.display = "none";
 
   status.textContent = "Loading Result...";
   status.style.display = "block";
 
-  try {
-    const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
-    const page = await pdf.getPage(1);
+  const tryLoad = () => {
 
-    const viewport = page.getViewport({ scale: 1.6 });
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
+    if(loaded) return;
+    attempt++;
 
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
+    iframe.src =
+      "https://docs.google.com/gview?embedded=true&url=" +
+      encodeURIComponent(pdfUrl) +
+      "&t=" + Date.now();
 
-    await page.render({ canvasContext: ctx, viewport }).promise;
+    iframe.onload = ()=>{
+      if(loaded) return;
+      loaded = true;
+      iframe.style.display = "block";
+      status.style.display = "none";
+      downloadBtn.style.display = "inline-block";
+    };
 
-    img.src = canvas.toDataURL("image/webp", 0.95);
-    img.style.display = "block";
-    status.style.display = "none";
+    setTimeout(()=>{
+      if(loaded) return;
 
-  } catch (e) {
-    status.textContent = "Result not published yet";
-  }
+      if(attempt < maxRetry){
+        tryLoad(); // 🔁 silent retry
+      }else{
+        status.textContent = "Result available but not displayed.";
+        retryBtn.style.display = "inline-block";
+        downloadBtn.style.display = "inline-block";
+      }
+    }, 5000);
+  };
+
+  tryLoad();
+
+  retryBtn.onclick = ()=>{
+    attempt = 0;
+    loaded = false;
+    retryBtn.style.display = "none";
+    downloadBtn.style.display = "none";
+    status.textContent = "Loading Result...";
+    tryLoad();
+  };
 }
 
-// MAIN
-function loadResults(){
+/* ===== MAIN (ALL 3 CARDS TOGETHER) ===== */
+function loadTodayPDF(){
 
   const wrap = document.getElementById("todayResults");
   wrap.innerHTML = "";
 
   const today = getTodayIST();
 
-  draws.forEach(draw => {
+  draws.forEach(draw=>{
 
     const card = document.createElement("div");
     card.className = "card";
 
-    const img = document.createElement("img");
-    img.style.display = "none";
-
-    const status = document.createElement("div");
-
     card.innerHTML = `
       <h3>${draw.title}</h3>
-      <div>${today.toDateString()}</div>
+      <div class="date-show">${today.toDateString()}</div>
     `;
 
-    card.append(img, status);
+    const pdfWrapper = document.createElement("div");
+pdfWrapper.className = "pdf-wrapper";
+
+const iframe = document.createElement("iframe");
+iframe.className = "pdf-frame";
+
+pdfWrapper.appendChild(iframe);
+    
+
+    const status = document.createElement("div");
+    status.className = "status";
+
+    const retryBtn = document.createElement("button");
+    retryBtn.className = "refresh-btn";
+    retryBtn.textContent = "Retry";
+
+    const downloadBtn = document.createElement("a");
+    downloadBtn.className = "refresh-btn";
+    downloadBtn.textContent = "Download PDF";
+    downloadBtn.target = "_blank";
+
+    const pdfUrl =
+      BASE_URL + draw.prefix + fileCode(today) + ".PDF";
+
+    downloadBtn.href = pdfUrl;
+
+    card.append(iframe, status, retryBtn, downloadBtn);
     wrap.appendChild(card);
 
-    const pdfUrl = BASE_URL + draw.prefix + fileCode(today) + ".PDF";
-
-    pdfToImage(img, status, pdfUrl);
+    // 🔥 background auto retry start
+    loadPDFWithRetry(
+      iframe, status, retryBtn, downloadBtn, pdfUrl
+    );
   });
 }
 
-loadResults();
+loadTodayPDF();
