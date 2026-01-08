@@ -20,59 +20,89 @@ function fileCode(d){
          String(d.getFullYear()).slice(-2);
 }
 
-/* ===== LOAD PDF ===== */
-function loadPDF(iframe, status, retryBtn, downloadBtn, pdfUrl){
+/* ===== LOAD PDF WITH AUTO RETRY (3x) ===== */
+function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
+  let attempt = 0;
+  let maxRetry = 3;
+  let done = false;
 
-  status.textContent = "Loading Result...";
-  status.style.display = "block";
-  iframe.style.display = "none";
   retryBtn.style.display = "none";
   downloadBtn.style.display = "none";
+  iframe.style.display = "none";
 
-  iframe.src =
-    "https://docs.google.com/gview?embedded=true&url=" +
-    encodeURIComponent(pdfUrl) +
-    "&t=" + Date.now();
+  const tryLoad = () => {
+    if(done) return;
 
-  let loaded = false;
+    attempt++;
+    status.textContent = `Loading Result... (${attempt}/3)`;
+    status.style.display = "block";
 
-  iframe.onload = ()=>{
-    loaded = true;
-    iframe.style.display = "block";
-    status.style.display = "none";
-    downloadBtn.style.display = "inline-block";
+    iframe.src =
+      "https://docs.google.com/gview?embedded=true&url=" +
+      encodeURIComponent(pdfUrl) +
+      "&t=" + Date.now();
+
+    let loaded = false;
+
+    iframe.onload = ()=>{
+      if(done) return;
+      loaded = true;
+      done = true;
+      iframe.style.display = "block";
+      status.style.display = "none";
+      downloadBtn.style.display = "inline-block";
+    };
+
+    // ⏱️ timeout for silent failure
+    setTimeout(()=>{
+      if(done || loaded) return;
+
+      if(attempt < maxRetry){
+        // 🔁 auto retry in background
+        setTimeout(tryLoad, 2000);
+      }else{
+        // ❌ auto retry finished
+        status.textContent = "Result available but not displayed.";
+        retryBtn.style.display = "inline-block";
+        downloadBtn.style.display = "inline-block";
+      }
+    }, 5000);
   };
 
-  // ⏱️ fallback if iframe blank
-  setTimeout(()=>{
-    if(!loaded){
-      status.textContent = "Result available. Click Retry or Download.";
-      retryBtn.style.display = "inline-block";
-      downloadBtn.style.display = "inline-block";
-    }
-  }, 6000);
+  tryLoad();
+
+  // 👆 manual retry
+  retryBtn.onclick = ()=>{
+    attempt = 0;
+    done = false;
+    tryLoad();
+  };
 }
 
-/* ===== MAIN ===== */
-function loadTodayPDF(){
+/* ===== MAIN (SEQUENTIAL LOAD) ===== */
+async function loadTodayPDF(){
 
   const wrap = document.getElementById("todayResults");
   wrap.innerHTML = "";
 
   const today = getTodayIST();
 
-  draws.forEach(draw=>{
+  for(const draw of draws){
 
     const card = document.createElement("div");
     card.className = "card";
-
     card.innerHTML = `
       <h3>${draw.title}</h3>
       <div class="date-show">${today.toDateString()}</div>
     `;
 
+    const pdfWrap = document.createElement("div");
+    pdfWrap.className = "pdf-wrap";
+
     const iframe = document.createElement("iframe");
     iframe.className = "pdf-frame";
+
+    pdfWrap.appendChild(iframe);
 
     const status = document.createElement("div");
     status.className = "status";
@@ -89,18 +119,19 @@ function loadTodayPDF(){
     const pdfUrl =
       BASE_URL + draw.prefix + fileCode(today) + ".PDF";
 
-    downloadBtn.href = pdfUrl + "&t=" + Date.now();
+    downloadBtn.href = pdfUrl;
 
-    retryBtn.onclick = ()=>{
-      loadPDF(iframe, status, retryBtn, downloadBtn, pdfUrl);
-    };
-
-    card.append(iframe, status, retryBtn, downloadBtn);
+    card.append(pdfWrap, status, retryBtn, downloadBtn);
     wrap.appendChild(card);
 
-    // auto load
-    loadPDF(iframe, status, retryBtn, downloadBtn, pdfUrl);
-  });
+    // 🔥 auto retry system start
+    loadPDFWithRetry(
+      iframe, status, retryBtn, downloadBtn, pdfUrl
+    );
+
+    // ⏳ wait before next draw (order maintain)
+    await new Promise(r => setTimeout(r, 1000));
+  }
 }
 
 loadTodayPDF();
