@@ -40,9 +40,10 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
     attempt++;
 
     iframe.src =
-      "https://docs.google.com/gview?embedded=true&url=" +
-      encodeURIComponent(pdfUrl) +
-      "&t=" + Date.now();
+ "https://docs.google.com/gview?embedded=true&url=" +
+ encodeURIComponent(pdfUrl) +
+ "#toolbar=0&navpanes=0&scrollbar=0&t=" + Date.now();
+    
 
     iframe.onload = ()=>{
       if(loaded) return;
