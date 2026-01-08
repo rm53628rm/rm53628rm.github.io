@@ -95,8 +95,14 @@ function loadTodayPDF(){
       <div class="date-show">${today.toDateString()}</div>
     `;
 
-    const iframe = document.createElement("iframe");
-    iframe.className = "pdf-frame";
+    const pdfWrapper = document.createElement("div");
+pdfWrapper.className = "pdf-wrapper";
+
+const iframe = document.createElement("iframe");
+iframe.className = "pdf-frame";
+
+pdfWrapper.appendChild(iframe);
+    
 
     const status = document.createElement("div");
     status.className = "status";
