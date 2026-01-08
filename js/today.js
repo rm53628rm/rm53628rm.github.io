@@ -75,11 +75,6 @@ function loadTodayPDF(){
     const iframe = document.createElement("iframe");
     iframe.className = "pdf-frame";
 
-    const pdfWrap = document.createElement("div");
-pdfWrap.className = "pdf-wrap";
-pdfWrap.appendChild(iframe);
-    
-
     const status = document.createElement("div");
     status.className = "status";
 
@@ -101,7 +96,7 @@ pdfWrap.appendChild(iframe);
       loadPDF(iframe, status, retryBtn, downloadBtn, pdfUrl);
     };
 
-    card.append(pdfWrap, status, retryBtn, downloadBtn);
+    card.append(iframe, status, retryBtn, downloadBtn);
     wrap.appendChild(card);
 
     // auto load
