@@ -115,7 +115,7 @@ header{
 }
 .pdf-wrapper{
   width:100%;
-  height:65vh;              /* height yahin control karo */
+  height:58vh;              /* height yahin control karo */
   background:#fff;
   border-radius:16px;
   overflow:hidden;
