@@ -1,4 +1,4 @@
-
+<script>
 /* =========================
    CONFIG
 ========================= */
@@ -140,3 +140,4 @@ function loadTodayPDF(){
 ========================= */
 document.addEventListener("DOMContentLoaded", loadTodayPDF);
 
+</script>
