@@ -106,8 +106,8 @@ header{
   display:block;   /* 🔥 VERY IMPORTANT */
 }
 .pdf-frame{
-  width:100%;
-  height:720px;
+  width:200px;
+  height:420px;
   border:none;
   border-radius:12px;
   background:#fff;
