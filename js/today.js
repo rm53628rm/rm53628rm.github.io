@@ -20,48 +20,44 @@ function fileCode(d){
          String(d.getFullYear()).slice(-2);
 }
 
-/* ===== LOAD PDF WITH AUTO RETRY (3x) ===== */
+/* ===== AUTO RETRY PDF (4x background) ===== */
 function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
+
   let attempt = 0;
-  let maxRetry = 3;
-  let done = false;
+  const maxRetry = 4;
+  let loaded = false;
 
   retryBtn.style.display = "none";
   downloadBtn.style.display = "none";
   iframe.style.display = "none";
 
-  const tryLoad = () => {
-    if(done) return;
+  status.textContent = "Loading Result...";
+  status.style.display = "block";
 
+  const tryLoad = () => {
+
+    if(loaded) return;
     attempt++;
-    status.textContent = `Loading Result... (${attempt}/3)`;
-    status.style.display = "block";
 
     iframe.src =
       "https://docs.google.com/gview?embedded=true&url=" +
       encodeURIComponent(pdfUrl) +
       "&t=" + Date.now();
 
-    let loaded = false;
-
     iframe.onload = ()=>{
-      if(done) return;
+      if(loaded) return;
       loaded = true;
-      done = true;
       iframe.style.display = "block";
       status.style.display = "none";
       downloadBtn.style.display = "inline-block";
     };
 
-    // ⏱️ timeout for silent failure
     setTimeout(()=>{
-      if(done || loaded) return;
+      if(loaded) return;
 
       if(attempt < maxRetry){
-        // 🔁 auto retry in background
-        setTimeout(tryLoad, 2000);
+        tryLoad(); // 🔁 silent retry
       }else{
-        // ❌ auto retry finished
         status.textContent = "Result available but not displayed.";
         retryBtn.style.display = "inline-block";
         downloadBtn.style.display = "inline-block";
@@ -71,38 +67,36 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
 
   tryLoad();
 
-  // 👆 manual retry
   retryBtn.onclick = ()=>{
     attempt = 0;
-    done = false;
+    loaded = false;
+    retryBtn.style.display = "none";
+    downloadBtn.style.display = "none";
+    status.textContent = "Loading Result...";
     tryLoad();
   };
 }
 
-/* ===== MAIN (SEQUENTIAL LOAD) ===== */
-async function loadTodayPDF(){
+/* ===== MAIN (ALL 3 CARDS TOGETHER) ===== */
+function loadTodayPDF(){
 
   const wrap = document.getElementById("todayResults");
   wrap.innerHTML = "";
 
   const today = getTodayIST();
 
-  for(const draw of draws){
+  draws.forEach(draw=>{
 
     const card = document.createElement("div");
     card.className = "card";
+
     card.innerHTML = `
       <h3>${draw.title}</h3>
       <div class="date-show">${today.toDateString()}</div>
     `;
 
-    const pdfWrap = document.createElement("div");
-    pdfWrap.className = "pdf-wrap";
-
     const iframe = document.createElement("iframe");
     iframe.className = "pdf-frame";
-
-    pdfWrap.appendChild(iframe);
 
     const status = document.createElement("div");
     status.className = "status";
@@ -121,17 +115,14 @@ async function loadTodayPDF(){
 
     downloadBtn.href = pdfUrl;
 
-    card.append(pdfWrap, status, retryBtn, downloadBtn);
+    card.append(iframe, status, retryBtn, downloadBtn);
     wrap.appendChild(card);
 
-    // 🔥 auto retry system start
+    // 🔥 background auto retry start
     loadPDFWithRetry(
       iframe, status, retryBtn, downloadBtn, pdfUrl
     );
-
-    // ⏳ wait before next draw (order maintain)
-    await new Promise(r => setTimeout(r, 1000));
-  }
+  });
 }
 
 loadTodayPDF();
