@@ -51,15 +51,6 @@ header{
 }
 .card h3{margin:0;color:#0a2a66}
 .date-show{margin-top:6px;font-size:13px;color:#555}
-.card img{
-  width:100%;
-  height:710px;                 /* 🔥 BIGGER IMAGE */
-  margin-top:14px;
-  border-radius:14px;
-  object-fit:cover;
-  display:none;
-  transition:transform .4s ease, box-shadow .4s ease;
-}
 
 
 .status{
@@ -116,7 +107,7 @@ header{
 }
 .pdf-frame{
   width:100%;
-  height:420px;
+  height:720px;
   border:none;
   border-radius:12px;
   background:#fff;
@@ -127,6 +118,16 @@ header{
   padding:20px;
   color:#777;
   font-weight:600;
+}
+.pdf-box{
+  background: #ffffff;   /* black ki jagah white */
+  border-radius: 16px;
+  padding: 8px;
+}
+
+.pdf-box iframe{
+  background: #ffffff;
+  border-radius: 12px;
 }
 
 /* FOOTER */
