@@ -1,3 +1,7 @@
+
+/* =========================
+   CONFIG
+========================= */
 const BASE_URL = "https://www.dhankesari.com/download.php?filename=";
 
 const draws = [
@@ -6,21 +10,29 @@ const draws = [
   { title:"🌙 Night",   prefix:"EN" }
 ];
 
-/* ===== INDIA DATE ===== */
+/* =========================
+   INDIA DATE (IST)
+========================= */
 function getTodayIST(){
   return new Date(
-    new Date().toLocaleDateString("en-CA",{ timeZone:"Asia/Kolkata" })
+    new Date().toLocaleDateString("en-CA",{
+      timeZone:"Asia/Kolkata"
+    })
   );
 }
 
-/* ===== DDMMYY ===== */
+/* =========================
+   DDMMYY FORMAT
+========================= */
 function fileCode(d){
   return String(d.getDate()).padStart(2,"0") +
          String(d.getMonth()+1).padStart(2,"0") +
          String(d.getFullYear()).slice(-2);
 }
 
-/* ===== AUTO RETRY PDF (4x background) ===== */
+/* =========================
+   PDF AUTO RETRY (4x)
+========================= */
 function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
 
   let attempt = 0;
@@ -34,17 +46,14 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
   status.textContent = "Loading Result...";
   status.style.display = "block";
 
-  const tryLoad = () => {
-
+  function tryLoad(){
     if(loaded) return;
     attempt++;
 
-    iframe.src =
-      "https://docs.google.com/gview?embedded=true&url=" +
-      encodeURIComponent(pdfUrl) +
-      "&t=" + Date.now();
+    // 🔥 DIRECT PDF LOAD (NO GVIEW)
+    iframe.src = pdfUrl + "?t=" + Date.now();
 
-    iframe.onload = ()=>{
+    iframe.onload = () => {
       if(loaded) return;
       loaded = true;
       iframe.style.display = "block";
@@ -56,14 +65,14 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
       if(loaded) return;
 
       if(attempt < maxRetry){
-        tryLoad(); // 🔁 silent retry
+        tryLoad();   // silent retry
       }else{
         status.textContent = "Result available but not displayed.";
         retryBtn.style.display = "inline-block";
         downloadBtn.style.display = "inline-block";
       }
     }, 5000);
-  };
+  }
 
   tryLoad();
 
@@ -77,7 +86,9 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
   };
 }
 
-/* ===== MAIN (ALL 3 CARDS TOGETHER) ===== */
+/* =========================
+   MAIN LOAD (ALL 3 CARDS)
+========================= */
 function loadTodayPDF(){
 
   const wrap = document.getElementById("todayResults");
@@ -85,7 +96,7 @@ function loadTodayPDF(){
 
   const today = getTodayIST();
 
-  draws.forEach(draw=>{
+  draws.forEach(draw => {
 
     const card = document.createElement("div");
     card.className = "card";
@@ -95,14 +106,8 @@ function loadTodayPDF(){
       <div class="date-show">${today.toDateString()}</div>
     `;
 
-    const pdfWrapper = document.createElement("div");
-pdfWrapper.className = "pdf-wrapper";
-
-const iframe = document.createElement("iframe");
-iframe.className = "pdf-frame";
-
-pdfWrapper.appendChild(iframe);
-    
+    const iframe = document.createElement("iframe");
+    iframe.className = "pdf-frame";
 
     const status = document.createElement("div");
     status.className = "status";
@@ -114,21 +119,24 @@ pdfWrapper.appendChild(iframe);
     const downloadBtn = document.createElement("a");
     downloadBtn.className = "refresh-btn";
     downloadBtn.textContent = "Download PDF";
+    downloadBtn.href =
+      BASE_URL + draw.prefix + fileCode(today) + ".PDF";
     downloadBtn.target = "_blank";
 
-    const pdfUrl =
-      BASE_URL + draw.prefix + fileCode(today) + ".PDF";
-
-    downloadBtn.href = pdfUrl;
+    const pdfUrl = downloadBtn.href;
 
     card.append(iframe, status, retryBtn, downloadBtn);
     wrap.appendChild(card);
 
-    // 🔥 background auto retry start
+    // 🔁 Auto background retry start
     loadPDFWithRetry(
       iframe, status, retryBtn, downloadBtn, pdfUrl
     );
   });
 }
 
-loadTodayPDF();
+/* =========================
+   INIT
+========================= */
+document.addEventListener("DOMContentLoaded", loadTodayPDF);
+
