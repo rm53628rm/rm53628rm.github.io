@@ -31,45 +31,54 @@ function fileCode(d){
 }
 
 /* =========================
-   PDF AUTO RETRY (4x)
+   LOAD PDF WITH RETRY
 ========================= */
-function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
+function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, fullBtn, pdfUrl){
 
   let attempt = 0;
   const maxRetry = 4;
   let loaded = false;
 
+  iframe.style.display = "none";
   retryBtn.style.display = "none";
   downloadBtn.style.display = "none";
-  iframe.style.display = "none";
+  fullBtn.style.display = "none";
 
-  status.textContent = "Loading Result...";
-  status.style.display = "block";
+  status.style.display = "flex";
+  status.innerHTML = `
+    <div class="loader"></div>
+    <div class="loading-text">Loading Result…</div>
+  `;
 
   function tryLoad(){
     if(loaded) return;
     attempt++;
 
-    // 🔥 DIRECT PDF LOAD (NO GVIEW)
-    iframe.src = pdfUrl + "?t=" + Date.now();
+    iframe.src =
+      "https://docs.google.com/gview?embedded=true&url=" +
+      encodeURIComponent(pdfUrl) +
+      "&t=" + Date.now();
 
-    iframe.onload = () => {
+    iframe.onload = ()=>{
       if(loaded) return;
       loaded = true;
-      iframe.style.display = "block";
       status.style.display = "none";
+      iframe.style.display = "block";
       downloadBtn.style.display = "inline-block";
+      fullBtn.style.display = "inline-block";
     };
 
     setTimeout(()=>{
       if(loaded) return;
 
       if(attempt < maxRetry){
-        tryLoad();   // silent retry
+        tryLoad(); // silent retry
       }else{
-        status.textContent = "Result available but not displayed.";
+        status.style.display = "block";
+        status.innerHTML = "Result available but not displayed.";
         retryBtn.style.display = "inline-block";
         downloadBtn.style.display = "inline-block";
+        fullBtn.style.display = "inline-block";
       }
     }, 5000);
   }
@@ -81,13 +90,30 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
     loaded = false;
     retryBtn.style.display = "none";
     downloadBtn.style.display = "none";
-    status.textContent = "Loading Result...";
+    fullBtn.style.display = "none";
+
+    status.style.display = "flex";
+    status.innerHTML = `
+      <div class="loader"></div>
+      <div class="loading-text">Loading Result…</div>
+    `;
     tryLoad();
+  };
+
+  /* =========================
+     FULLSCREEN
+  ========================= */
+  fullBtn.onclick = ()=>{
+    if(iframe.requestFullscreen){
+      iframe.requestFullscreen();
+    }else if(iframe.webkitRequestFullscreen){
+      iframe.webkitRequestFullscreen();
+    }
   };
 }
 
 /* =========================
-   MAIN LOAD (ALL 3 CARDS)
+   MAIN LOAD
 ========================= */
 function loadTodayPDF(){
 
@@ -119,18 +145,34 @@ function loadTodayPDF(){
     const downloadBtn = document.createElement("a");
     downloadBtn.className = "refresh-btn";
     downloadBtn.textContent = "Download PDF";
-    downloadBtn.href =
-      BASE_URL + draw.prefix + fileCode(today) + ".PDF";
     downloadBtn.target = "_blank";
 
-    const pdfUrl = downloadBtn.href;
+    const fullBtn = document.createElement("button");
+    fullBtn.className = "refresh-btn fullscreen-btn";
+    fullBtn.textContent = "Fullscreen";
 
-    card.append(iframe, status, retryBtn, downloadBtn);
+    const pdfUrl =
+      BASE_URL + draw.prefix + fileCode(today) + ".PDF";
+
+    downloadBtn.href = pdfUrl;
+
+    card.append(
+      iframe,
+      status,
+      retryBtn,
+      downloadBtn,
+      fullBtn
+    );
+
     wrap.appendChild(card);
 
-    // 🔁 Auto background retry start
     loadPDFWithRetry(
-      iframe, status, retryBtn, downloadBtn, pdfUrl
+      iframe,
+      status,
+      retryBtn,
+      downloadBtn,
+      fullBtn,
+      pdfUrl
     );
   });
 }
@@ -139,5 +181,4 @@ function loadTodayPDF(){
    INIT
 ========================= */
 document.addEventListener("DOMContentLoaded", loadTodayPDF);
-
 </script>
