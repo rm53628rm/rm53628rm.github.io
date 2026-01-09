@@ -1,4 +1,4 @@
-<script>
+
 /* =========================
    CONFIG (OLD RESULT)
 ========================= */
@@ -133,4 +133,4 @@ function loadOldResult(){
     );
   });
 }
-</script>
+
