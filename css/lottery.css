@@ -1,183 +1,169 @@
-*{
-  box-sizing:border-box;
-  font-family:Segoe UI, Arial, sans-serif;
+/* =======================
+   OLD RESULT CONFIG
+======================= */
+const OLD_BASE_URL = "https://www.dhankesari.com/oldresultsdown.php?filename=";
+
+const draws = [
+  { title:"🌅 Morning", prefix:"MN" },
+  { title:"☀️ Day",     prefix:"DN" },
+  { title:"🌙 Night",   prefix:"EN" }
+];
+
+/* =======================
+   DDMMYY FORMAT
+======================= */
+function fileCode(d){
+  return String(d.getDate()).padStart(2,"0") +
+         String(d.getMonth()+1).padStart(2,"0") +
+         String(d.getFullYear()).slice(-2);
 }
 
-body{
-  margin:0;
-  background:#f4f6fb;
-  color:#222;
+/* =======================
+   PDF AUTO RETRY
+======================= */
+function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
+
+  let attempt = 0;
+  const maxRetry = 4;
+  let loaded = false;
+
+  iframe.style.display = "none";
+  retryBtn.style.display = "none";
+  downloadBtn.style.display = "none";
+
+  status.textContent = "Loading Result...";
+  status.style.display = "block";
+
+  function tryLoad(){
+
+    if(loaded) return;
+    attempt++;
+
+    iframe.src =
+      "https://docs.google.com/gview?embedded=true&url=" +
+      encodeURIComponent(pdfUrl) +
+      "&t=" + Date.now();
+
+    iframe.onload = () => {
+      if(loaded) return;
+      loaded = true;
+      iframe.style.display = "block";
+      status.style.display = "none";
+      retryBtn.style.display = "none";
+      downloadBtn.style.display = "inline-block";
+    };
+
+    setTimeout(() => {
+      if(loaded) return;
+
+      if(attempt < maxRetry){
+        tryLoad();   // background retry
+      }else{
+        status.textContent = "Result available but not displayed.";
+        retryBtn.style.display = "inline-block";
+        downloadBtn.style.display = "inline-block";
+      }
+    }, 5000);
+  }
+
+  tryLoad();
+
+  retryBtn.onclick = () => {
+    attempt = 0;
+    loaded = false;
+    iframe.style.display = "none";
+    retryBtn.style.display = "none";
+    downloadBtn.style.display = "none";
+    status.textContent = "Loading Result...";
+    status.style.display = "block";
+    tryLoad();
+  };
 }
 
-/* ================= HEADER ================= */
-header{
-  background:linear-gradient(135deg,#0a2a66,#123d9c);
-  color:#fff;
-  padding:14px 16px;
-  display:flex;
-  align-items:center;
-}
-.menu-btn{font-size:26px;cursor:pointer}
-.header-text{flex:1;text-align:center}
-.header-text h1{margin:0;font-size:22px}
-.header-text p{margin:4px 0 0;font-size:13px;opacity:.9}
+/* =======================
+   LOAD OLD RESULT
+======================= */
+function loadOldResult(){
 
-/* ================= MENU ================= */
-.overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.45);
-  display:none;
-  z-index:9;
-}
-.side-menu{
-  position:fixed;
-  top:0;
-  left:-260px;
-  width:260px;
-  height:100%;
-  background:#0a2a66;
-  padding:20px;
-  transition:.3s;
-  z-index:10;
-}
-.side-menu.active{left:0}
-.side-menu a{
-  display:block;
-  color:#fff;
-  text-decoration:none;
-  padding:12px 0;
-  border-bottom:1px solid rgba(255,255,255,.25)
-}
-.menu-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:12px;
-  margin-bottom:10px;
-  border-radius:14px;
-  background:rgba(255,255,255,.15)
-}
-.menu-logo{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  background:#fff;
-  color:#0a2a66;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700
-}
-.menu-close{font-size:32px;color:#fff;cursor:pointer}
+  const dateValue = document.getElementById("oldDate").value;
+  const wrap = document.getElementById("oldResults");
+  const placeholder = document.getElementById("datePlaceholder");
 
-/* ================= CONTENT ================= */
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:15px;
-}
-.section-title{
-  font-size:18px;
-  font-weight:700;
-  color:#0a2a66;
-  margin:20px 0 10px
-}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:15px;
+  wrap.innerHTML = "";
+
+  const selectedDate = dateValue ? new Date(dateValue) : null;
+
+  placeholder.style.display = selectedDate ? "none" : "block";
+
+  draws.forEach(draw => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <h3>${draw.title}</h3>
+      <div class="date-show">
+        ${selectedDate ? selectedDate.toDateString() : "Please select date"}
+      </div>
+    `;
+
+    const iframe = document.createElement("iframe");
+    iframe.className = "pdf-frame";
+
+    const status = document.createElement("div");
+    status.className = "status";
+    status.textContent = selectedDate ? "Loading Result..." : "Select date to view result";
+    status.style.display = "block";
+
+    const retryBtn = document.createElement("button");
+    retryBtn.className = "refresh-btn";
+    retryBtn.textContent = "Retry";
+
+    const downloadBtn = document.createElement("a");
+    downloadBtn.className = "refresh-btn";
+    downloadBtn.textContent = "Download PDF";
+    downloadBtn.target = "_blank";
+
+    card.append(iframe, status, retryBtn, downloadBtn);
+    wrap.appendChild(card);
+
+    if(!selectedDate) return;
+
+    const pdfUrl =
+      OLD_BASE_URL + draw.prefix + fileCode(selectedDate) + ".PDF";
+
+    downloadBtn.href = pdfUrl;
+
+    loadPDFWithRetry(
+      iframe,
+      status,
+      retryBtn,
+      downloadBtn,
+      pdfUrl
+    );
+
+    iframe.onclick = () => openFullscreen(iframe);
+  });
 }
 
-/* ================= CARD ================= */
-.card{
-  background:#fff;
-  border-radius:14px;
-  padding:10px;
-  text-align:center;
-  box-shadow:0 10px 25px rgba(0,0,0,.08)
-}
-.card h3{
-  margin:6px 0 0;
-  color:#0a2a66
-}
-.date-show{
-  margin-top:6px;
-  font-size:13px;
-  color:#555
+/* =======================
+   FULLSCREEN PDF
+======================= */
+function openFullscreen(iframe){
+  const fs = document.getElementById("pdfFullscreen");
+  const fsFrame = document.getElementById("fullscreenFrame");
+
+  fsFrame.src = iframe.src;
+  fs.style.display = "block";
+  document.body.style.overflow = "hidden";
 }
 
-/* ================= PDF ================= */
-.pdf-frame{
-  width:100%;
-  height:520px;
-  border:none;
-  border-radius:14px;
-  background:#fff;
-  margin-top:12px;
-}
+function closeFullscreen(){
+  const fs = document.getElementById("pdfFullscreen");
+  const fsFrame = document.getElementById("fullscreenFrame");
 
-/* ================= STATUS ================= */
-.status{
-  text-align:center;
-  padding:16px;
-  font-size:15px;
-  color:#777;
-  font-weight:600;
-  display:none;
+  fsFrame.src = "";
+  fs.style.display = "none";
+  document.body.style.overflow = "";
 }
-
-/* ================= BUTTON ================= */
-.refresh-btn{
-  margin-top:14px;
-  padding:10px 26px;
-  border:none;
-  border-radius:25px;
-  background:#0a2a66;
-  color:#fff;
-  font-weight:600;
-  cursor:pointer;
-  display:none;
-}
-
-/* ================= CALENDAR ================= */
-.calendar-box{
-  background:#fff;
-  padding:18px;
-  border-radius:16px;
-  box-shadow:0 8px 20px rgba(0,0,0,.08)
-}
-.calendar-box input{
-  width:100%;
-  padding:14px;
-  font-size:16px;
-  border-radius:12px;
-  border:1px solid #ccc
-}
-
-.date-wrap{position:relative}
-
-.date-placeholder{
-  position:absolute;
-  left:25px;
-  top:50%;
-  transform:translateY(-50%);
-  color:#888;
-  font-size:15px;
-  pointer-events:none;
-  display:block;
-}
-
-/* ================= FOOTER ================= */
-footer{
-  text-align:center;
-  font-size:12px;
-  color:#777;
-  padding:20px
-}
-
-/* ================= MOBILE ================= */
-@media(max-width:600px){
-  .grid{grid-template-columns:1fr}
-  .pdf-frame{height:440px}
-}
+  
