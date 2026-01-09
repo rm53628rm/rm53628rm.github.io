@@ -1,4 +1,3 @@
-
 const BASE_URL = "https://www.dhankesari.com/download.php?filename=";
 
 const draws = [
@@ -91,13 +90,19 @@ function loadTodayPDF(){
     const card = document.createElement("div");
     card.className = "card";
 
-    card.innerHTML = 
+    card.innerHTML = `
       <h3>${draw.title}</h3>
       <div class="date-show">${today.toDateString()}</div>
-    ;
+    `;
 
-    const iframe = document.createElement("iframe");
-    iframe.className = "pdf-frame";
+    const pdfWrapper = document.createElement("div");
+pdfWrapper.className = "pdf-wrapper";
+
+const iframe = document.createElement("iframe");
+iframe.className = "pdf-frame";
+
+pdfWrapper.appendChild(iframe);
+    
 
     const status = document.createElement("div");
     status.className = "status";
