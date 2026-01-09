@@ -31,18 +31,15 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
   retryBtn.style.display = "none";
   downloadBtn.style.display = "none";
 
-  status.textContent = "Loading Result...";
   status.style.display = "block";
+  status.textContent = "Loading Result...";
 
   function tryLoad(){
 
     if(loaded) return;
     attempt++;
 
-    iframe.src =
-      "https://docs.google.com/gview?embedded=true&url=" +
-      encodeURIComponent(pdfUrl) +
-      "&t=" + Date.now();
+    iframe.src = pdfUrl + "?t=" + Date.now();
 
     iframe.onload = () => {
       if(loaded) return;
@@ -57,7 +54,7 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
       if(loaded) return;
 
       if(attempt < maxRetry){
-        tryLoad();   // background retry
+        tryLoad(); // background retry
       }else{
         status.textContent = "Result available but not displayed.";
         retryBtn.style.display = "inline-block";
@@ -87,24 +84,25 @@ function loadOldResult(){
 
   const dateValue = document.getElementById("oldDate").value;
   const wrap = document.getElementById("oldResults");
-  const placeholder = document.getElementById("datePlaceholder");
 
   wrap.innerHTML = "";
 
-  const selectedDate = dateValue ? new Date(dateValue) : null;
+  if(!dateValue){
+    alert("Please select a date first!");
+    return;
+  }
 
-  placeholder.style.display = selectedDate ? "none" : "block";
+  const selectedDate = new Date(dateValue);
 
   draws.forEach(draw => {
 
     const card = document.createElement("div");
     card.className = "card";
 
+    // always show card + date
     card.innerHTML = `
       <h3>${draw.title}</h3>
-      <div class="date-show">
-        ${selectedDate ? selectedDate.toDateString() : "Please select date"}
-      </div>
+      <div class="date-show">${selectedDate.toDateString()}</div>
     `;
 
     const iframe = document.createElement("iframe");
@@ -112,7 +110,7 @@ function loadOldResult(){
 
     const status = document.createElement("div");
     status.className = "status";
-    status.textContent = selectedDate ? "Loading Result..." : "Select date to view result";
+    status.textContent = "Loading Result...";
     status.style.display = "block";
 
     const retryBtn = document.createElement("button");
@@ -127,42 +125,9 @@ function loadOldResult(){
     card.append(iframe, status, retryBtn, downloadBtn);
     wrap.appendChild(card);
 
-    if(!selectedDate) return;
-
-    const pdfUrl =
-      OLD_BASE_URL + draw.prefix + fileCode(selectedDate) + ".PDF";
-
+    const pdfUrl = OLD_BASE_URL + draw.prefix + fileCode(selectedDate) + ".PDF";
     downloadBtn.href = pdfUrl;
 
-    loadPDFWithRetry(
-      iframe,
-      status,
-      retryBtn,
-      downloadBtn,
-      pdfUrl
-    );
-
-    iframe.onclick = () => openFullscreen(iframe);
+    loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl);
   });
-}
-
-/* =======================
-   FULLSCREEN PDF
-======================= */
-function openFullscreen(iframe){
-  const fs = document.getElementById("pdfFullscreen");
-  const fsFrame = document.getElementById("fullscreenFrame");
-
-  fsFrame.src = iframe.src;
-  fs.style.display = "block";
-  document.body.style.overflow = "hidden";
-}
-
-function closeFullscreen(){
-  const fs = document.getElementById("pdfFullscreen");
-  const fsFrame = document.getElementById("fullscreenFrame");
-
-  fsFrame.src = "";
-  fs.style.display = "none";
-  document.body.style.overflow = "";
 }
