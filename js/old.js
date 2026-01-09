@@ -1,31 +1,33 @@
-
-/* =========================
-   CONFIG (OLD RESULT)
-========================= */
+/* ===============================
+   OLD RESULT BASE URL
+================================ */
 const OLD_BASE_URL =
   "https://www.dhankesari.com/oldresultsdown.php?filename=";
 
+/* ===============================
+   DRAWS (PREFIX)
+================================ */
 const draws = [
   { title:"🌅 Morning", prefix:"MN" },
   { title:"☀️ Day",     prefix:"DN" },
   { title:"🌙 Night",   prefix:"EN" }
 ];
 
-/* =========================
-   DATE → DDMMYY
-========================= */
-function fileCodeFromInput(dateStr){
-  const d = new Date(dateStr);
+/* ===============================
+   DDMMYY FORMAT
+================================ */
+function fileCode(d){
   return String(d.getDate()).padStart(2,"0") +
          String(d.getMonth()+1).padStart(2,"0") +
          String(d.getFullYear()).slice(-2);
 }
 
-/* =========================
-   PDF AUTO RETRY (4x)
-========================= */
-function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
-
+/* ===============================
+   AUTO RETRY PDF (GVIEW)
+================================ */
+function loadPDFWithRetry(
+  iframe, status, retryBtn, downloadBtn, pdfUrl
+){
   let attempt = 0;
   const maxRetry = 4;
   let loaded = false;
@@ -37,7 +39,8 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
   status.textContent = "Loading Result...";
   status.style.display = "block";
 
-  function tryLoad(){
+  const tryLoad = () => {
+
     if(loaded) return;
     attempt++;
 
@@ -46,7 +49,7 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
       encodeURIComponent(pdfUrl) +
       "&t=" + Date.now();
 
-    iframe.onload = ()=>{
+    iframe.onload = () => {
       if(loaded) return;
       loaded = true;
       iframe.style.display = "block";
@@ -54,22 +57,23 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
       downloadBtn.style.display = "inline-block";
     };
 
-    setTimeout(()=>{
+    setTimeout(() => {
       if(loaded) return;
 
       if(attempt < maxRetry){
-        tryLoad();
+        tryLoad(); // silent retry
       }else{
-        status.textContent = "Result not available.";
+        status.textContent =
+          "Result available but not displayed.";
         retryBtn.style.display = "inline-block";
         downloadBtn.style.display = "inline-block";
       }
     }, 5000);
-  }
+  };
 
   tryLoad();
 
-  retryBtn.onclick = ()=>{
+  retryBtn.onclick = () => {
     attempt = 0;
     loaded = false;
     retryBtn.style.display = "none";
@@ -79,30 +83,31 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
   };
 }
 
-/* =========================
-   LOAD OLD RESULT
-========================= */
-function loadOldResult(){
+/* ===============================
+   LOAD OLD RESULT (DATE PICKER)
+================================ */
+function loadOldPDF(){
 
-  const dateInput = document.getElementById("oldDate").value;
-  if(!dateInput){
+  const wrap = document.getElementById("oldResults");
+  const input = document.getElementById("oldDate");
+
+  if(!input.value){
     alert("Please select date");
     return;
   }
 
-  const wrap = document.getElementById("oldResults");
   wrap.innerHTML = "";
 
-  const code = fileCodeFromInput(dateInput);
+  const d = new Date(input.value);
 
-  draws.forEach(draw=>{
+  draws.forEach(draw => {
 
     const card = document.createElement("div");
     card.className = "card";
 
     card.innerHTML = `
       <h3>${draw.title}</h3>
-      <div class="date-show">${dateInput}</div>
+      <div class="date-show">${d.toDateString()}</div>
     `;
 
     const iframe = document.createElement("iframe");
@@ -121,7 +126,7 @@ function loadOldResult(){
     downloadBtn.target = "_blank";
 
     const pdfUrl =
-      OLD_BASE_URL + draw.prefix + code + ".PDF";
+      OLD_BASE_URL + draw.prefix + fileCode(d) + ".PDF";
 
     downloadBtn.href = pdfUrl;
 
@@ -133,4 +138,3 @@ function loadOldResult(){
     );
   });
 }
-
