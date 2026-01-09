@@ -1,4 +1,3 @@
-
 const BASE_URL = "https://www.dhankesari.com/download.php?filename=";
 
 const draws = [
@@ -21,64 +20,80 @@ function fileCode(d){
          String(d.getFullYear()).slice(-2);
 }
 
-/* ===== AUTO RETRY PDF (4x background) ===== */
+/* ===== PDF AUTO RETRY (NO FALLBACK) ===== */
 function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
 
   let attempt = 0;
   const maxRetry = 4;
   let loaded = false;
+  let retryTimer = null;
 
+  iframe.style.display = "none";
   retryBtn.style.display = "none";
   downloadBtn.style.display = "none";
-  iframe.style.display = "none";
 
   status.textContent = "Loading Result...";
   status.style.display = "block";
 
-  const tryLoad = () => {
-
-    if(loaded) return;
-    attempt++;
-
+  const loadOnce = () => {
     iframe.src =
       "https://docs.google.com/gview?embedded=true&url=" +
       encodeURIComponent(pdfUrl) +
       "&t=" + Date.now();
+  };
 
-    iframe.onload = ()=>{
-      if(loaded) return;
-      loaded = true;
-      iframe.style.display = "block";
-      status.style.display = "none";
-      downloadBtn.style.display = "inline-block";
-    };
+  const tryLoad = () => {
+    if (loaded) return;
 
-    setTimeout(()=>{
-      if(loaded) return;
+    attempt++;
+    loadOnce();
 
-      if(attempt < maxRetry){
-        tryLoad(); // 🔁 silent retry
-      }else{
-        status.textContent = "Result available but not displayed.";
+    retryTimer = setTimeout(() => {
+      if (loaded) return;
+
+      if (attempt >= maxRetry) {
+        // ⛔ stop background retry
+        status.textContent = "Click Retry to load result";
         retryBtn.style.display = "inline-block";
         downloadBtn.style.display = "inline-block";
+        return;
       }
+
+      tryLoad();
     }, 5000);
   };
 
-  tryLoad();
+  iframe.onload = () => {
+    if (loaded) return;
+    loaded = true;
 
-  retryBtn.onclick = ()=>{
-    attempt = 0;
+    clearTimeout(retryTimer);
+
+    iframe.style.display = "block";
+    status.style.display = "none";
+    retryBtn.style.display = "none"; // 🔥 hide retry on success
+    downloadBtn.style.display = "inline-block";
+  };
+
+  // 🔁 manual retry – sirf isi card ka
+  retryBtn.onclick = () => {
     loaded = false;
+    attempt = 0;
+
     retryBtn.style.display = "none";
     downloadBtn.style.display = "none";
+
     status.textContent = "Loading Result...";
+    status.style.display = "block";
+
     tryLoad();
   };
+
+  // 🔥 start auto retry
+  tryLoad();
 }
 
-/* ===== MAIN (ALL 3 CARDS TOGETHER) ===== */
+/* ===== MAIN ===== */
 function loadTodayPDF(){
 
   const wrap = document.getElementById("todayResults");
@@ -86,7 +101,7 @@ function loadTodayPDF(){
 
   const today = getTodayIST();
 
-  draws.forEach(draw=>{
+  draws.forEach(draw => {
 
     const card = document.createElement("div");
     card.className = "card";
@@ -96,14 +111,8 @@ function loadTodayPDF(){
       <div class="date-show">${today.toDateString()}</div>
     `;
 
-    const pdfWrapper = document.createElement("div");
-pdfWrapper.className = "pdf-wrapper";
-
-const iframe = document.createElement("iframe");
-iframe.className = "pdf-frame";
-
-pdfWrapper.appendChild(iframe);
-    
+    const iframe = document.createElement("iframe");
+    iframe.className = "pdf-frame";
 
     const status = document.createElement("div");
     status.className = "status";
@@ -125,7 +134,6 @@ pdfWrapper.appendChild(iframe);
     card.append(iframe, status, retryBtn, downloadBtn);
     wrap.appendChild(card);
 
-    // 🔥 background auto retry start
     loadPDFWithRetry(
       iframe, status, retryBtn, downloadBtn, pdfUrl
     );
