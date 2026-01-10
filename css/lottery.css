@@ -167,6 +167,77 @@ header{
   pointer-events:none;
   display:block;
 }
+/* ===== DATE PICKER CENTER ===== */
+.date-picker{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:25px;
+}
+
+.date-picker input[type="date"]{
+    padding:10px 14px;
+    font-size:15px;
+    border-radius:8px;
+    border:1px solid #cbd5e1;
+    outline:none;
+    background:#f8fafc;
+}
+
+.date-picker input[type="date"]:focus{
+    border-color:#1e3a8a;
+}
+
+/* ===== LOAD RESULT BUTTON ===== */
+.date-picker button{
+    padding:10px 20px;
+    font-size:15px;
+    border:none;
+    border-radius:8px;
+    background:#1e3a8a;
+    color:#fff;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.date-picker button:hover{
+    background:#374bbb;
+}
+
+/* ===== CARD ACTION BUTTONS CENTER ===== */
+.card{
+    text-align:center;
+}
+
+/* ===== STATUS TEXT CENTER ===== */
+.status{
+    text-align:center;
+    margin:12px 0;
+    font-size:14px;
+}
+
+/* ===== RETRY + DOWNLOAD CENTER ===== */
+.card .refresh-btn{
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    margin:8px 6px;
+    padding:10px 18px;
+    font-size:14px;
+    font-weight:600;
+    border-radius:8px;
+}
+
+/* ===== DOWNLOAD PDF SPECIAL STYLE ===== */
+.card a.refresh-btn{
+    background:#16a34a;
+}
+
+.card a.refresh-btn:hover{
+    background:#15803d;
+}
 
 /* ================= FOOTER ================= */
 footer{
