@@ -239,6 +239,47 @@ header{
     background:#15803d;
 }
 
+/* ===== VIEW OLD RESULT BUTTON ===== */
+.view-old-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+
+    padding:12px 22px;
+    font-size:15px;
+    font-weight:700;
+
+    color:#ffffff;
+    background:linear-gradient(135deg,#1e3a8a,#2563eb);
+    border:none;
+    border-radius:10px;
+
+    text-decoration:none;
+    cursor:pointer;
+    box-shadow:0 6px 14px rgba(37,99,235,0.35);
+    transition:all .25s ease;
+}
+
+/* Hover effect */
+.view-old-btn:hover{
+    background:linear-gradient(135deg,#1e40af,#1d4ed8);
+    transform:translateY(-1px);
+    box-shadow:0 10px 20px rgba(29,78,216,0.45);
+}
+
+/* Active click */
+.view-old-btn:active{
+    transform:scale(.97);
+}
+
+/* Center wrapper (optional) */
+.view-old-wrap{
+    display:flex;
+    justify-content:center;
+    margin:18px 0;
+}
+
 /* ================= FOOTER ================= */
 footer{
   text-align:center;
