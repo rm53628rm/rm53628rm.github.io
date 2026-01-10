@@ -158,11 +158,13 @@ header{
 /* ===== DATE PICKER CENTER ===== */
 .date-picker{
     display:flex;
+  flex-direction:column;
     justify-content:center;
     align-items:center;
     gap:12px;
     flex-wrap:wrap;
     margin-bottom:25px;
+  margin-top:20px;     
 }
 
 .date-picker input[type="date"]{
