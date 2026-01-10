@@ -155,18 +155,6 @@ header{
   border:1px solid #ccc
 }
 
-.date-wrap{position:relative}
-
-.date-placeholder{
-  position:absolute;
-  left:25px;
-  top:50%;
-  transform:translateY(-50%);
-  color:#888;
-  font-size:15px;
-  pointer-events:none;
-  display:block;
-}
 /* ===== DATE PICKER CENTER ===== */
 .date-picker{
     display:flex;
@@ -286,6 +274,92 @@ footer{
   font-size:12px;
   color:#777;
   padding:20px
+}
+
+/* ===== DATE PICKER WRAP ===== */
+.date-picker{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:14px;
+    margin-bottom:28px;
+    flex-wrap:wrap;
+}
+
+/* ===== CUSTOM DATE FIELD ===== */
+.date-box{
+    position:relative;
+}
+
+.date-box input[type="date"]{
+    width:220px;
+    padding:14px 14px;
+    font-size:15px;
+    font-weight:600;
+
+    border-radius:12px;
+    border:1px solid #dbe2f1;
+    background:#ffffff;
+    color:#111827;
+
+    box-shadow:0 6px 16px rgba(0,0,0,.08);
+    outline:none;
+}
+
+/* remove default placeholder look */
+.date-box input[type="date"]::-webkit-calendar-picker-indicator{
+    cursor:pointer;
+    opacity:.6;
+}
+
+/* focus effect */
+.date-box input[type="date"]:focus{
+    border-color:#2563eb;
+    box-shadow:0 8px 20px rgba(37,99,235,.25);
+}
+
+/* ===== FAKE PLACEHOLDER TEXT ===== */
+.date-placeholder{
+    position:absolute;
+    left:14px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:14px;
+    font-weight:600;
+    color:#9ca3af;
+    pointer-events:none;
+    transition:.2s ease;
+}
+
+/* hide text when date selected */
+.date-box.has-date .date-placeholder{
+    opacity:0;
+}
+
+/* ===== LOAD RESULT BUTTON (PREMIUM) ===== */
+.date-picker button{
+    padding:14px 26px;
+    font-size:15px;
+    font-weight:700;
+
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+
+    color:#ffffff;
+    background:linear-gradient(135deg,#1e3a8a,#2563eb);
+    box-shadow:0 8px 18px rgba(37,99,235,.35);
+    transition:.25s ease;
+}
+
+.date-picker button:hover{
+    background:linear-gradient(135deg,#1e40af,#1d4ed8);
+    transform:translateY(-2px);
+    box-shadow:0 12px 26px rgba(29,78,216,.45);
+}
+
+.date-picker button:active{
+    transform:scale(.97);
 }
 
 /* ================= MOBILE ================= */
