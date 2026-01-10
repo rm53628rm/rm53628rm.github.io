@@ -2,207 +2,210 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>News | StockNews</title>
-
-<link rel="stylesheet" href="../css/style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Old Lottery Result Viewer</title>
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+header{
+    width:100%;
+    background:#1e3a8a;
+    color:white;
+    padding:15px 0;
+    text-align:center;
+    font-size:1.5em;
+    font-weight:bold;
+}
+main{
+    width:95%;
+    max-width:900px;
+    margin-top:20px;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+h2{
+    text-align:center;
+    color:#1e3a8a;
+}
+.date-picker{
+    text-align:center;
+    margin-bottom:20px;
+}
+.date-picker input{
+    padding:8px;
+    font-size:1em;
+}
+.card{
+    margin-bottom:20px;
+    padding:15px;
+    border-radius:8px;
+    background:#eef2fb;
+    box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+.card h3{
+    margin:0 0 10px 0;
+}
+.pdf-frame{
+    width:100%;
+    height:500px;
+    border:none;
+    border-radius:10px;
+    display:none;
+}
+.status{
+    margin:10px 0;
+    color:#555;
+}
+.refresh-btn{
+    margin-right:10px;
+    padding:8px 16px;
+    background:#1e3a8a;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    text-decoration:none;
+}
+.refresh-btn:hover{
+    background:#374bbb;
+}
+</style>
 </head>
 <body>
 
-<!-- HEADER (SAME AS INDEX) -->
-<header>
-  <div class="menu-btn" onclick="openMenu()">☰</div>
-  <div class="logo">StockNews</div>
-</header>
+<header>🎯 Old Lottery Results</header>
 
-<!-- MOBILE MENU -->
-<div id="mobileMenu" class="mobile-menu">
-  <span class="close" onclick="closeMenu()">✕</span>
-  <div class="menu-header">Stock Edge</div>
-
-  <div class="menu-accordion" onclick="toggleCat()">
-    News Categories <span id="arrow">▼</span>
-  </div>
-
-  <div id="catMenu" class="submenu">
-    <a href="../category.html?cat=latest">Latest News</a>
-    <a href="../category.html?cat=earnings">Earnings</a>
-    <a href="../category.html?cat=dividend">Dividend</a>
-  </div>
-</div>
-
-<!-- ================= NEWS DETAIL ================= -->
 <main>
+    <h2>Select Date to View Result</h2>
+    <div class="date-picker">
+        <input type="date" id="resultDate">
+        <button onclick="loadOldResults()">Load Result</button>
+    </div>
 
-<div class="news-detail-box">
-
-  <h1 id="newsTitle">HDFC Bank Dividend</h1>
-
-  <div class="news-detail-meta">
-    <span id="newsDate"></span>
-    <span id="newsCategory"></span>
-  </div>
-
-  <img id="newsImage" class="news-detail-image" src="" alt="">
-
-  <!-- 🔴 FULL NEWS CONTENT YAHA MANUALLY LIKHE -->
-  <div class="news-full-content">
-    <p>
-      HDFC Bank ne apne shareholders ke liye ₹15 per share dividend announce
-      kiya hai. Bank ke board ne financial performance ke baad is dividend
-      ko approve kiya.
-    </p>
-
-    <p>
-      Record date aur payment date jald hi announce ki jayegi.
-      Investors ko is announcement se short term me positive impact
-      dekhne ko mil sakta hai.
-    </p>
-  </div>
-
-  <!-- BACK BUTTON -->
-  <a href="../index.html" class="back-btn">← Back to Home</a>
-
-
-  <div class="share-box">
-
-  <a id="shareWhatsapp" target="_blank" class="share-btn wa">WhatsApp</a>
-  <a id="shareFacebook" target="_blank" class="share-btn fb">Facebook</a>
-  <a id="shareTelegram" target="_blank" class="share-btn tg">Telegram</a>
-  <a id="shareTwitter" target="_blank" class="share-btn tw">Twitter</a>
-  </div>
-</div>
-<!-- ================= RELATED NEWS ================= -->
-<section>
-
-  <div id="relatedNews"></div>
-</section>
-
+    <div id="oldResults"></div>
 </main>
 
-<!-- FOOTER -->
-<footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <h3>StockNews</h3>
-      <p>Latest stock market news, earnings, dividends & updates.</p>
-    </div>
-  </div>
-  
-  <div class="footer-bottom">
-    © 2025 StockNews • Educational Purpose Only
-  </div>
-</footer>
-
-<!-- ================= JS ================= -->
-<script src="../js/latest.js"></script>
-<script src="../js/earning.js"></script>
-<script src="../js/dividend.js"></script>
-
 <script>
-/* MOBILE MENU */
-function openMenu(){
-  document.getElementById("mobileMenu").classList.add("show");
-}
-function closeMenu(){
-  document.getElementById("mobileMenu").classList.remove("show");
-}
-function toggleCat(){
-  const menu = document.getElementById("catMenu");
-  const arrow = document.getElementById("arrow");
-  if(menu.style.maxHeight){
-    menu.style.maxHeight = null;
-    arrow.innerText = "▼";
-  }else{
-    menu.style.maxHeight = menu.scrollHeight + "px";
-    arrow.innerText = "▲";
-  }
+const OLD_BASE_URL = "https://ldemo.dhankesari.com/oldresultsdownload.php?filename=";
+const draws = [
+    { title:"🌅 Morning", prefix:"MN" },
+    { title:"☀️ Day",     prefix:"DN" },
+    { title:"🌙 Night",   prefix:"EN" }
+];
+
+/* ===== Format date to DDMMYY ===== */
+function fileCode(d){
+    return String(d.getDate()).padStart(2,"0") +
+           String(d.getMonth()+1).padStart(2,"0") +
+           String(d.getFullYear()).slice(-2);
 }
 
-/* =====================
-   LOAD DATA FROM JS
-===================== */
-const allNews = [...latestNews, ...earningNews, ...dividendNews];
+/* ===== PDF AUTO RETRY ===== */
+function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
+    let attempt=0, maxRetry=4, loaded=false, retryTimer=null;
 
-// current page link
-const params = new URLSearchParams(window.location.search);
-const newsId = params.get("id");
+    iframe.style.display="none";
+    retryBtn.style.display="none";
+    downloadBtn.style.display="none";
 
-const news = allNews.find(n => n.id == newsId);
-  
+    status.textContent="Loading Result...";
+    status.style.display="block";
 
-if(news){
-  document.getElementById("newsTitle").innerText = news.title;
-  document.getElementById("newsCategory").innerText = news.category;
-  document.getElementById("newsImage").src = news.image;
+    const loadOnce = () => {
+        iframe.src = "https://docs.google.com/gview?embedded=true&url=" + encodeURIComponent(pdfUrl) + "&t=" + Date.now();
+    };
 
-  const d = new Date(news.date);
-  document.getElementById("newsDate").innerText = d.toDateString();
-}
-  
-const shareUrl = encodeURIComponent(window.location.href);
-const shareTitle = encodeURIComponent(
-  document.getElementById("newsTitle")?.innerText || "Stock News"
-);
+    const tryLoad = () => {
+        if(loaded) return;
+        attempt++;
+        loadOnce();
 
-document.getElementById("shareWhatsapp").href =
-  `https://wa.me/?text=${shareTitle}%20${shareUrl}`;
+        retryTimer = setTimeout(() => {
+            if(loaded) return;
+            if(attempt>=maxRetry){
+                status.textContent="Click Retry to load result";
+                retryBtn.style.display="inline-block";
+                downloadBtn.style.display="inline-block";
+                return;
+            }
+            tryLoad();
+        }, 5000);
+    };
 
-document.getElementById("shareFacebook").href =
-  `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
+    iframe.onload = () => {
+        if(loaded) return;
+        loaded=true;
+        clearTimeout(retryTimer);
+        iframe.style.display="block";
+        status.style.display="none";
+        retryBtn.style.display="none";
+        downloadBtn.style.display="inline-block";
+    };
 
-document.getElementById("shareTelegram").href =
-  `https://t.me/share/url?url=${shareUrl}&text=${shareTitle}`;
+    retryBtn.onclick = () => {
+        loaded=false; attempt=0;
+        retryBtn.style.display="none";
+        downloadBtn.style.display="none";
+        status.textContent="Loading Result...";
+        status.style.display="block";
+        tryLoad();
+    };
 
-document.getElementById("shareTwitter").href =
-  `https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareTitle}`;
-  
-/* ======================
-   RELATED + RANDOM NEWS
-====================== */
-
-const relatedBox = document.getElementById("relatedNews");
-
-/* PROPER SHUFFLE (Fisher–Yates) */
-function shuffleArray(arr){
-  let array = [...arr];
-  for(let i = array.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
-function renderRelatedNews(){
-  if(!relatedBox || !news) return;
-
-  /* ===== 4 RELATED NEWS ===== */
-  const related = allNews.filter(n =>
-    n.category === news.category && n.id != news.id
-  ).slice(0,4);
-
-  /* ----- RELATED ----- */
-  relatedBox.innerHTML += `<h3>Related News</h3>`;
-
-  related.forEach(n => {
-    relatedBox.innerHTML += `
-      <div class="news-card" onclick="location.href='${n.link}'">
-        <img src="${n.image}" alt="">
-        <div class="news-text">
-          <div class="news-title">${n.title}</div>
-          <div class="news-meta">${n.category}</div>
-          <div class="news-summary">${n.summary || ""}</div>
-        </div>
-      </div>
-    `;
-  });
+    tryLoad();
 }
 
-renderRelatedNews();
-  
-  
+/* ===== MAIN OLD RESULTS ===== */
+function loadOldResults(){
+    const wrap = document.getElementById("oldResults");
+    wrap.innerHTML="";
+
+    const dateInput = document.getElementById("resultDate").value;
+    if(!dateInput){
+        alert("Please select a date!");
+        return;
+    }
+
+    const selectedDate = new Date(dateInput);
+
+    draws.forEach(draw=>{
+        const card = document.createElement("div");
+        card.className="card";
+        card.innerHTML = `<h3>${draw.title} - ${selectedDate.toDateString()}</h3>`;
+
+        const iframe = document.createElement("iframe");
+        iframe.className="pdf-frame";
+
+        const status = document.createElement("div");
+        status.className="status";
+
+        const retryBtn = document.createElement("button");
+        retryBtn.className="refresh-btn";
+        retryBtn.textContent="Retry";
+
+        const downloadBtn = document.createElement("a");
+        downloadBtn.className="refresh-btn";
+        downloadBtn.textContent="Download PDF";
+        downloadBtn.target="_blank";
+
+        const pdfUrl = OLD_BASE_URL + draw.prefix + fileCode(selectedDate) + ".PDF";
+        downloadBtn.href = pdfUrl;
+
+        card.append(iframe, status, retryBtn, downloadBtn);
+        wrap.appendChild(card);
+
+        loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl);
+    });
+}
 </script>
 
 </body>
 </html>
-
