@@ -135,3 +135,20 @@ function loadOldResults(){
     });
 }
 
+
+
+
+const dateInput = document.getElementById("resultDate");
+const dateBox   = dateInput.closest(".date-box");
+
+function toggleDateText(){
+    if(dateInput.value){
+        dateBox.classList.add("has-date");
+    }else{
+        dateBox.classList.remove("has-date");
+    }
+}
+
+dateInput.addEventListener("change", toggleDateText);
+toggleDateText();
+
