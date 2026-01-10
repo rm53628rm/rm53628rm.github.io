@@ -40,22 +40,14 @@
 </div>
 
 
-<div class="container">
-  <div class="calendar-box">
-    <input type="date" id="oldDate">
-    <button onclick="loadOldResult()" class="refresh-btn">Show Result</button>
-    <span id="datePlaceholder" class="date-placeholder">Please select old result date</span>
-  </div>
+<div class="date-picker">
+        <input type="date" id="resultDate">
+        <button onclick="loadOldResults()">Load Result</button>
+    </div>
 
-  <div class="grid" id="oldResults"></div>
-</div>
-
-<!-- FULLSCREEN DIV -->
-<div id="pdfFullscreen" class="pdf-fullscreen">
-  <span class="close-fullscreen" onclick="closeFullscreen()">×</span>
-  <iframe id="fullscreenFrame"></iframe>
-</div>
-
+    <!-- OLD RESULTS WILL LOAD HERE -->
+    <div id="oldResults"></div>
+  
 
   
 
