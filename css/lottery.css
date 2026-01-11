@@ -380,6 +380,17 @@ footer{
     margin-bottom:10px;
 }
 
+.result-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:25px;
+}
+
+@media (max-width:768px){
+  .result-grid{
+    grid-template-columns:1fr;
+  }
+}
 
 /* ================= MOBILE ================= */
 @media(max-width:600px){
