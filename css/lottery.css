@@ -380,17 +380,20 @@ footer{
     margin-bottom:10px;
 }
 
-.result-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:25px;
+#oldResults{
+  width:100%;
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:20px;
+  margin-top:20px;
 }
 
-@media (max-width:768px){
-  .result-grid{
+@media(max-width:768px){
+  #oldResults{
     grid-template-columns:1fr;
   }
 }
+
 
 /* ================= MOBILE ================= */
 @media(max-width:600px){
