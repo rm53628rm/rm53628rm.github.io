@@ -155,16 +155,6 @@ header{
   border:1px solid #ccc
 }
 
-/* ===== DATE PICKER CENTER ===== */
-.date-picker{
-    display:flex;
-  flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    gap:12px;
-    margin-bottom:25px;
-  margin-top:20px;     
-}
 
 .date-picker input[type="date"]{
     padding:5px 10px;
