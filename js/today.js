@@ -1,9 +1,9 @@
 const BASE_URL = "https://www.dhankesari.com/download.php?filename=";
 
 const draws = [
-  { title:"🌅 Morning", prefix:"MN" },
-  { title:"☀️ Day",     prefix:"DN" },
-  { title:"🌙 Night",   prefix:"EN" }
+  { title:"🌅 Dear Morning 1PM", prefix:"MN" },
+  { title:"☀️ Dear Day 6PM",     prefix:"DN" },
+  { title:"🌙 Dear Night 8PM",   prefix:"EN" }
 ];
 
 /* ===== INDIA DATE ===== */
