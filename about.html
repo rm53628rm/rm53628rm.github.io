@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,8 +21,8 @@
 <header>
   <div class="menu-btn" onclick="openMenu()">☰</div>
   <div class="header-text">
-    <h1>Dhankesari Today</h1>
-    <p>About us</p>
+    <h1>Dear Lottery</h1>
+    <p>Disclaimer</p>
   </div>
 </header>
 
@@ -43,7 +43,7 @@
   <a href="disclaimer.html">⚠️ Disclaimer</a>
 </div>
 
-<!-- ================= MAIN CONTENT ================= -->
+<!-- ================= CONTENT ================= -->
 <main class="container">
 
   <h1>About Us</h1>
@@ -67,23 +67,21 @@
   We do not sell, promote, or operate any lottery games.</p>
 
 </main>
-
 <!-- ================= FOOTER ================= -->
-<footer class="site-footer">
-  <p>© 2026 Lottery Result Today. All Rights Reserved.</p>
-
-This website is for informational purposes only.
-    We do not sell or promote any lottery tickets.
+<footer>
+  © 2026 Dear Lottery. All rights reserved.
 </footer>
 
-<!-- ================= MOBILE MENU JS ================= -->
+<!-- ================= JS ================= -->
 <script>
-  const toggle = document.querySelector(".menu-toggle");
-  const menu = document.querySelector(".mobile-menu");
-
-  toggle.addEventListener("click", () => {
-    menu.classList.toggle("active");
-  });
+function openMenu(){
+  menu.classList.add("active");
+  overlay.style.display="block";
+}
+function closeMenu(){
+  menu.classList.remove("active");
+  overlay.style.display="none";
+}
 </script>
 
 </body>
