@@ -389,19 +389,52 @@ footer{
 }
 
 
-.lottery-content{
-  margin-top:20px;
-  padding:15px;
-  background:#ffffff;
-  border-radius:10px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.05);
-  font-size:14px;
-  line-height:1.7;
-}
-
-
 /* ================= MOBILE ================= */
 @media(max-width:600px){
   .grid{grid-template-columns:1fr}
   .pdf-frame{height:440px}
+}
+
+.lottery-content{
+  max-width: 1100px;        /* content ko premium width */
+  margin: 0 auto;          /* center align */
+  padding: 18px 20px;      /* 🔥 left-right gap */
+  line-height: 1.75;
+  font-size: 15.5px;
+  color: #2c2c2c;
+}
+
+/* Heading */
+.lottery-content h1{
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: #111;
+}
+
+/* Paragraph */
+.lottery-content p{
+  margin-bottom: 14px;
+  text-align: justify;     /* premium reading */
+}
+
+/* Links inside text */
+.lottery-content a{
+  color: #0b57d0;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.lottery-content a:hover{
+  text-decoration: underline;
+}
+@media(max-width:768px){
+  .lottery-content{
+    padding: 16px 14px;   /* mobile gap */
+    font-size: 15px;
+  }
+
+  .lottery-content h1{
+    font-size: 18px;
+  }
 }
