@@ -1,58 +1,77 @@
 
-function generateTable(tableId, drawNames){
-  const tbody = document.querySelector(`#${tableId} tbody`);
-  const today = new Date();
+// ========= FIXED DRAW NAMES =========
+const draws = {
+  draw1pm: [
+    "Dear Dwarka",
+    "Dear Godavari",
+    "Dear Indus",
+    "Dear Mahandi",
+    "Dear Meghna",
+    "Dear Narmada",
+    "Dear Yamuna"
+  ],
+  draw6pm: [
+    "Dear Blitzen",
+    "Dear Comet",
+    "Dear Cupid",
+    "Dear Dancer",
+    "Dear Dasher",
+    "Dear Donner",
+    "Dear Vixen"
+  ],
+  draw8pm: [
+    "Dear Finch",
+    "Dear Goose",
+    "Dear Pelican",
+    "Dear Sandpiper",
+    "SeaGull",
+    "Dear Stork",
+    "Dear Toucan"
+  ]
+};
 
-  for(let i=0;i<7;i++){
+// ========= GET NEXT 7 DAYS =========
+function getNext7Days() {
+  const days = [];
+  for (let i = 0; i < 7; i++) {
     const d = new Date();
-    d.setDate(today.getDate()+i);
-
-    const dateText = d.toLocaleDateString("en-US",{
-      day:"2-digit", month:"long", year:"numeric"
-    });
-    const dayText = d.toLocaleDateString("en-US",{weekday:"long"});
-
-    const tr = document.createElement("tr");
-    if(i === 0) tr.classList.add("today");
-
-    tr.innerHTML = `
-      <td>${dateText}</td>
-      <td>${dayText}</td>
-      <td>${drawNames[d.getDay()]}</td>
-    `;
-    tbody.appendChild(tr);
+    d.setDate(d.getDate() + i);
+    days.push(d);
   }
+  return days;
 }
 
-/* Draw Names Mapping */
-generateTable("draw1pm",{
-  0:"Dear Yamuna",
-  1:"Dear Dwarka",
-  2:"Dear Godavari",
-  3:"Dear Indus",
-  4:"Dear Mahandi",
-  5:"Dear Meghna",
-  6:"Dear Narmada"
-});
+// ========= FILL TABLE =========
+function fillWeeklyTable(tableId, drawNames) {
+  const tbody = document.querySelector(`#${tableId} tbody`);
+  if (!tbody) return;
 
-generateTable("draw6pm",{
-  0:"Dear Vixen",
-  1:"Dear Blitzen",
-  2:"Dear Comet",
-  3:"Dear Cupid",
-  4:"Dear Dancer",
-  5:"Dear Dasher",
-  6:"Dear Donner"
-});
+  tbody.innerHTML = "";
+  const today = new Date().toDateString();
+  const days = getNext7Days();
 
-generateTable("draw8pm",{
-  0:"Dear Toucan",
-  1:"Dear Finch",
-  2:"Dear Goose",
-  3:"Dear Pelican",
-  4:"Dear Sandpiper",
-  5:"Dear Seagull",
-  6:"Dear Stork"
-});
+  days.forEach((date, index) => {
+    const tr = document.createElement("tr");
 
+    // 🔥 highlight today
+    if (date.toDateString() === today) {
+      tr.style.background = "#1e3a8a";
+      tr.style.color = "#ffffff";
+      tr.style.fontWeight = "700";
+    }
+
+    tr.innerHTML = `
+      <td>${date.toLocaleDateString("en-IN")}</td>
+      <td>${date.toLocaleDateString("en-IN", { weekday: "long" })}</td>
+      <td>${drawNames[index]}</td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+}
+
+// ========= LOAD ALL =========
+fillWeeklyTable("draw1pm", draws.draw1pm);
+fillWeeklyTable("draw6pm", draws.draw6pm);
+fillWeeklyTable("draw8pm", draws.draw8pm);
 
