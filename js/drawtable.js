@@ -1,5 +1,5 @@
-
-/* ========= FIXED DRAW NAMES (MON → SUN) ========= */
+<script>
+// ========= FIXED DRAW NAMES (MON → SUN) =========
 const draws = {
   draw1pm: [
     "Dear Dwarka",
@@ -24,43 +24,38 @@ const draws = {
     "Dear Goose",
     "Dear Pelican",
     "Dear Sandpiper",
-    "SeaGull",
+    "Dear SeaGull",
     "Dear Stork",
     "Dear Toucan"
   ]
 };
 
-/* ========= GET MONDAY OF CURRENT WEEK ========= */
-function getMonday(date) {
-  const d = new Date(date);
-  const day = d.getDay(); // Sun=0
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-  return new Date(d.setDate(diff));
-}
+// ========= GET CURRENT WEEK (MON → SUN) =========
+function getCurrentWeek() {
+  const today = new Date();
+  const day = today.getDay(); // 0=Sun
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - (day === 0 ? 6 : day - 1));
 
-/* ========= GET 7 DAYS (MON → SUN) ========= */
-function getWeekDates() {
-  const dates = [];
-  const monday = getMonday(new Date());
-
+  const week = [];
   for (let i = 0; i < 7; i++) {
     const d = new Date(monday);
     d.setDate(monday.getDate() + i);
-    dates.push(d);
+    week.push(d);
   }
-  return dates;
+  return week;
 }
 
-/* ========= FILL TABLE ========= */
+// ========= FILL WEEKLY TABLE =========
 function fillWeeklyTable(tableId, drawNames) {
   const tbody = document.querySelector(`#${tableId} tbody`);
   if (!tbody) return;
 
   tbody.innerHTML = "";
+  const weekDates = getCurrentWeek();
   const todayStr = new Date().toDateString();
-  const dates = getWeekDates();
 
-  dates.forEach((date, index) => {
+  weekDates.forEach((date, index) => {
     const tr = document.createElement("tr");
 
     if (date.toDateString() === todayStr) {
@@ -69,7 +64,7 @@ function fillWeeklyTable(tableId, drawNames) {
 
     tr.innerHTML = `
       <td>${date.toLocaleDateString("en-IN")}</td>
-      <td>${date.toLocaleDateString("en-IN", { weekday: "short" })}</td>
+      <td>${date.toLocaleDateString("en-IN",{ weekday:"short" })}</td>
       <td>${drawNames[index]}</td>
     `;
 
@@ -77,8 +72,8 @@ function fillWeeklyTable(tableId, drawNames) {
   });
 }
 
-/* ========= LOAD ALL TABLES ========= */
+// ========= LOAD ALL TABLES =========
 fillWeeklyTable("draw1pm", draws.draw1pm);
 fillWeeklyTable("draw6pm", draws.draw6pm);
 fillWeeklyTable("draw8pm", draws.draw8pm);
-
+</script>
