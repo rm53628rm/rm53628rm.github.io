@@ -30,15 +30,26 @@ const draws = {
   ]
 };
 
-// ========= GET NEXT 7 DAYS =========
-function getNext7Days() {
-  const days = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date();
-    d.setDate(d.getDate() + i);
-    days.push(d);
+// ========= GET ACTIVE WEEK (MON → SUN AUTO) =========
+function getActiveWeek() {
+  const today = new Date();
+  const day = today.getDay(); // 0 = Sunday
+  const monday = new Date(today);
+
+  // 🔥 If Sunday already passed, next week auto start
+  if (day === 0) {
+    monday.setDate(today.getDate() + 1);
+  } else {
+    monday.setDate(today.getDate() - (day - 1));
   }
-  return days;
+
+  const week = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    week.push(d);
+  }
+  return week;
 }
 
 // ========= FILL TABLE =========
@@ -47,31 +58,29 @@ function fillWeeklyTable(tableId, drawNames) {
   if (!tbody) return;
 
   tbody.innerHTML = "";
-  const today = new Date().toDateString();
-  const days = getNext7Days();
+  const todayStr = new Date().toDateString();
+  const weekDays = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+  const dates = getActiveWeek();
 
-  days.forEach((date, index) => {
+  dates.forEach((date, i) => {
     const tr = document.createElement("tr");
 
-    // 🔥 highlight today
-    if (date.toDateString() === today) {
-      tr.style.background = "#1e3a8a";
-      tr.style.color = "#ffffff";
-      tr.style.fontWeight = "700";
+    // 🔥 Highlight today
+    if (date.toDateString() === todayStr) {
+      tr.classList.add("today-row");
     }
 
     tr.innerHTML = `
       <td>${date.toLocaleDateString("en-IN")}</td>
-      <td>${date.toLocaleDateString("en-IN", { weekday: "long" })}</td>
-      <td>${drawNames[index]}</td>
+      <td>${weekDays[i]}</td>
+      <td>${drawNames[i]}</td>
     `;
-
     tbody.appendChild(tr);
   });
 }
 
-// ========= LOAD ALL =========
+// ========= LOAD =========
 fillWeeklyTable("draw1pm", draws.draw1pm);
 fillWeeklyTable("draw6pm", draws.draw6pm);
 fillWeeklyTable("draw8pm", draws.draw8pm);
-               
+
