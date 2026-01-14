@@ -1,89 +1,57 @@
-/* ===== COMMON WRAP ===== */
-.container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 20px;
-}
-
 /* ===== TABLE WRAP ===== */
-.table-wrap {
-  width: 100%;
-  overflow-x: auto; /* chhoti screens ke liye optional scroll */
-  margin-bottom: 40px;
+.table-wrap{
+  width:100%;
+  overflow-x:auto;
 }
 
 /* ===== TABLE ===== */
-.weekly-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: auto; /* responsive */
-  background: #fff;
-  font-size: 14px;
-  word-break: break-word; /* long text break ho jaye */
+.weekly-table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  font-size:14px;
 }
 
-/* ===== TABLE CELLS ===== */
+/* ===== TH / TD ===== */
 .weekly-table th,
-.weekly-table td {
-  padding: 10px;
-  text-align: center;
-  white-space: normal; /* wrap ho sake */
-  border-bottom: 1px solid #e5e7eb;
+.weekly-table td{
+  padding:10px;
+  border:1px solid #e5e7eb;
+  text-align:center;
 }
 
-.weekly-table th {
-  background: #0b3c91;
-  color: #fff;
-  font-weight: 600;
-  font-size: 15px;
+/* ===== HEADER ===== */
+.weekly-table th{
+  background:#0b3c91;
+  color:#fff;
+  font-weight:600;
 }
 
-.weekly-table td:nth-child(3) {
-  font-weight: 600;
-  color: #1e3a8a;
+/* ===== RESULT COLUMN ===== */
+.weekly-table td:nth-child(3){
+  font-weight:600;
+  color:#1e3a8a;
 }
 
-/* ===== HOVER EFFECT ===== */
-.weekly-table tr:hover {
-  background: #f1f5ff;
+/* ===== HOVER ===== */
+.weekly-table tr:hover{
+  background:#f1f5ff;
 }
 
-/* ===== TODAY HIGHLIGHT ===== */
-.weekly-table tr.today {
-  background: #fff6d8;
-  font-weight: 600;
-  color: #000;
+/* ===== TODAY ROW ===== */
+.weekly-table tr.today{
+  background:#fff6d8;
+  font-weight:700;
 }
 
-/* ===== SECTION TITLE ===== */
-.section-title {
-  font-size: 22px;
-  margin: 30px 0 15px;
-  font-weight: 700;
-}
-
-/* ===== DESKTOP GRID ===== */
-@media (min-width: 1024px) {
-  .grid-3 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-  }
-}
-
-/* ===== MOBILE FIX ===== */
-@media (max-width: 768px) {
-  .section-title {
-    font-size: 18px;
+/* ===== MOBILE RESPONSIVE ===== */
+@media(max-width:768px){
+  .weekly-table{
+    font-size:13px;
   }
 
   .weekly-table th,
-  .weekly-table td {
-    padding: 8px;
-    font-size: 13px;
-  }
-
-  .weekly-table {
-    min-width: 0; /* scroll remove */
+  .weekly-table td{
+    padding:8px;
   }
 }
