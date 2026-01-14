@@ -1,99 +1,55 @@
-/* ===============================
-   WEEKLY DRAW TABLE – PREMIUM
-================================ */
-
 .container{
   max-width:1200px;
   margin:auto;
-  padding:10px;
+  padding:15px;
 }
 
 .grid-3{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:14px;
+  gap:15px;
 }
 
-/* ===== TABLE WRAP ===== */
+@media(max-width:900px){
+  .grid-3{ grid-template-columns:1fr; }
+}
+
 .table-wrap{
-  background:#ffffff;
-  border-radius:14px;
-  box-shadow:0 8px 22px rgba(0,0,0,0.08);
+  background:#fff;
+  border-radius:10px;
   padding:10px;
+  box-shadow:0 5px 15px rgba(0,0,0,.08);
 }
 
-/* ===== SECTION TITLE ===== */
 .section-title{
   text-align:center;
+  margin:10px 0;
   font-size:16px;
   font-weight:700;
-  color:#1e3a8a;
-  margin:6px 0 10px;
 }
 
-/* ===== TABLE ===== */
 .weekly-table{
   width:100%;
   border-collapse:collapse;
-  table-layout:fixed; /* 🔥 no scroll */
+  table-layout:fixed;
+  font-size:13px;
 }
 
-/* ===== HEADER ===== */
-.weekly-table thead th{
-  background:#1e3a8a;
-  color:#ffffff;
-  font-size:13px;
+.weekly-table th,
+.weekly-table td{
   padding:6px 4px;
-  text-align:center;
-}
-
-/* ===== BODY ===== */
-.weekly-table tbody td{
-  font-size:13px;
-  padding:5px 4px; /* 🔥 gap kam */
   text-align:center;
   border-bottom:1px solid #e5e7eb;
   white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
 }
 
-/* ===== DRAW NAME LEFT ALIGN ===== */
-.weekly-table tbody td:nth-child(3){
-  text-align:left;
-  padding-left:6px;
+.weekly-table th{
+  background:#f1f5f9;
   font-weight:600;
 }
 
-/* ===== ROW HOVER ===== */
-.weekly-table tbody tr:hover{
-  background:#f1f5ff;
-}
-
-/* ===== TODAY HIGHLIGHT ===== */
-.today-row{
+.today{
   background:#1e3a8a !important;
-  color:#ffffff;
+  color:#fff;
   font-weight:700;
-}
-
-.today-row td{
-  border-color:rgba(255,255,255,0.3);
-}
-
-/* ===== MOBILE ===== */
-@media(max-width:768px){
-  .grid-3{
-    grid-template-columns:1fr;
-  }
-
-  .section-title{
-    font-size:15px;
-  }
-
-  .weekly-table thead th,
-  .weekly-table tbody td{
-    font-size:12px;
-    padding:5px 3px;
-  }
 }
