@@ -1,1 +1,73 @@
+/* ===== COMMON WRAP ===== */
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:20px;
+}
+
+/* ===== TABLE WRAP ===== */
+.table-wrap{
+  width:100%;
+  overflow-x:auto;
+  margin-bottom:40px;
+}
+
+/* ===== TABLE ===== */
+.weekly-table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:600px;
+  background:#fff;
+}
+
+.weekly-table th{
+  background:#0b3c91;
+  color:#fff;
+  padding:12px;
+  text-align:left;
+  font-size:15px;
+}
+
+.weekly-table td{
+  padding:12px;
+  border-bottom:1px solid #e5e7eb;
+  font-size:14px;
+}
+
+.weekly-table tr:hover{
+  background:#f1f5ff;
+}
+
+/* ===== TODAY HIGHLIGHT ===== */
+.weekly-table tr.today{
+  background:#fff6d8;
+  font-weight:600;
+}
+
+/* ===== HEADING ===== */
+.section-title{
+  font-size:22px;
+  margin:30px 0 15px;
+  font-weight:700;
+}
+
+/* ===== DESKTOP GRID ===== */
+@media (min-width:1024px){
+  .grid-3{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:30px;
+  }
+}
+
+/* ===== MOBILE FIX ===== */
+@media (max-width:768px){
+  .section-title{
+    font-size:18px;
+  }
+
+  .weekly-table{
+    min-width:500px;
+  }
+}
 
