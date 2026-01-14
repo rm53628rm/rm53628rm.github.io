@@ -1,11 +1,15 @@
-/* ===== FIX TABLE VISIBILITY ===== */
+/* ===========================
+   DRAW TABLE – FINAL FIX
+=========================== */
 
 .weekly-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed; /* 🔥 important */
+  table-layout: fixed; /* 🔥 must */
+  background: #ffffff;
 }
 
+/* Always show header & body */
 .weekly-table thead {
   display: table-header-group;
 }
@@ -15,18 +19,28 @@
 }
 
 .weekly-table tr {
-  display: table-row; /* 🔥 */
+  display: table-row;
 }
 
+/* Cell styling */
 .weekly-table th,
 .weekly-table td {
-  padding: 8px 6px;   /* gap kam */
-  font-size: 13px;   /* mobile fit */
+  padding: 8px 6px;           /* compact gap */
+  font-size: 13px;           /* mobile friendly */
   text-align: center;
-  white-space: nowrap; /* scroll remove */
+  border: 1px solid #e5e7eb;
+  white-space: normal;       /* ❌ nowrap hata diya */
+  word-break: break-word;    /* long draw name fix */
 }
 
-/* Column width control */
+/* Header look */
+.weekly-table th {
+  background: #1e3a8a;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Column width balance */
 .weekly-table th:nth-child(1),
 .weekly-table td:nth-child(1) {
   width: 32%;
@@ -42,7 +56,21 @@
   width: 40%;
 }
 
-/* Mobile scroll completely off */
+/* Wrapper */
 .table-wrap {
-  overflow-x: hidden;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 18px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  overflow: hidden; /* 🔥 horizontal scroll kill */
+}
+
+/* Section title */
+.section-title {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #1e3a8a;
 }
