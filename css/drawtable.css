@@ -1,73 +1,83 @@
 /* ===== COMMON WRAP ===== */
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:20px;
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
 }
 
 /* ===== TABLE WRAP ===== */
-.table-wrap{
-  width:100%;
-  overflow-x:auto;
-  margin-bottom:40px;
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 40px;
 }
 
 /* ===== TABLE ===== */
-.weekly-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:600px;
-  background:#fff;
+.weekly-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+  table-layout: fixed;
+  background: #fff;
+  font-size: 14px;
 }
 
-.weekly-table th{
-  background:#0b3c91;
-  color:#fff;
-  padding:12px;
-  text-align:left;
-  font-size:15px;
+.weekly-table th,
+.weekly-table td {
+  padding: 12px 6px;
+  text-align: center;
+  white-space: nowrap;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.weekly-table td{
-  padding:12px;
-  border-bottom:1px solid #e5e7eb;
-  font-size:14px;
+.weekly-table th {
+  background: #0b3c91; /* Old color merged */
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  text-align: left;
 }
 
-.weekly-table tr:hover{
-  background:#f1f5ff;
+.weekly-table td:nth-child(3) {
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+/* ===== HOVER EFFECT ===== */
+.weekly-table tr:hover {
+  background: #f1f5ff;
 }
 
 /* ===== TODAY HIGHLIGHT ===== */
-.weekly-table tr.today{
-  background:#fff6d8;
-  font-weight:600;
+.weekly-table tr.today {
+  background: #fff6d8; /* Highlight row */
+  font-weight: 600;
+  color: #000; /* ensure readability */
 }
 
-/* ===== HEADING ===== */
-.section-title{
-  font-size:22px;
-  margin:30px 0 15px;
-  font-weight:700;
+/* ===== SECTION TITLE ===== */
+.section-title {
+  font-size: 22px;
+  margin: 30px 0 15px;
+  font-weight: 700;
 }
 
 /* ===== DESKTOP GRID ===== */
-@media (min-width:1024px){
-  .grid-3{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:30px;
+@media (min-width: 1024px) {
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
   }
 }
 
 /* ===== MOBILE FIX ===== */
-@media (max-width:768px){
-  .section-title{
-    font-size:18px;
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 18px;
   }
 
-  .weekly-table{
-    min-width:500px;
+  .weekly-table {
+    min-width: 500px;
   }
 }
-
