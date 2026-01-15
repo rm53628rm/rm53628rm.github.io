@@ -196,9 +196,9 @@ header{
     margin:12px 0;
     font-size:14px;
 }
-/* 🔄 SMALL LOADING SPINNER */
+/* ==== LOADING ANIMATION (GUARANTEED) ==== */
 .loading-wrap{
-  display:flex;
+  display:inline-flex;
   align-items:center;
   gap:8px;
 }
@@ -206,16 +206,17 @@ header{
 .mini-spinner{
   width:14px;
   height:14px;
-  border:2px solid #c7d2fe;
+  border:2px solid #ddd;
   border-top:2px solid #1e3a8a;
   border-radius:50%;
-  animation:spin 0.8s linear infinite;
+  animation:miniSpin 0.7s linear infinite;
 }
 
-@keyframes spin{
+@keyframes miniSpin{
   0%{ transform:rotate(0deg); }
   100%{ transform:rotate(360deg); }
 }
+
 
 /* ===== RETRY + DOWNLOAD CENTER ===== */
 .card .refresh-btn{
