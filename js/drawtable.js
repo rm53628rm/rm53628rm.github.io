@@ -1,101 +1,84 @@
-{
+document.addEventListener("DOMContentLoaded", function () {
 
-  /* ===============================
-   WEEKLY DRAW TABLE – FINAL
-   Monday → Sunday
-   Today Highlight
-================================ */
+  // ================= DRAW NAMES =================
+  const DRAW_NAMES = {
+    draw1pm: [
+      "Dear Dwarka",
+      "Dear Godavari",
+      "Dear Indus",
+      "Dear Mahandi",
+      "Dear Meghna",
+      "Dear Narmada",
+      "Dear Yamuna"
+    ],
+    draw6pm: [
+      "Dear Blitzen",
+      "Dear Comet",
+      "Dear Cupid",
+      "Dear Dancer",
+      "Dear Dasher",
+      "Dear Donner",
+      "Dear Vixen"
+    ],
+    draw8pm: [
+      "Dear Finch",
+      "Dear Goose",
+      "Dear Pelican",
+      "Dear Sandpiper",
+      "SeaGull",
+      "Dear Stork",
+      "Dear Toucan"
+    ]
+  };
 
-/* ===== FIXED DRAW NAMES ===== */
-const draws = {
-  draw1pm: [
-    "Dear Dwarka",
-    "Dear Godavari",
-    "Dear Indus",
-    "Dear Mahandi",
-    "Dear Meghna",
-    "Dear Narmada",
-    "Dear Yamuna"
-  ],
-  draw6pm: [
-    "Dear Blitzen",
-    "Dear Comet",
-    "Dear Cupid",
-    "Dear Dancer",
-    "Dear Dasher",
-    "Dear Donner",
-    "Dear Vixen"
-  ],
-  draw8pm: [
-    "Dear Finch",
-    "Dear Goose",
-    "Dear Pelican",
-    "Dear Sandpiper",
-    "Dear SeaGull",
-    "Dear Stork",
-    "Dear Toucan"
-  ]
-};
-
-/* ===== DATE COMPARE FIX ===== */
-function isSameDate(d1, d2) {
-  return (
-    d1.getFullYear() === d2.getFullYear() &&
-    d1.getMonth() === d2.getMonth() &&
-    d1.getDate() === d2.getDate()
-  );
-}
-
-/* ===== CURRENT WEEK (MON → SUN) ===== */
-function getCurrentWeek() {
-  const today = new Date();
-  const day = today.getDay(); // 0 = Sunday
-  const monday = new Date(today);
-
-  // convert to Monday
-  monday.setDate(today.getDate() - (day === 0 ? 6 : day - 1));
-
-  const week = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(monday);
-    d.setDate(monday.getDate() + i);
-    week.push(d);
+  // ================= GET MONDAY =================
+  function getCurrentWeekMonday() {
+    const now = new Date();
+    const day = now.getDay(); // 0=Sunday
+    const diff = day === 0 ? -6 : 1 - day;
+    const monday = new Date(now);
+    monday.setDate(now.getDate() + diff);
+    monday.setHours(0,0,0,0);
+    return monday;
   }
-  return week;
-}
 
-/* ===== FILL TABLE ===== */
-function fillWeeklyTable(tableId, drawNames) {
-  const tbody = document.querySelector(`#${tableId} tbody`);
-  if (!tbody) return;
+  // ================= FILL TABLE =================
+  function fillWeeklyTable(tableId, drawList) {
 
-  tbody.innerHTML = "";
+    const tbody = document.querySelector(`#${tableId} tbody`);
+    if (!tbody) return;
 
-  const today = new Date();
-  const week = getCurrentWeek();
+    tbody.innerHTML = "";
 
-  week.forEach((date, index) => {
-    const tr = document.createElement("tr");
+    const monday = getCurrentWeekMonday();
+    const today = new Date();
+    today.setHours(0,0,0,0);
 
-    /* 🔥 TODAY HIGHLIGHT */
-    if (isSameDate(date, today)) {
-      tr.classList.add("today-row");
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(monday);
+      date.setDate(monday.getDate() + i);
+      date.setHours(0,0,0,0);
+
+      const tr = document.createElement("tr");
+
+      // 🔥 TODAY HIGHLIGHT
+      if (date.getTime() === today.getTime()) {
+        tr.classList.add("today-row");
+      }
+
+      tr.innerHTML = `
+        <td>${date.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"})}</td>
+        <td>${date.toLocaleDateString("en-IN",{weekday:"short"})}</td>
+        <td>${drawList[i]}</td>
+      `;
+
+      tbody.appendChild(tr);
     }
+  }
 
-    tr.innerHTML = `
-      <td>${date.toLocaleDateString("en-IN")}</td>
-      <td>${date.toLocaleDateString("en-IN", { weekday: "long" })}</td>
-      <td>${drawNames[index]}</td>
-    `;
+  // ================= LOAD ALL =================
+  fillWeeklyTable("draw1pm", DRAW_NAMES.draw1pm);
+  fillWeeklyTable("draw6pm", DRAW_NAMES.draw6pm);
+  fillWeeklyTable("draw8pm", DRAW_NAMES.draw8pm);
 
-    tbody.appendChild(tr);
-  });
-}
-
-/* ===== LOAD ALL TABLES ===== */
-document.addEventListener("DOMContentLoaded", () => {
-  fillWeeklyTable("draw1pm", draws.draw1pm);
-  fillWeeklyTable("draw6pm", draws.draw6pm);
-  fillWeeklyTable("draw8pm", draws.draw8pm);
 });
-  
