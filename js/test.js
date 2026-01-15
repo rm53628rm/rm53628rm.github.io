@@ -50,7 +50,13 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
   retryBtn.style.display = "none";
   downloadBtn.style.display = "none";
 
-  status.textContent = "Loading Result...";
+  status.innerHTML = `
+  <div class="loading-wrap">
+    <span class="mini-spinner"></span>
+    <span>Loading Result...</span>
+  </div>
+`;
+  
   status.style.display = "block";
 
   const loadOnce = () => {
@@ -95,7 +101,13 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
 
     retryBtn.style.display = "none";
     downloadBtn.style.display = "none";
-    status.textContent = "Loading Result...";
+    status.innerHTML = `
+  <div class="loading-wrap">
+    <span class="mini-spinner"></span>
+    <span>Loading Result...</span>
+  </div>
+`;
+    
     status.style.display = "block";
 
     tryLoad();
