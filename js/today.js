@@ -6,27 +6,45 @@ const draws = [
   { title:"🌙 Dear Night 8PM",   prefix:"EN" }
 ];
 
-/* ===== INDIA DATE ===== */
+/* ================= TIME LOCK (IST) ================= */
+const TIME_LOCK = {
+  MN: 13, // 1 PM
+  DN: 18, // 6 PM
+  EN: 20  // 8 PM
+};
+
+function isTimeAllowed(prefix){
+  const hour = Number(
+    new Date().toLocaleString("en-IN", {
+      timeZone:"Asia/Kolkata",
+      hour:"2-digit",
+      hour12:false
+    })
+  );
+  return hour >= TIME_LOCK[prefix];
+}
+
+/* ================= INDIA DATE ================= */
 function getTodayIST(){
   return new Date(
     new Date().toLocaleDateString("en-CA",{ timeZone:"Asia/Kolkata" })
   );
 }
 
-/* ===== DDMMYY ===== */
+/* ================= DDMMYY ================= */
 function fileCode(d){
   return String(d.getDate()).padStart(2,"0") +
          String(d.getMonth()+1).padStart(2,"0") +
          String(d.getFullYear()).slice(-2);
 }
 
-/* ===== PDF AUTO RETRY (NO FALLBACK) ===== */
+/* ================= PDF AUTO RETRY ================= */
 function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
 
   let attempt = 0;
   const maxRetry = 4;
   let loaded = false;
-  let retryTimer = null;
+  let timer = null;
 
   iframe.style.display = "none";
   retryBtn.style.display = "none";
@@ -43,57 +61,50 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
   };
 
   const tryLoad = () => {
-    if (loaded) return;
-
+    if(loaded) return;
     attempt++;
     loadOnce();
 
-    retryTimer = setTimeout(() => {
-      if (loaded) return;
+    timer = setTimeout(()=>{
+      if(loaded) return;
 
-      if (attempt >= maxRetry) {
-        // ⛔ stop background retry
+      if(attempt >= maxRetry){
         status.textContent = "Click Retry to load result";
-        retryBtn.style.display = "inline-block";
-        downloadBtn.style.display = "inline-block";
+        retryBtn.style.display = "inline-flex";
+        downloadBtn.style.display = "inline-flex";
         return;
       }
-
       tryLoad();
-    }, 5000);
+    },5000);
   };
 
-  iframe.onload = () => {
-    if (loaded) return;
+  iframe.onload = ()=>{
+    if(loaded) return;
     loaded = true;
-
-    clearTimeout(retryTimer);
+    clearTimeout(timer);
 
     iframe.style.display = "block";
     status.style.display = "none";
-    retryBtn.style.display = "none"; // 🔥 hide retry on success
-    downloadBtn.style.display = "inline-block";
+    retryBtn.style.display = "none";
+    downloadBtn.style.display = "inline-flex";
   };
 
-  // 🔁 manual retry – sirf isi card ka
-  retryBtn.onclick = () => {
-    loaded = false;
+  retryBtn.onclick = ()=>{
     attempt = 0;
+    loaded = false;
 
     retryBtn.style.display = "none";
     downloadBtn.style.display = "none";
-
     status.textContent = "Loading Result...";
     status.style.display = "block";
 
     tryLoad();
   };
 
-  // 🔥 start auto retry
   tryLoad();
 }
 
-/* ===== MAIN ===== */
+/* ================= MAIN ================= */
 function loadTodayPDF(){
 
   const wrap = document.getElementById("todayResults");
@@ -103,6 +114,26 @@ function loadTodayPDF(){
 
   draws.forEach(draw => {
 
+    /* 🔒 TIME LOCK */
+    if(!isTimeAllowed(draw.prefix)){
+      const lockCard = document.createElement("div");
+      lockCard.className = "card";
+
+      let msg = "Result not published yet";
+      if(draw.prefix === "MN") msg = "Morning result will be published after 1:00 PM";
+      if(draw.prefix === "DN") msg = "Day result will be published after 6:00 PM";
+      if(draw.prefix === "EN") msg = "Night result will be published after 8:00 PM";
+
+      lockCard.innerHTML = `
+        <h3>${draw.title}</h3>
+        <div class="status" style="display:block">${msg}</div>
+      `;
+
+      wrap.appendChild(lockCard);
+      return; // ⛔ STOP HERE
+    }
+
+    /* ✅ NORMAL LOAD */
     const card = document.createElement("div");
     card.className = "card";
 
@@ -140,4 +171,5 @@ function loadTodayPDF(){
   });
 }
 
+/* ================= AUTO LOAD ================= */
 loadTodayPDF();
