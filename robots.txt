@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://Dhankesaritoday.in/sitemap.xml
+User-agent: Amazonbot
+Disallow: /
+
+Sitemap: https://dhankesaritoday.in/sitemap.xml
