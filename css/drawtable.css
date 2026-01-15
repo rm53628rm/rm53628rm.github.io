@@ -1,82 +1,36 @@
-/* ===========================
-   DRAW TABLE – FINAL FIX
-=========================== */
-
-.weekly-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed; /* 🔥 must */
-  background: #ffffff;
+.weekly-table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+  font-size:14px;
+  background:#fff;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 6px 16px rgba(0,0,0,.08);
 }
 
-/* Always show header & body */
-.weekly-table thead {
-  display: table-header-group;
-}
-
-.weekly-table tbody {
-  display: table-row-group; /* 🔥 MOST IMPORTANT */
-}
-
-.weekly-table tr {
-  display: table-row;
-}
-
-/* Cell styling */
 .weekly-table th,
-.weekly-table td {
-  padding: 8px 6px;           /* compact gap */
-  font-size: 13px;           /* mobile friendly */
-  text-align: center;
-  border: 1px solid #e5e7eb;
-  white-space: normal;       /* ❌ nowrap hata diya */
-  word-break: break-word;    /* long draw name fix */
+.weekly-table td{
+  padding:8px 6px;
+  text-align:center;
+  white-space:nowrap;
+  border-bottom:1px solid #e5e7eb;
 }
 
-/* Header look */
-.weekly-table th {
-  background: #1e3a8a;
-  color: #ffffff;
-  font-weight: 600;
-}
-
-/* Column width balance */
-.weekly-table th:nth-child(1),
-.weekly-table td:nth-child(1) {
-  width: 32%;
-}
-
-.weekly-table th:nth-child(2),
-.weekly-table td:nth-child(2) {
-  width: 28%;
-}
-
-.weekly-table th:nth-child(3),
-.weekly-table td:nth-child(3) {
-  width: 40%;
-}
-
-/* Wrapper */
-.table-wrap {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 12px;
-  margin-bottom: 18px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-  overflow: hidden; /* 🔥 horizontal scroll kill */
-}
-
-/* Section title */
-.section-title {
-  text-align: center;
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 10px;
-  color: #1e3a8a;
-}
-
-.today-row{
-  background:#1e40af;
+.weekly-table th{
+  background:#0f172a;
   color:#fff;
+  font-weight:600;
+}
+
+.weekly-table td:nth-child(3){
+  font-weight:600;
+  color:#1e3a8a;
+}
+
+/* 🔥 Today Highlight */
+.today-row{
+  background:#1e40af !important;
+  color:#fff !important;
   font-weight:700;
 }
