@@ -71,11 +71,5 @@
   color:#fff !important;
 }
 
-/* MOBILE TUNING */
-@media(max-width:480px){
-  .weekly-table th,
-  .weekly-table td{
-    font-size:13px;
-    padding:8px 4px;
-  }
-}
+
+
