@@ -1,83 +1,93 @@
-/* ================= WEEKLY TABLE – LIGHT PREMIUM ================= */
-
+/* ================= GRID ================= */
 .grid-3{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-  gap:18px;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:22px;
   margin-top:20px;
 }
 
+/* ================= CARD ================= */
 .table-wrap{
   background:#ffffff;
-  border-radius:16px;
-  padding:14px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.06);
+  border-radius:18px;
+  padding:16px 14px 18px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.07);
 }
 
-/* SECTION TITLE */
+/* TITLE */
 .table-wrap .section-title{
   font-size:16px;
   font-weight:700;
   color:#1e3a8a;
   text-align:center;
-  margin-bottom:10px;
+  margin-bottom:14px;
 }
 
-/* TABLE */
+/* ================= TABLE RESET ================= */
 .weekly-table{
   width:100%;
-  border-collapse:collapse;
-  table-layout:fixed;
+  border-collapse:separate;
+  border-spacing:0 8px; /* ROW GAP */
   font-size:14px;
 }
 
-/* HEADER */
-.weekly-table th{
-  background:#f1f5ff;
-  color:#1e3a8a;
-  padding:8px 6px;
-  font-weight:600;
-  border-bottom:1px solid #e5e7eb;
+/* HIDE HEADER GRID FEEL */
+.weekly-table thead{
+  display:none;
 }
 
-/* BODY */
+/* ROW CARD */
+.weekly-table tbody tr{
+  background:#f9fbff;
+  border-radius:12px;
+  box-shadow:0 3px 8px rgba(0,0,0,0.04);
+}
+
+/* CELLS */
 .weekly-table td{
-  padding:8px 6px;
+  padding:10px 8px;
   text-align:center;
   color:#334155;
-  border-bottom:1px solid #f1f5f9;
-  background:#ffffff;
+  background:#f9fbff;
+}
+
+/* ROUND CARD */
+.weekly-table td:first-child{
+  border-radius:12px 0 0 12px;
+}
+.weekly-table td:last-child{
+  border-radius:0 12px 12px 0;
 }
 
 /* DRAW NAME */
 .weekly-table td:nth-child(3){
-  font-weight:600;
+  font-weight:700;
   color:#1e40af;
 }
 
 /* HOVER */
-.weekly-table tbody tr:hover{
-  background:#f8fafc;
+.weekly-table tbody tr:hover td{
+  background:#f1f5ff;
 }
 
-/* ===== TODAY ROW – DESKTOP FIX ===== */
+/* ================= TODAY ROW ================= */
 .today-row td{
-  background:#eef4ff;
+  background:#eef4ff !important;
+  font-weight:700;
   color:#1e3a8a;
-  font-weight:600;
 }
 
-/* REMOVE INNER BORDERS FOR TODAY */
-.today-row td{
-  border-bottom:1px solid #dbeafe;
-}
-
-/* LEFT INDICATOR – SOFT */
+/* TODAY LEFT STRIP */
 .today-row td:first-child{
   border-left:4px solid #93c5fd;
 }
 
-/* PREVENT BOX GAP FEEL */
-.weekly-table{
-  border-collapse:collapse;
+/* ================= MOBILE ================= */
+@media(max-width:600px){
+  .weekly-table{
+    font-size:13px;
+  }
+  .weekly-table td{
+    padding:9px 6px;
+  }
 }
