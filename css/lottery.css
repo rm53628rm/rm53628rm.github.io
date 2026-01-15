@@ -525,12 +525,3 @@ footer{
   border-left:4px solid #93c5fd;
 }
 
-/* ================= MOBILE ================= */
-@media(max-width:600px){
-  .weekly-table{
-    font-size:13px;
-  }
-  .weekly-table td{
-    padding:9px 6px;
-  }
-}
