@@ -1,56 +1,86 @@
-// ✅ FIRST LINE
-console.log("drawtable.js loaded");
+document.addEventListener("DOMContentLoaded", function () {
 
-// baaki table ka code
-
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  const DATA = {
-    draw1pm: ["Dear Dwarka","Dear Godavari","Dear Indus","Dear Mahandi","Dear Meghna","Dear Narmada","Dear Yamuna"],
-    draw6pm: ["Dear Blitzen","Dear Comet","Dear Cupid","Dear Dancer","Dear Dasher","Dear Donner","Dear Vixen"],
-    draw8pm: ["Dear Finch","Dear Goose","Dear Pelican","Dear Sandpiper","SeaGull","Dear Stork","Dear Toucan"]
+  /* ===== WEEKLY DRAW NAMES (AS PROVIDED) ===== */
+  const WEEKLY_DRAWS = {
+    draw1pm: [
+      "Dear Dwarka",
+      "Dear Godavari",
+      "Dear Indus",
+      "Dear Mahandi",
+      "Dear Meghna",
+      "Dear Narmada",
+      "Dear Yamuna"
+    ],
+    draw6pm: [
+      "Dear Blitzen",
+      "Dear Comet",
+      "Dear Cupid",
+      "Dear Dancer",
+      "Dear Dasher",
+      "Dear Donner",
+      "Dear Vixen"
+    ],
+    draw8pm: [
+      "Dear Finch",
+      "Dear Goose",
+      "Dear Pelican",
+      "Dear Sandpiper",
+      "SeaGull",
+      "Dear Stork",
+      "Dear Toucan"
+    ]
   };
 
-  function getMonday() {
-    const d = new Date();
-    const day = d.getDay();
-    const diff = day === 0 ? -6 : 1 - day;
-    d.setDate(d.getDate() + diff);
-    d.setHours(0,0,0,0);
-    return d;
+  /* ===== IST DATE ===== */
+  function getISTDate(d = new Date()){
+    return new Date(
+      d.toLocaleDateString("en-CA", { timeZone:"Asia/Kolkata" })
+    );
   }
 
-  function fill(id, names) {
-    const tbody = document.querySelector("#" + id + " tbody");
-    if (!tbody) {
-      console.error("tbody not found for", id);
-      return;
+  const today = getISTDate();
+
+  /* ===== LAST 7 DAYS (TODAY FIRST) ===== */
+  function last7Days(){
+    let arr = [];
+    for(let i = 0; i < 7; i++){
+      let d = new Date(today);
+      d.setDate(today.getDate() - i);
+      arr.push(d);
     }
+    return arr;
+  }
+
+  const days = last7Days();
+
+  /* ===== FILL TABLES ===== */
+  Object.keys(WEEKLY_DRAWS).forEach(tableId => {
+
+    const tbody = document.querySelector(`#${tableId} tbody`);
+    if(!tbody) return;
 
     tbody.innerHTML = "";
-    const monday = getMonday();
-    const today = new Date().setHours(0,0,0,0);
 
-    for (let i=0;i<7;i++){
-      const d = new Date(monday);
-      d.setDate(monday.getDate()+i);
-      d.setHours(0,0,0,0);
+    WEEKLY_DRAWS[tableId].forEach((drawName, index) => {
+
+      const d = days[index];
+      if(!d) return;
 
       const tr = document.createElement("tr");
-      if (d.getTime() === today) tr.classList.add("today-row");
+
+      const isToday =
+        d.toDateString() === today.toDateString();
+
+      if(isToday) tr.classList.add("today-row");
 
       tr.innerHTML = `
-        <td>${d.toLocaleDateString("en-IN",{day:"2-digit",month:"short"})}</td>
-        <td>${d.toLocaleDateString("en-IN",{weekday:"short"})}</td>
-        <td>${names[i]}</td>
+        <td>${d.toLocaleDateString("en-IN")}</td>
+        <td>${d.toLocaleDateString("en-IN",{ weekday:"short" })}</td>
+        <td>${drawName}</td>
       `;
-      tbody.appendChild(tr);
-    }
-  }
 
-  fill("draw1pm", DATA.draw1pm);
-  fill("draw6pm", DATA.draw6pm);
-  fill("draw8pm", DATA.draw8pm);
+      tbody.appendChild(tr);
+    });
+  });
 
 });
