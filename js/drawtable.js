@@ -1,3 +1,9 @@
+// ✅ FIRST LINE
+console.log("drawtable.js loaded");
+
+// baaki table ka code
+
+
 document.addEventListener("DOMContentLoaded", () => {
 
   const DATA = {
