@@ -1,3 +1,7 @@
+alert("drawtable.js loaded");
+console.log("draw1pm tbody:", document.querySelector("#draw1pm tbody"));
+
+
 document.addEventListener("DOMContentLoaded", function () {
 
   /* ===== WEEKLY DRAW NAMES (AS PROVIDED) ===== */
