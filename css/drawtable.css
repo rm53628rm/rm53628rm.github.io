@@ -48,6 +48,10 @@
   font-weight:700;
 }
 
-.today-row td{
-  color:#fff !important;
+.today-row{
+  background:#f5f3ff;
+  color:#4c1d95;
+  font-weight:600;
+  border-left:3px solid #c4b5fd;
 }
+
