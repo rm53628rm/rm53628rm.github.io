@@ -60,40 +60,24 @@
   background:#f8fafc;
 }
 
-/* ===== TODAY ROW (SOFT & PREMIUM) ===== */
-.today-row{
-  background:linear-gradient(90deg,#f8fbff,#eef4ff);
-}
-
+/* ===== TODAY ROW – DESKTOP FIX ===== */
 .today-row td{
+  background:#eef4ff;
   color:#1e3a8a;
   font-weight:600;
 }
 
-/* LEFT SOFT INDICATOR */
+/* REMOVE INNER BORDERS FOR TODAY */
+.today-row td{
+  border-bottom:1px solid #dbeafe;
+}
+
+/* LEFT INDICATOR – SOFT */
 .today-row td:first-child{
-  position:relative;
+  border-left:4px solid #93c5fd;
 }
 
-.today-row td:first-child::before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  width:4px;
-  height:100%;
-  background:#c7d2fe;
-  border-radius:4px;
-}
-
-
-/* MOBILE */
-@media(max-width:600px){
-  .weekly-table{
-    font-size:13px;
-  }
-  .weekly-table th,
-  .weekly-table td{
-    padding:7px 4px;
-  }
+/* PREVENT BOX GAP FEEL */
+.weekly-table{
+  border-collapse:collapse;
 }
