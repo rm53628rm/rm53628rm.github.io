@@ -170,7 +170,7 @@ function loadTodayPDF(){
     downloadBtn.target = "_blank";
 
     const pdfUrl =
-      BASE_URL + draw.prefix + fileCode(today) + ".PDF";
+      BASE_URL + draw.prefix + fileCode(today) + ".pdf";
 
     downloadBtn.href = pdfUrl;
 
