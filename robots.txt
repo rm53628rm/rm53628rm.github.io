@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-User-agent: Amazonbot
-Disallow: /
+Disallow: /wp-admin/
+Disallow: /cgi-bin/
 
 Sitemap: https://dhankesaritoday.in/sitemap.xml
