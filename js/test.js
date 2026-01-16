@@ -1,4 +1,4 @@
-const BASE_URL = "https://www.dhankesari.com/download.php?filename=";
+const BASE_URL = "https://nagalandstatelotterysambad.com/wp-content/uploads/2026/01/";
 
 const draws = [
   { title:"🌅 Dear Morning 1PM", prefix:"MN" },
