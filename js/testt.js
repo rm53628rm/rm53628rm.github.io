@@ -1,3 +1,5 @@
+/* ================= CONFIG ================= */
+
 const BASE_URL = "https://nagalandstatelotterysambad.com/wp-content/uploads/2026/01/";
 
 const draws = [
@@ -7,10 +9,11 @@ const draws = [
 ];
 
 /* ================= TIME LOCK (IST) ================= */
+
 const TIME_LOCK = {
-  MN: 13, // 1 PM
-  DN: 18, // 6 PM
-  EN: 20  // 8 PM
+  MN: 13,
+  DN: 18,
+  EN: 20
 };
 
 function isTimeAllowed(prefix){
@@ -25,20 +28,41 @@ function isTimeAllowed(prefix){
 }
 
 /* ================= INDIA DATE ================= */
+
 function getTodayIST(){
   return new Date(
-    new Date().toLocaleDateString("en-CA",{ timeZone:"Asia/Kolkata" })
+    new Date().toLocaleDateString("en-CA", {
+      timeZone:"Asia/Kolkata"
+    })
   );
 }
 
-/* ================= DDMMYY ================= */
+/* ================= DDMMYY FORMAT ================= */
+
 function fileCode(d){
-  return String(d.getDate()).padStart(2,"0") +
-         String(d.getMonth()+1).padStart(2,"0") +
-         String(d.getFullYear()).slice(-2);
+  return (
+    String(d.getDate()).padStart(2,"0") +
+    String(d.getMonth()+1).padStart(2,"0") +
+    String(d.getFullYear()).slice(-2)
+  );
 }
 
-/* ================= PDF AUTO RETRY + LOADING SPINNER ================= */
+/* ================= CHECK PDF EXISTS ON SERVER ================= */
+
+async function checkPDFExists(url){
+  try{
+    const res = await fetch(url, {
+      method: "HEAD",
+      cache: "no-store"
+    });
+    return res.ok;
+  }catch(e){
+    return false;
+  }
+}
+
+/* ================= PDF LOAD WITH RETRY ================= */
+
 function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
 
   let attempt = 0;
@@ -50,12 +74,13 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
   retryBtn.style.display = "none";
   downloadBtn.style.display = "none";
 
-  const showLoading = () => {
-    status.innerHTML = `<div class="spinner"></div>Loading Result...`;
-    status.style.display = "flex";
-  };
-
-  showLoading();
+  status.innerHTML = `
+    <div class="loading-wrap">
+      <span class="mini-spinner"></span>
+      <span>Loading result...</span>
+    </div>
+  `;
+  status.style.display = "block";
 
   const loadOnce = () => {
     iframe.src =
@@ -73,16 +98,16 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
       if(loaded) return;
 
       if(attempt >= maxRetry){
-        status.textContent = "Click Retry to load result";
+        status.innerHTML = "Unable to preview. You may retry or download the PDF.";
         retryBtn.style.display = "inline-flex";
         downloadBtn.style.display = "inline-flex";
         return;
       }
       tryLoad();
-    },5000);
+    }, 5000);
   };
 
-  iframe.onload = ()=>{
+  iframe.onload = () => {
     if(loaded) return;
     loaded = true;
     clearTimeout(timer);
@@ -93,13 +118,19 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
     downloadBtn.style.display = "inline-flex";
   };
 
-  retryBtn.onclick = ()=>{
+  retryBtn.onclick = () => {
     attempt = 0;
     loaded = false;
-
     retryBtn.style.display = "none";
     downloadBtn.style.display = "none";
-    showLoading();
+
+    status.innerHTML = `
+      <div class="loading-wrap">
+        <span class="mini-spinner"></span>
+        <span>Retrying...</span>
+      </div>
+    `;
+    status.style.display = "block";
 
     tryLoad();
   };
@@ -107,15 +138,16 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
   tryLoad();
 }
 
-/* ================= MAIN TODAY PDF LOAD ================= */
-function loadTodayPDF(){
+/* ================= MAIN FUNCTION ================= */
+
+async function loadTodayPDF(){
 
   const wrap = document.getElementById("todayResults");
   wrap.innerHTML = "";
 
   const today = getTodayIST();
 
-  draws.forEach(draw => {
+  for(const draw of draws){
 
     /* 🔒 TIME LOCK */
     if(!isTimeAllowed(draw.prefix)){
@@ -129,14 +161,13 @@ function loadTodayPDF(){
 
       lockCard.innerHTML = `
         <h3>${draw.title}</h3>
-        <div class="status" style="display:block">${msg}</div>
+        <div class="status">${msg}</div>
       `;
-
       wrap.appendChild(lockCard);
-      return; // ⛔ STOP HERE
+      continue;
     }
 
-    /* ✅ NORMAL LOAD */
+    /* ✅ NORMAL CARD */
     const card = document.createElement("div");
     card.className = "card";
 
@@ -160,42 +191,40 @@ function loadTodayPDF(){
     downloadBtn.textContent = "Download PDF";
     downloadBtn.target = "_blank";
 
-    const pdfUrl =
-      BASE_URL + draw.prefix + fileCode(today) + ".PDF";
-
+    const pdfUrl = BASE_URL + draw.prefix + fileCode(today) + ".pdf";
     downloadBtn.href = pdfUrl;
-
-    /* ===== Download Overlay Logic ===== */
-    downloadBtn.onclick = (e) => {
-      e.preventDefault();
-
-      const overlay = document.getElementById("downloadOverlay");
-      overlay.style.display = "flex";
-
-      // Open new tab
-      window.open(pdfUrl, "_blank");
-
-      // Hidden iframe download
-      const hiddenIframe = document.createElement("iframe");
-      hiddenIframe.style.display = "none";
-      hiddenIframe.src = pdfUrl;
-      document.body.appendChild(hiddenIframe);
-
-      // Auto hide overlay after 5 sec
-      setTimeout(() => {
-        overlay.style.display = "none";
-        document.body.removeChild(hiddenIframe);
-      }, 5000);
-    };
 
     card.append(iframe, status, retryBtn, downloadBtn);
     wrap.appendChild(card);
 
+    /* 🔍 CHECK SERVER FILE */
+    status.innerHTML = `
+      <div class="loading-wrap">
+        <span class="mini-spinner"></span>
+        <span>Checking result file...</span>
+      </div>
+    `;
+
+    const exists = await checkPDFExists(pdfUrl);
+
+    if(!exists){
+      status.innerHTML = `
+        ❌ File not uploaded yet.<br>
+        Please try again after sometime.
+      `;
+      iframe.style.display = "none";
+      retryBtn.style.display = "none";
+      downloadBtn.style.display = "none";
+      continue;
+    }
+
+    /* 📄 FILE EXISTS → LOAD PREVIEW */
     loadPDFWithRetry(
       iframe, status, retryBtn, downloadBtn, pdfUrl
     );
-  });
+  }
 }
 
 /* ================= AUTO LOAD ================= */
-loadTodayPDF();
+
+document.addEventListener("DOMContentLoaded", loadTodayPDF);
