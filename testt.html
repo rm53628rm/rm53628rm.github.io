@@ -2,22 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Dear Lottery Result Today</title>
+<title>Dear Lottery Result – 1PM, 6PM, 8PM</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- ================= CSS ================= -->
-<style>
-*{
-  box-sizing:border-box;
-  font-family:Segoe UI, Arial, sans-serif;
-}
+<!-- ===== BASIC SEO ===== -->
+<meta name="description" content="Dear Lottery Result 1PM, 6PM and 8PM. View today lottery result image and download PDF. Fast & trusted result portal.">
 
-body{
-  margin:0;
-  background:#f4f6fb;
-  color:#222;
-  overflow-x:hidden;
-}
+<style>
+*{box-sizing:border-box;font-family:Segoe UI,Arial,sans-serif}
+body{margin:0;background:#f4f6fb}
 
 /* ===== CONTAINER ===== */
 .container{
@@ -31,23 +24,15 @@ body{
   background:#fff;
   border-radius:14px;
   padding:12px;
-  margin:16px auto;
-  max-width:680px;
-  width:100%;
   box-shadow:0 10px 25px rgba(0,0,0,.08);
-  text-align:center;
+  max-width:720px;
+  margin:16px auto;
   overflow:hidden;
+  text-align:center;
 }
 
-.card h3{
-  margin:6px 0;
-  color:#0a2a66;
-}
-
-.date-show{
-  font-size:13px;
-  color:#555;
-}
+.card h3{margin:6px 0;color:#0a2a66}
+.date-show{font-size:13px;color:#555}
 
 /* ===== IMAGE PREVIEW (FIXED) ===== */
 .img-preview{
@@ -55,40 +40,17 @@ body{
   max-width:100%;
   height:auto;
   display:block;
-  margin:12px auto;
+  margin:12px auto 0;
   border-radius:10px;
   object-fit:contain;
 }
 
 /* ===== STATUS ===== */
 .status{
-  padding:16px;
-  font-size:14px;
+  display:none;
+  padding:14px;
   font-weight:600;
   color:#666;
-  display:none;
-}
-
-/* ===== BUTTON ===== */
-.refresh-btn{
-  margin:10px 6px;
-  padding:10px 20px;
-  border:none;
-  border-radius:20px;
-  background:#0a2a66;
-  color:#fff;
-  font-weight:600;
-  cursor:pointer;
-  display:none;
-}
-
-a.refresh-btn{
-  background:#16a34a;
-  text-decoration:none;
-}
-
-a.refresh-btn:hover{
-  background:#15803d;
 }
 
 /* ===== LOADING ===== */
@@ -97,7 +59,6 @@ a.refresh-btn:hover{
   align-items:center;
   gap:8px;
 }
-
 .mini-spinner{
   width:14px;
   height:14px;
@@ -106,137 +67,142 @@ a.refresh-btn:hover{
   border-radius:50%;
   animation:spin .7s linear infinite;
 }
+@keyframes spin{to{transform:rotate(360deg)}}
 
-@keyframes spin{
-  to{transform:rotate(360deg)}
+/* ===== BUTTON ===== */
+.refresh-btn{
+  margin:10px 6px 0;
+  padding:10px 18px;
+  border:none;
+  border-radius:8px;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  color:#fff;
+  background:#1e3a8a;
+  display:none;
+}
+.download-btn{
+  background:#16a34a;
+}
+.download-btn:hover{background:#15803d}
+
+/* ===== MOBILE ===== */
+@media(max-width:600px){
+  .card{margin:12px 8px}
 }
 </style>
 </head>
-
 <body>
 
-<div class="container">
-  <div id="todayResults"></div>
-</div>
+<div class="container" id="todayResults"></div>
 
-<!-- ================= JS ================= -->
 <script>
-/* ===== IMAGE SERVER ===== */
-const IMAGE_BASE = "https://dhankesari.net/old/img";
+/* ================= CONFIG ================= */
 
-/* ===== PDF SERVER ===== */
+// IMAGE SERVER (PREVIEW)
+const IMAGE_BASE = "https://dhankesari.net/old/img/";
+
+// PDF SERVER (DOWNLOAD)
 const PDF_BASE = "https://nagalandstatelotterysambad.com/wp-content/uploads/2026/01/";
 
-/* ===== DRAWS ===== */
+// DRAW SETUP
 const draws = [
-  { title:"🌅 Dear Morning 1PM", img:"1PM", prefix:"MD", pdf:"MN" },
-  { title:"☀️ Dear Day 6PM",     img:"6PM", prefix:"DD", pdf:"DN" },
-  { title:"🌙 Dear Night 8PM",   img:"8PM", prefix:"ED", pdf:"EN" }
+  { title:"🌅 Dear Morning 1PM", imgFolder:"1PM", imgPrefix:"MD", pdfPrefix:"MN", hour:13 },
+  { title:"☀️ Dear Day 6PM", imgFolder:"6PM", imgPrefix:"DD", pdfPrefix:"DN", hour:18 },
+  { title:"🌙 Dear Night 8PM", imgFolder:"8PM", imgPrefix:"ED", pdfPrefix:"EN", hour:20 }
 ];
 
-/* ===== TIME LOCK ===== */
-const TIME_LOCK = { MD:13, DD:18, ED:20 };
-
-/* ===== TIME CHECK ===== */
-function isTimeAllowed(prefix){
-  const hour = Number(
-    new Date().toLocaleString("en-IN",{
-      timeZone:"Asia/Kolkata",
-      hour:"2-digit",
-      hour12:false
-    })
-  );
-  return hour >= TIME_LOCK[prefix];
-}
-
-/* ===== DATE ===== */
-function todayCode(){
-  const d = new Date(
+/* ================= DATE ================= */
+function getIST(){
+  return new Date(
     new Date().toLocaleDateString("en-CA",{timeZone:"Asia/Kolkata"})
   );
-  return {
-    img: String(d.getDate()).padStart(2,"0") +
+}
+function code(d){
+  return String(d.getDate()).padStart(2,"0") +
          String(d.getMonth()+1).padStart(2,"0") +
-         String(d.getFullYear()).slice(-2),
-    pdf: String(d.getDate()).padStart(2,"0") +
-         String(d.getMonth()+1).padStart(2,"0") +
-         String(d.getFullYear()).slice(-2)
-  };
+         String(d.getFullYear()).slice(-2);
+}
+function hourNow(){
+  return Number(new Date().toLocaleString("en-IN",{
+    timeZone:"Asia/Kolkata",
+    hour:"2-digit",
+    hour12:false
+  }));
 }
 
-/* ===== LOAD ===== */
-function loadToday(){
+/* ================= MAIN ================= */
+function loadResults(){
   const wrap = document.getElementById("todayResults");
   wrap.innerHTML = "";
-  const code = todayCode();
+  const today = getIST();
 
-  draws.forEach(d => {
-
+  draws.forEach(d=>{
     const card = document.createElement("div");
     card.className = "card";
 
-    card.innerHTML = `
-      <h3>${d.title}</h3>
-      <div class="date-show">${new Date().toDateString()}</div>
-    `;
-
-    if(!isTimeAllowed(d.prefix)){
-      const status = document.createElement("div");
-      status.className = "status";
-      status.style.display = "block";
-      status.textContent = "Result not published yet";
-      card.appendChild(status);
+    if(hourNow() < d.hour){
+      card.innerHTML = `
+        <h3>${d.title}</h3>
+        <div class="status" style="display:block">
+          Result will be published after ${d.hour}:00 IST
+        </div>`;
       wrap.appendChild(card);
       return;
     }
 
-    const img = document.createElement("img");
-    img.className = "img-preview";
-    img.src = `${IMAGE_BASE}/${d.img}/${d.prefix}${code.img}.webp`;
+    const imgUrl = `${IMAGE_BASE}${d.imgFolder}/${d.imgPrefix}${code(today)}.webp`;
+    const pdfUrl = `${PDF_BASE}${d.pdfPrefix}${code(today)}.pdf`;
 
-    const status = document.createElement("div");
-    status.className = "status";
-    status.innerHTML = `
-      <div class="loading-wrap">
-        <span class="mini-spinner"></span>
-        Loading Result...
+    card.innerHTML = `
+      <h3>${d.title}</h3>
+      <div class="date-show">${today.toDateString()}</div>
+
+      <div class="status" style="display:block">
+        <div class="loading-wrap">
+          <span class="mini-spinner"></span>
+          <span>Loading Result...</span>
+        </div>
       </div>
+
+      <img class="img-preview" style="display:none">
+
+      <button class="refresh-btn download-btn">Download PDF</button>
     `;
-    status.style.display = "block";
 
-    const retry = document.createElement("button");
-    retry.className = "refresh-btn";
-    retry.textContent = "Retry";
-
-    const download = document.createElement("a");
-    download.className = "refresh-btn";
-    download.textContent = "Download PDF";
-    download.target = "_blank";
-    download.href = `${PDF_BASE}${d.pdf}${code.pdf}.pdf`;
+    const img = card.querySelector(".img-preview");
+    const status = card.querySelector(".status");
+    const downloadBtn = card.querySelector(".download-btn");
 
     img.onload = ()=>{
       status.style.display = "none";
-      download.style.display = "inline-flex";
+      img.style.display = "block";
+      downloadBtn.style.display = "inline-block";
     };
 
     img.onerror = ()=>{
-      status.textContent = "File not uploaded yet. Please try after sometime.";
-      retry.style.display = "inline-flex";
-      download.style.display = "inline-flex";
+      status.textContent = "Result file not uploaded. Please try after sometime.";
     };
 
-    retry.onclick = ()=>{
-      status.style.display = "block";
-      retry.style.display = "none";
-      img.src = img.src.split("?")[0] + "?t=" + Date.now();
+    img.src = imgUrl + "?t=" + Date.now();
+
+    /* ===== FORCE PDF DOWNLOAD ===== */
+    downloadBtn.onclick = ()=>{
+      const a = document.createElement("a");
+      a.href = pdfUrl + "?t=" + Date.now();
+      a.download = pdfUrl.split("/").pop();
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     };
 
-    card.append(img, status, retry, download);
     wrap.appendChild(card);
   });
 }
 
-loadToday();
+/* ================= AUTO LOAD ================= */
+loadResults();
 </script>
 
 </body>
