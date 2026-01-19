@@ -83,11 +83,6 @@ header{
   color:#0a2a66;
   margin:20px 0 10px
 }
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:15px;
-}
 
 /* ================= CARD ================= */
 .img-preview{
