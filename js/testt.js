@@ -1,183 +1,130 @@
-/* ================= CONFIG ================= */
-
-const BASE_URL = "https://nagalandstatelotterysambad.com/wp-content/uploads/2026/01/";
+const BASE_PDF_URL = "https://nagalandstatelotterysambad.com/wp-content/uploads/2026/01/";
+const BASE_IMG_URL = "https://dhankesari.net/old/img/";
 
 const draws = [
-  { title:"🌅 Dear Morning 1PM", prefix:"MN" },
-  { title:"☀️ Dear Day 6PM",     prefix:"DN" },
-  { title:"🌙 Dear Night 8PM",   prefix:"EN" }
+  { title:"🌅 Dear Morning 1PM", prefix:"MD", folder:"1PM", lock:13 },
+  { title:"☀️ Dear Day 6PM",     prefix:"DD", folder:"6PM", lock:18 },
+  { title:"🌙 Dear Night 8PM",   prefix:"ED", folder:"8PM", lock:20 }
 ];
 
-/* ================= TIME LOCK (IST) ================= */
-
-const TIME_LOCK = {
-  MN: 13,
-  DN: 18,
-  EN: 20
-};
-
-function isTimeAllowed(prefix){
-  const hour = Number(
-    new Date().toLocaleString("en-IN", {
+/* ================= IST TIME ================= */
+function getISTHour(){
+  return Number(
+    new Date().toLocaleString("en-IN",{
       timeZone:"Asia/Kolkata",
       hour:"2-digit",
       hour12:false
     })
   );
-  return hour >= TIME_LOCK[prefix];
 }
 
-/* ================= INDIA DATE ================= */
-
+/* ================= IST DATE ================= */
 function getTodayIST(){
   return new Date(
-    new Date().toLocaleDateString("en-CA", {
-      timeZone:"Asia/Kolkata"
-    })
+    new Date().toLocaleDateString("en-CA",{ timeZone:"Asia/Kolkata" })
   );
 }
 
-/* ================= DDMMYY FORMAT ================= */
-
+/* ================= DDMMYY ================= */
 function fileCode(d){
-  return (
-    String(d.getDate()).padStart(2,"0") +
-    String(d.getMonth()+1).padStart(2,"0") +
-    String(d.getFullYear()).slice(-2)
-  );
+  return String(d.getDate()).padStart(2,"0") +
+         String(d.getMonth()+1).padStart(2,"0") +
+         String(d.getFullYear()).slice(-2);
 }
 
-/* ================= CHECK PDF EXISTS ON SERVER ================= */
+/* ================= IMAGE LOAD ================= */
+function loadImage(img, status, retryBtn, downloadBtn, imgUrl){
 
-async function checkPDFExists(url){
-  try{
-    const res = await fetch(url, {
-      method: "HEAD",
-      cache: "no-store"
-    });
-    return res.ok;
-  }catch(e){
-    return false;
-  }
-}
-
-/* ================= PDF LOAD WITH RETRY ================= */
-
-function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
-
-  let attempt = 0;
-  const maxRetry = 4;
   let loaded = false;
-  let timer = null;
 
-  iframe.style.display = "none";
+  img.style.display = "none";
   retryBtn.style.display = "none";
   downloadBtn.style.display = "none";
 
   status.innerHTML = `
     <div class="loading-wrap">
       <span class="mini-spinner"></span>
-      <span>Loading result...</span>
+      <span>Loading Result...</span>
     </div>
   `;
   status.style.display = "block";
 
-  const loadOnce = () => {
-    iframe.src =
-      "https://docs.google.com/gview?embedded=true&url=" +
-      encodeURIComponent(pdfUrl) +
-      "&t=" + Date.now();
+  const tryLoad = ()=>{
+    img.src = imgUrl + "?t=" + Date.now();
   };
 
-  const tryLoad = () => {
-    if(loaded) return;
-    attempt++;
-    loadOnce();
-
-    timer = setTimeout(()=>{
-      if(loaded) return;
-
-      if(attempt >= maxRetry){
-        status.innerHTML = "Unable to preview. You may retry or download the PDF.";
-        retryBtn.style.display = "inline-flex";
-        downloadBtn.style.display = "inline-flex";
-        return;
-      }
-      tryLoad();
-    }, 5000);
-  };
-
-  iframe.onload = () => {
+  img.onload = ()=>{
     if(loaded) return;
     loaded = true;
-    clearTimeout(timer);
 
-    iframe.style.display = "block";
     status.style.display = "none";
-    retryBtn.style.display = "none";
+    img.style.display = "block";
     downloadBtn.style.display = "inline-flex";
   };
 
-  retryBtn.onclick = () => {
-    attempt = 0;
-    loaded = false;
-    retryBtn.style.display = "none";
-    downloadBtn.style.display = "none";
+  img.onerror = ()=>{
+    status.textContent = "Result file not uploaded yet. Please try again later.";
+    retryBtn.style.display = "inline-flex";
+    downloadBtn.style.display = "inline-flex";
+  };
 
+  retryBtn.onclick = ()=>{
+    retryBtn.style.display = "none";
     status.innerHTML = `
       <div class="loading-wrap">
         <span class="mini-spinner"></span>
-        <span>Retrying...</span>
+        <span>Loading Result...</span>
       </div>
     `;
-    status.style.display = "block";
-
     tryLoad();
   };
 
   tryLoad();
 }
 
-/* ================= MAIN FUNCTION ================= */
-
-async function loadTodayPDF(){
+/* ================= MAIN ================= */
+function loadTodayResult(){
 
   const wrap = document.getElementById("todayResults");
   wrap.innerHTML = "";
 
   const today = getTodayIST();
+  const hour = getISTHour();
+  const code = fileCode(today);
 
-  for(const draw of draws){
+  draws.forEach(draw=>{
 
-    /* 🔒 TIME LOCK */
-    if(!isTimeAllowed(draw.prefix)){
-      const lockCard = document.createElement("div");
-      lockCard.className = "card";
-
-      let msg = "Result not published yet";
-      if(draw.prefix === "MN") msg = "Morning result will be published after 1:00 PM";
-      if(draw.prefix === "DN") msg = "Day result will be published after 6:00 PM";
-      if(draw.prefix === "EN") msg = "Night result will be published after 8:00 PM";
-
-      lockCard.innerHTML = `
-        <h3>${draw.title}</h3>
-        <div class="status">${msg}</div>
-      `;
-      wrap.appendChild(lockCard);
-      continue;
-    }
-
-    /* ✅ NORMAL CARD */
     const card = document.createElement("div");
     card.className = "card";
+
+    /* 🔒 TIME LOCK */
+    if(hour < draw.lock){
+      card.innerHTML = `
+        <h3>${draw.title}</h3>
+        <div class="status" style="display:block">
+          Result will be published after ${draw.lock}:00
+        </div>
+      `;
+      wrap.appendChild(card);
+      return;
+    }
+
+    const imgUrl =
+      BASE_IMG_URL + draw.folder + "/" +
+      draw.prefix + code + ".webp";
+
+    const pdfUrl =
+      BASE_PDF_URL +
+      draw.prefix.replace("D","N").replace("M","N").replace("E","N") +
+      code + ".pdf";
 
     card.innerHTML = `
       <h3>${draw.title}</h3>
       <div class="date-show">${today.toDateString()}</div>
     `;
 
-    const iframe = document.createElement("iframe");
-    iframe.className = "pdf-frame";
+    const img = document.createElement("img");
+    img.className = "result-image";
 
     const status = document.createElement("div");
     status.className = "status";
@@ -189,42 +136,15 @@ async function loadTodayPDF(){
     const downloadBtn = document.createElement("a");
     downloadBtn.className = "refresh-btn";
     downloadBtn.textContent = "Download PDF";
+    downloadBtn.href = pdfUrl;
     downloadBtn.target = "_blank";
 
-    const pdfUrl = BASE_URL + draw.prefix + fileCode(today) + ".pdf";
-    downloadBtn.href = pdfUrl;
-
-    card.append(iframe, status, retryBtn, downloadBtn);
+    card.append(img, status, retryBtn, downloadBtn);
     wrap.appendChild(card);
 
-    /* 🔍 CHECK SERVER FILE */
-    status.innerHTML = `
-      <div class="loading-wrap">
-        <span class="mini-spinner"></span>
-        <span>Checking result file...</span>
-      </div>
-    `;
-
-    const exists = await checkPDFExists(pdfUrl);
-
-    if(!exists){
-      status.innerHTML = `
-        ❌ File not uploaded yet.<br>
-        Please try again after sometime.
-      `;
-      iframe.style.display = "none";
-      retryBtn.style.display = "none";
-      downloadBtn.style.display = "none";
-      continue;
-    }
-
-    /* 📄 FILE EXISTS → LOAD PREVIEW */
-    loadPDFWithRetry(
-      iframe, status, retryBtn, downloadBtn, pdfUrl
-    );
-  }
+    loadImage(img, status, retryBtn, downloadBtn, imgUrl);
+  });
 }
 
 /* ================= AUTO LOAD ================= */
-
-document.addEventListener("DOMContentLoaded", loadTodayPDF);
+loadTodayResult();
