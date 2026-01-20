@@ -1,8 +1,6 @@
-/* ================= BASE URLS ================= */
 const BASE_PDF_URL = "https://ldemo.dhankesari.com/download.php?filename=";
 const BASE_IMG_URL = "https://dhankesari.net/old/img/";
 
-/* ================= DRAWS ================= */
 const draws = [
   { title:"🌅 Dear Morning 1PM", prefix:"MN", imgPrefix:"MD", imgFolder:"1PM" },
   { title:"☀️ Dear Day 6PM",     prefix:"DN", imgPrefix:"DD", imgFolder:"6PM" },
@@ -23,7 +21,7 @@ function isTimeAllowed(prefix){
   return hour >= TIME_LOCK[prefix];
 }
 
-/* ================= TODAY DATE (IST) ================= */
+/* ================= INDIA DATE ================= */
 function getTodayIST(){
   return new Date(
     new Date().toLocaleDateString("en-CA",{ timeZone:"Asia/Kolkata" })
@@ -37,7 +35,7 @@ function fileCode(d){
          String(d.getFullYear()).slice(-2);
 }
 
-/* ================= IMAGE LOAD WITH RETRY ================= */
+/* ================= IMAGE AUTO RETRY ================= */
 function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
   let attempt = 0;
   const maxRetry = 4;
@@ -56,7 +54,7 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
   `;
   status.style.display = "block";
 
-  function tryLoad(){
+  const tryLoad = ()=>{
     if(loaded) return;
     attempt++;
     img.src = imgUrl + "?t=" + Date.now();
@@ -71,7 +69,7 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
       }
       tryLoad();
     }, 4000);
-  }
+  };
 
   img.onload = ()=>{
     if(loaded) return;
@@ -83,6 +81,8 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
     retryBtn.style.display = "none";
     downloadBtn.style.display = "inline-flex";
   };
+
+  img.onerror = ()=>{};
 
   retryBtn.onclick = ()=>{
     attempt = 0;
@@ -102,16 +102,14 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
   tryLoad();
 }
 
-/* ================= MAIN FUNCTION ================= */
+/* ================= MAIN ================= */
 function loadTodayPDF(){
   const wrap = document.getElementById("todayResults");
   wrap.innerHTML = "";
 
   const today = getTodayIST();
-  const code = fileCode(today);
 
   draws.forEach(draw=>{
-    /* ===== TIME LOCK ===== */
     if(!isTimeAllowed(draw.prefix)){
       const lockCard = document.createElement("div");
       lockCard.className = "card";
@@ -129,7 +127,6 @@ function loadTodayPDF(){
       return;
     }
 
-    /* ===== CARD ===== */
     const card = document.createElement("div");
     card.className = "card";
     card.innerHTML = `
@@ -138,7 +135,7 @@ function loadTodayPDF(){
     `;
 
     const img = document.createElement("img");
-    img.className = "pdf-frame";
+    img.className = "pdf-frame"; // same CSS reuse
 
     const status = document.createElement("div");
     status.className = "status";
@@ -147,9 +144,12 @@ function loadTodayPDF(){
     retryBtn.className = "refresh-btn";
     retryBtn.textContent = "Retry";
 
-    const downloadBtn = document.createElement("button");
+    const downloadBtn = document.createElement("a");
     downloadBtn.className = "refresh-btn";
     downloadBtn.textContent = "Download PDF";
+    downloadBtn.target = "_blank";
+
+    const code = fileCode(today);
 
     const imgUrl =
       BASE_IMG_URL +
@@ -158,17 +158,9 @@ function loadTodayPDF(){
 
     const pdfUrl =
       BASE_PDF_URL +
-      draw.prefix + code + ".PDF";
+      draw.prefix + code + ".pdf";
 
-    /* ===== FORCE DOWNLOAD (NO VIEW) ===== */
-    downloadBtn.onclick = function(){
-      const a = document.createElement("a");
-      a.href = pdfUrl;
-      a.download = pdfUrl.split("/").pop();
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    };
+    downloadBtn.href = pdfUrl;
 
     card.append(img, status, retryBtn, downloadBtn);
     wrap.appendChild(card);
