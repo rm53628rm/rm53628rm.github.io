@@ -478,3 +478,67 @@ footer{
 }
 
 
+
+/* ===== GREEN BUTTON ===== */
+.refresh-btn{
+  background:#16a34a;
+  color:#fff;
+  border:none;
+  padding:10px 16px;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+
+.refresh-btn:disabled{
+  opacity:.8;
+  cursor:not-allowed;
+}
+
+/* ===== DOWNLOADING SPINNER ===== */
+.btn-spinner{
+  width:16px;
+  height:16px;
+  border:2px solid rgba(255,255,255,.4);
+  border-top:2px solid #fff;
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+  to{ transform:rotate(360deg); }
+}
+
+/* ===== IMAGE ===== */
+.pdf-frame{
+  width:100%;
+  border-radius:10px;
+  cursor:zoom-in;
+}
+
+/* ===== IMAGE ZOOM MODAL ===== */
+.img-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+.img-modal img{
+  max-width:95%;
+  max-height:95%;
+  border-radius:10px;
+  animation:zoomIn .25s ease;
+}
+
+@keyframes zoomIn{
+  from{ transform:scale(.8); opacity:0 }
+  to{ transform:scale(1); opacity:1 }
+}
+
