@@ -147,8 +147,10 @@ function loadTodayPDF(){
     const downloadBtn = document.createElement("a");
     downloadBtn.className = "refresh-btn";
     downloadBtn.textContent = "Download PDF";
-    downloadBtn.target = "_blank";
-
+    downloadBtn.href = pdfUrl;
+downloadBtn.removeAttribute("target");
+downloadBtn.setAttribute("download", "");
+    
     const code = fileCode(today);
 
     const imgUrl =
