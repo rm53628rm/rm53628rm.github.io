@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Lottery Result Download</title>
+<title>Lottery PDF Download</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -14,49 +14,36 @@
 body{
   margin:0;
   background:#f4f6fb;
-  color:#222;
-}
-
-/* ===== HEADER ===== */
-header{
-  background:linear-gradient(135deg,#0a2a66,#123d9c);
-  color:#fff;
-  padding:14px 16px;
-  text-align:center;
 }
 
 /* ===== CARD ===== */
 .card{
-  background:#fff;
   max-width:720px;
-  margin:20px auto;
-  padding:14px;
+  margin:30px auto;
+  background:#fff;
+  padding:16px;
   border-radius:14px;
-  box-shadow:0 10px 25px rgba(0,0,0,.08);
-  overflow:hidden;
   text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
 
-/* IMAGE FIX (IMPORTANT) */
 .img-preview{
   width:100%;
-  max-width:100%;
   height:auto;
-  display:block;
+  max-width:100%;
   border-radius:10px;
-  object-fit:contain;
 }
 
 /* BUTTON */
 .download-btn{
-  margin-top:14px;
-  padding:12px 24px;
-  font-size:15px;
-  font-weight:700;
+  margin-top:16px;
+  padding:12px 26px;
   border:none;
   border-radius:10px;
   background:#16a34a;
   color:#fff;
+  font-size:15px;
+  font-weight:700;
   cursor:pointer;
 }
 
@@ -65,7 +52,7 @@ header{
 }
 
 /* ===== POPUP ===== */
-#downloadPopup{
+#popup{
   display:none;
   position:fixed;
   inset:0;
@@ -85,7 +72,6 @@ header{
   font-weight:600;
 }
 
-/* LOADER */
 .loader{
   width:18px;
   height:18px;
@@ -99,32 +85,22 @@ header{
   0%{transform:rotate(0)}
   100%{transform:rotate(360deg)}
 }
-
-/* MOBILE */
-@media(max-width:600px){
-  .card{margin:14px}
-}
 </style>
 </head>
 
 <body>
 
-<header>
-  <h2>Lottery Result</h2>
-</header>
-
 <div class="card">
-  <img src="images/favicon.png" class="img-preview" alt="Result Image">
-
+  <img src="images/favicon.png" class="img-preview">
   <h3>Today Lottery Result</h3>
 
-  <button class="download-btn" onclick="startDownload()">
+  <button class="download-btn" onclick="downloadPDF()">
     Download PDF
   </button>
 </div>
 
-<!-- DOWNLOAD POPUP -->
-<div id="downloadPopup">
+<!-- POPUP -->
+<div id="popup">
   <div class="popup-box">
     <div class="loader"></div>
     Downloading PDF...
@@ -133,23 +109,33 @@ header{
 
 <script>
 /* ===== PDF URL ===== */
-const PDF_URL = "https://nagalandstatelotterysambad.com/wp-content/uploads/2025/05/MD080525.pdf";
+const PDF_URL = "https://www.dhankesari.com/download.php?filename=MD080526.pdf";
 
-/* ===== FORCE DOWNLOAD (OLD JS STYLE) ===== */
-function startDownload(){
+function downloadPDF(){
 
-  // show popup
-  document.getElementById("downloadPopup").style.display="flex";
+  document.getElementById("popup").style.display="flex";
 
-  // SAME TAB DOWNLOAD (IMPORTANT)
-  setTimeout(()=>{
-    window.location.href = PDF_URL;
-  },400);
+  fetch(PDF_URL)
+    .then(res => res.blob())
+    .then(blob => {
 
-  // hide popup automatically
-  setTimeout(()=>{
-    document.getElementById("downloadPopup").style.display="none";
-  },4000);
+      const blobURL = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = blobURL;
+      a.download = "Lottery-Result.pdf"; // filename
+      document.body.appendChild(a);
+      a.click();
+
+      a.remove();
+      window.URL.revokeObjectURL(blobURL);
+
+      document.getElementById("popup").style.display="none";
+    })
+    .catch(err=>{
+      alert("Download failed. Try again.");
+      document.getElementById("popup").style.display="none";
+    });
 }
 </script>
 
