@@ -1,5 +1,5 @@
 /* ================= BASE URLS ================= */
-const BASE_PDF_URL = "https://nagalandstatelotterysambad.com/wp-content/uploads/2026/01/";
+const BASE_PDF_URL = "https://ldemo.dhankesari.com/download.php?filename=";
 const BASE_IMG_URL = "https://dhankesari.net/old/img/";
 
 /* ================= DRAWS ================= */
@@ -158,7 +158,7 @@ function loadTodayPDF(){
 
     const pdfUrl =
       BASE_PDF_URL +
-      draw.prefix + code + ".pdf";
+      draw.prefix + code + ".PDF";
 
     /* ===== FORCE DOWNLOAD (NO VIEW) ===== */
     downloadBtn.onclick = function(){
