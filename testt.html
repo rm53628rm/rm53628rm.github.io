@@ -2,207 +2,155 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Dear Lottery Result – 1PM, 6PM, 8PM</title>
+<title>Lottery Result Download</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- ===== BASIC SEO ===== -->
-<meta name="description" content="Dear Lottery Result 1PM, 6PM and 8PM. View today lottery result image and download PDF. Fast & trusted result portal.">
-
 <style>
-*{box-sizing:border-box;font-family:Segoe UI,Arial,sans-serif}
-body{margin:0;background:#f4f6fb}
+*{
+  box-sizing:border-box;
+  font-family:Segoe UI, Arial, sans-serif;
+}
 
-/* ===== CONTAINER ===== */
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:16px;
+body{
+  margin:0;
+  background:#f4f6fb;
+  color:#222;
+}
+
+/* ===== HEADER ===== */
+header{
+  background:linear-gradient(135deg,#0a2a66,#123d9c);
+  color:#fff;
+  padding:14px 16px;
+  text-align:center;
 }
 
 /* ===== CARD ===== */
 .card{
   background:#fff;
-  border-radius:14px;
-  padding:12px;
-  box-shadow:0 10px 25px rgba(0,0,0,.08);
   max-width:720px;
-  margin:16px auto;
+  margin:20px auto;
+  padding:14px;
+  border-radius:14px;
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
   overflow:hidden;
   text-align:center;
 }
 
-.card h3{margin:6px 0;color:#0a2a66}
-.date-show{font-size:13px;color:#555}
-
-/* ===== IMAGE PREVIEW (FIXED) ===== */
+/* IMAGE FIX (IMPORTANT) */
 .img-preview{
   width:100%;
   max-width:100%;
   height:auto;
   display:block;
-  margin:12px auto 0;
   border-radius:10px;
   object-fit:contain;
 }
 
-/* ===== STATUS ===== */
-.status{
-  display:none;
-  padding:14px;
-  font-weight:600;
-  color:#666;
+/* BUTTON */
+.download-btn{
+  margin-top:14px;
+  padding:12px 24px;
+  font-size:15px;
+  font-weight:700;
+  border:none;
+  border-radius:10px;
+  background:#16a34a;
+  color:#fff;
+  cursor:pointer;
 }
 
-/* ===== LOADING ===== */
-.loading-wrap{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
+.download-btn:hover{
+  background:#15803d;
 }
-.mini-spinner{
-  width:14px;
-  height:14px;
-  border:2px solid #ddd;
-  border-top:2px solid #1e3a8a;
+
+/* ===== POPUP ===== */
+#downloadPopup{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  z-index:9999;
+  align-items:center;
+  justify-content:center;
+}
+
+.popup-box{
+  background:#fff;
+  padding:20px 26px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:600;
+}
+
+/* LOADER */
+.loader{
+  width:18px;
+  height:18px;
+  border:3px solid #ddd;
+  border-top:3px solid #0a2a66;
   border-radius:50%;
   animation:spin .7s linear infinite;
 }
-@keyframes spin{to{transform:rotate(360deg)}}
 
-/* ===== BUTTON ===== */
-.refresh-btn{
-  margin:10px 6px 0;
-  padding:10px 18px;
-  border:none;
-  border-radius:8px;
-  font-size:14px;
-  font-weight:700;
-  cursor:pointer;
-  color:#fff;
-  background:#1e3a8a;
-  display:none;
+@keyframes spin{
+  0%{transform:rotate(0)}
+  100%{transform:rotate(360deg)}
 }
-.download-btn{
-  background:#16a34a;
-}
-.download-btn:hover{background:#15803d}
 
-/* ===== MOBILE ===== */
+/* MOBILE */
 @media(max-width:600px){
-  .card{margin:12px 8px}
+  .card{margin:14px}
 }
 </style>
 </head>
+
 <body>
 
-<div class="container" id="todayResults"></div>
+<header>
+  <h2>Lottery Result</h2>
+</header>
+
+<div class="card">
+  <img src="images/favicon.png" class="img-preview" alt="Result Image">
+
+  <h3>Today Lottery Result</h3>
+
+  <button class="download-btn" onclick="startDownload()">
+    Download PDF
+  </button>
+</div>
+
+<!-- DOWNLOAD POPUP -->
+<div id="downloadPopup">
+  <div class="popup-box">
+    <div class="loader"></div>
+    Downloading PDF...
+  </div>
+</div>
 
 <script>
-/* ================= CONFIG ================= */
+/* ===== PDF URL ===== */
+const PDF_URL = "https://nagalandstatelotterysambad.com/wp-content/uploads/2025/05/MD080525.pdf";
 
-// IMAGE SERVER (PREVIEW)
-const IMAGE_BASE = "https://dhankesari.net/old/img/";
+/* ===== FORCE DOWNLOAD (OLD JS STYLE) ===== */
+function startDownload(){
 
-// PDF SERVER (DOWNLOAD)
-const PDF_BASE = "https://nagalandstatelotterysambad.com/wp-content/uploads/2026/01/";
+  // show popup
+  document.getElementById("downloadPopup").style.display="flex";
 
-// DRAW SETUP
-const draws = [
-  { title:"🌅 Dear Morning 1PM", imgFolder:"1PM", imgPrefix:"MD", pdfPrefix:"MN", hour:13 },
-  { title:"☀️ Dear Day 6PM", imgFolder:"6PM", imgPrefix:"DD", pdfPrefix:"DN", hour:18 },
-  { title:"🌙 Dear Night 8PM", imgFolder:"8PM", imgPrefix:"ED", pdfPrefix:"EN", hour:20 }
-];
+  // SAME TAB DOWNLOAD (IMPORTANT)
+  setTimeout(()=>{
+    window.location.href = PDF_URL;
+  },400);
 
-/* ================= DATE ================= */
-function getIST(){
-  return new Date(
-    new Date().toLocaleDateString("en-CA",{timeZone:"Asia/Kolkata"})
-  );
+  // hide popup automatically
+  setTimeout(()=>{
+    document.getElementById("downloadPopup").style.display="none";
+  },4000);
 }
-function code(d){
-  return String(d.getDate()).padStart(2,"0") +
-         String(d.getMonth()+1).padStart(2,"0") +
-         String(d.getFullYear()).slice(-2);
-}
-function hourNow(){
-  return Number(new Date().toLocaleString("en-IN",{
-    timeZone:"Asia/Kolkata",
-    hour:"2-digit",
-    hour12:false
-  }));
-}
-
-/* ================= MAIN ================= */
-function loadResults(){
-  const wrap = document.getElementById("todayResults");
-  wrap.innerHTML = "";
-  const today = getIST();
-
-  draws.forEach(d=>{
-    const card = document.createElement("div");
-    card.className = "card";
-
-    if(hourNow() < d.hour){
-      card.innerHTML = `
-        <h3>${d.title}</h3>
-        <div class="status" style="display:block">
-          Result will be published after ${d.hour}:00 IST
-        </div>`;
-      wrap.appendChild(card);
-      return;
-    }
-
-    const imgUrl = `${IMAGE_BASE}${d.imgFolder}/${d.imgPrefix}${code(today)}.webp`;
-    const pdfUrl = `${PDF_BASE}${d.pdfPrefix}${code(today)}.pdf`;
-
-    card.innerHTML = `
-      <h3>${d.title}</h3>
-      <div class="date-show">${today.toDateString()}</div>
-
-      <div class="status" style="display:block">
-        <div class="loading-wrap">
-          <span class="mini-spinner"></span>
-          <span>Loading Result...</span>
-        </div>
-      </div>
-
-      <img class="img-preview" style="display:none">
-
-      <button class="refresh-btn download-btn">Download PDF</button>
-    `;
-
-    const img = card.querySelector(".img-preview");
-    const status = card.querySelector(".status");
-    const downloadBtn = card.querySelector(".download-btn");
-
-    img.onload = ()=>{
-      status.style.display = "none";
-      img.style.display = "block";
-      downloadBtn.style.display = "inline-block";
-    };
-
-    img.onerror = ()=>{
-      status.textContent = "Result file not uploaded. Please try after sometime.";
-    };
-
-    img.src = imgUrl + "?t=" + Date.now();
-
-    /* ===== FORCE PDF DOWNLOAD ===== */
-    downloadBtn.onclick = ()=>{
-      const a = document.createElement("a");
-      a.href = pdfUrl + "?t=" + Date.now();
-      a.download = pdfUrl.split("/").pop();
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    };
-
-    wrap.appendChild(card);
-  });
-}
-
-/* ================= AUTO LOAD ================= */
-loadResults();
 </script>
 
 </body>
