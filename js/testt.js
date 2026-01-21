@@ -4,9 +4,9 @@ const BASE_IMG_URL = "https://dhankesari.net/old/img/";
 
 /* ================= DRAWS ================= */
 const draws = [
-  { title:"🌅 Dear Morning 1PM", prefix:"MN", imgPrefix:"MD", imgFolder:"1PM" },
-  { title:"☀️ Dear Day 6PM",     prefix:"DN", imgPrefix:"DD", imgFolder:"6PM" },
-  { title:"🌙 Dear Night 8PM",   prefix:"EN", imgPrefix:"ED", imgFolder:"8PM" }
+  { title:"🌅 Dear Morning 1PM", prefix:"MN", imgPrefix:"MD", imgFolder:"1PM", timeText:"1PM" },
+  { title:"☀️ Dear Day 6PM",     prefix:"DN", imgPrefix:"DD", imgFolder:"6PM", timeText:"6PM" },
+  { title:"🌙 Dear Night 8PM",   prefix:"EN", imgPrefix:"ED", imgFolder:"8PM", timeText:"8PM" }
 ];
 
 /* ================= TIME LOCK (IST) ================= */
@@ -109,6 +109,7 @@ function loadTodayPDF(){
 
   const today = getTodayIST();
   const code = fileCode(today);
+  const readableDate = today.toDateString();
 
   draws.forEach(draw=>{
     /* ===== TIME LOCK ===== */
@@ -134,11 +135,15 @@ function loadTodayPDF(){
     card.className = "card";
     card.innerHTML = `
       <h3>${draw.title}</h3>
-      <div class="date-show">${today.toDateString()}</div>
+      <div class="date-show">${readableDate}</div>
     `;
 
+    /* ===== IMAGE ===== */
     const img = document.createElement("img");
     img.className = "pdf-frame";
+
+    /* 🔥 SEO FIX: ALT ATTRIBUTE */
+    img.alt = `Today Dear ${draw.timeText} Lottery Result ${readableDate},You Can Download PDF File Link Below.`;
 
     const status = document.createElement("div");
     status.className = "status";
@@ -160,11 +165,11 @@ function loadTodayPDF(){
       BASE_PDF_URL +
       draw.prefix + code + ".PDF";
 
-    /* ===== FORCE DOWNLOAD (NO VIEW) ===== */
-    downloadBtn.onclick = function(){
+    /* ===== FORCE DOWNLOAD ===== */
+    downloadBtn.onclick = ()=>{
       const a = document.createElement("a");
       a.href = pdfUrl;
-      a.download = pdfUrl.split("/").pop();
+      a.download = draw.prefix + code + ".PDF";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
