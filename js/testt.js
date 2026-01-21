@@ -158,7 +158,7 @@ function loadTodayPDF(){
 
     const pdfUrl =
       BASE_PDF_URL +
-      draw.prefix + code + ".pdf";
+      draw.prefix + code + ".PDF";
 
     /* ===== FORCE DOWNLOAD (NO VIEW) ===== */
     downloadBtn.onclick = function(){
