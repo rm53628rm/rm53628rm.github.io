@@ -142,7 +142,7 @@ seoText.className = "seo-text";
 
 seoText.innerHTML = `
   <p>
-    ${draw.title} lottery result for today has been published.
+    ${draw.timeText} lottery result for today has been published.
     Check the official <strong>${draw.timeText} Lottery Sambad today result</strong>
     image below and download the PDF for verification.
     DhankesariToday.in provides accurate Nagaland State Lottery results.
