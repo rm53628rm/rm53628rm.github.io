@@ -4,9 +4,9 @@ const BASE_IMG_URL = "https://dhankesari.net/old/img/";
 
 /* ================= DRAWS ================= */
 const draws = [
-  { title:"🌅 Dear Morning 1PM", prefix:"MN", imgPrefix:"MD", imgFolder:"1PM", timeText:"1PM" },
-  { title:"☀️ Dear Day 6PM",     prefix:"DN", imgPrefix:"DD", imgFolder:"6PM", timeText:"6PM" },
-  { title:"🌙 Dear Night 8PM",   prefix:"EN", imgPrefix:"ED", imgFolder:"8PM", timeText:"8PM" }
+  { title:"🌅 Dear Morning 1PM Lottery Sambad", prefix:"MN", imgPrefix:"MD", imgFolder:"1PM", timeText:"1PM" },
+  { title:"☀️ Dear Day 6PM Lottery Sambad",     prefix:"DN", imgPrefix:"DD", imgFolder:"6PM", timeText:"6PM" },
+  { title:"🌙 Dear Night 8PM Lottery Sambad",   prefix:"EN", imgPrefix:"ED", imgFolder:"8PM", timeText:"8PM" }
 ];
 
 /* ================= TIME LOCK (IST) ================= */
@@ -142,7 +142,7 @@ seoText.className = "seo-text";
 
 seoText.innerHTML = `
   <p>
-    ${draw.timeText} lottery result for today has been published.
+  Dear${draw.timeText} lottery result for today has been published.
     Check the official <strong>${draw.timeText} Lottery Sambad today result</strong>
     image below and download the PDF for verification.
     DhankesariToday.in provides accurate Nagaland State Lottery results.
