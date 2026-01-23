@@ -104,14 +104,7 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
 
 /* ================= MAIN FUNCTION ================= */
 function loadTodayPDF(){
-  if(draw.prefix === "MN"){
-  document.getElementById("morningResult").appendChild(card);
-}
-if(draw.prefix === "DN"){
-  document.getElementById("dayResult").appendChild(card);
-}
-if(draw.prefix === "EN"){
-  document.getElementById("nightResult").appendChild(card);
+  
 }
   
   wrap.innerHTML = "";
@@ -199,7 +192,16 @@ card.appendChild(seoText);
     };
 
     card.append(img, status, retryBtn, downloadBtn);
-    wrap.appendChild(card);
+    if(draw.prefix === "MN"){
+  document.getElementById("morningResult").appendChild(card);
+}
+if(draw.prefix === "DN"){
+  document.getElementById("dayResult").appendChild(card);
+}
+if(draw.prefix === "EN"){
+  document.getElementById("nightResult").appendChild(card);
+}
+    
 
     loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl);
   });
