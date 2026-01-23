@@ -129,10 +129,28 @@ function loadTodayPDF(){
 
     /* ===== TIME LOCK ===== */
     if(!isTimeAllowed(draw.prefix)){
-      target.innerHTML = `
-        <div class="status">
-          Result not published yet
-        </div>
+      
+
+  const status = document.createElement("div");
+  status.className = "status";
+  status.style.display = "block";
+  status.style.padding = "12px";
+  status.style.fontWeight = "600";
+
+  if(draw.prefix==="MN"){
+    status.textContent = "Morning result will be published after 1:00 PM";
+  }
+  if(draw.prefix==="DN"){
+    status.textContent = "Day result will be published after 6:00 PM";
+  }
+  if(draw.prefix==="EN"){
+    status.textContent = "Night result will be published after 8:00 PM";
+  }
+
+  target.appendChild(status);
+  return;
+      }
+      
       `;
       return;
     }
