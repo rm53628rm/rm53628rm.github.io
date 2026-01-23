@@ -104,7 +104,16 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
 
 /* ================= MAIN FUNCTION ================= */
 function loadTodayPDF(){
-  const wrap = document.getElementById("todayResults");
+  if(draw.prefix === "MN"){
+  document.getElementById("morningResult").appendChild(card);
+}
+if(draw.prefix === "DN"){
+  document.getElementById("dayResult").appendChild(card);
+}
+if(draw.prefix === "EN"){
+  document.getElementById("nightResult").appendChild(card);
+}
+  
   wrap.innerHTML = "";
 
   const today = getTodayIST();
