@@ -50,7 +50,7 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
   status.innerHTML = `
     <div class="loading-wrap">
       <span class="mini-spinner"></span>
-      <span>Loading Result Please Wait...</span>
+      <span>Loading Result...</span>
     </div>
   `;
 status.style.display = "block";
@@ -62,7 +62,7 @@ status.style.display = "block";
     setTimeout(()=>{
       if(loaded) return;
       if(attempt >= maxRetry){
-        status.textContent = "Click Retry to load result Otherwise You Can Download PDF File";
+        status.textContent = "Click Retry to load result";
         retryBtn.style.display = "inline-flex";
         downloadBtn.style.display = "inline-flex";
       } else {
@@ -89,7 +89,7 @@ status.style.display = "block";
 status.innerHTML = `
   <div class="loading-wrap">
     <span class="mini-spinner"></span>
-    <span>Loading Result Please Wait...</span>
+    <span>Loading Result...</span>
   </div>
 `;
     status.style.display = "block";
