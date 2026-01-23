@@ -49,11 +49,11 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
 
   status.innerHTML = `
     <div class="loading-wrap">
-      <span class="btn-spinner"></span>
+      <span class="mini-spinner"></span>
       <span>Loading Result...</span>
     </div>
   `;
-
+status.style.display = "block";
   function tryLoad(){
     if(loaded) return;
     attempt++;
@@ -92,7 +92,7 @@ status.innerHTML = `
     <span>Loading Result...</span>
   </div>
 `;
-    
+    status.style.display = "block";
     tryLoad();
   };
 
