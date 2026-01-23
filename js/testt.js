@@ -49,7 +49,7 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
 
   status.innerHTML = `
     <div class="loading-wrap">
-      <span class="mini-spinner"></span>
+      <span class="btn-spinner"></span>
       <span>Loading Result...</span>
     </div>
   `;
@@ -85,6 +85,14 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
     retryBtn.style.display = "none";
     downloadBtn.style.display = "none";
     status.style.display = "block";
+    
+status.innerHTML = `
+  <div class="loading-wrap">
+    <span class="btn-spinner"></span>
+    <span>Loading Result...</span>
+  </div>
+`;
+    
     tryLoad();
   };
 
