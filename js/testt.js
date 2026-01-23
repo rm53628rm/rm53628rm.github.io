@@ -1,3 +1,5 @@
+document.addEventListener("DOMContentLoaded", function () {
+
 /* ================= BASE URLS ================= */
 const BASE_PDF_URL = "https://ldemo.dhankesari.com/download.php?filename=";
 const BASE_IMG_URL = "https://dhankesari.net/old/img/";
@@ -9,7 +11,7 @@ const draws = [
   { title:"🌙 Dear Night 8PM Lottery Sambad",   prefix:"EN", imgPrefix:"ED", imgFolder:"8PM", timeText:"8PM" }
 ];
 
-/* ================= TIME LOCK (IST) ================= */
+/* ================= TIME LOCK ================= */
 const TIME_LOCK = { MN:13, DN:18, EN:20 };
 
 function isTimeAllowed(prefix){
@@ -23,78 +25,57 @@ function isTimeAllowed(prefix){
   return hour >= TIME_LOCK[prefix];
 }
 
-/* ================= TODAY DATE (IST) ================= */
+/* ================= DATE ================= */
 function getTodayIST(){
   return new Date(
     new Date().toLocaleDateString("en-CA",{ timeZone:"Asia/Kolkata" })
   );
 }
 
-/* ================= DDMMYY ================= */
 function fileCode(d){
   return String(d.getDate()).padStart(2,"0") +
          String(d.getMonth()+1).padStart(2,"0") +
          String(d.getFullYear()).slice(-2);
 }
 
-/* ================= IMAGE LOAD WITH RETRY ================= */
+/* ================= IMAGE LOADER ================= */
 function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
-  let attempt = 0;
+  let attempt = 0, loaded = false;
   const maxRetry = 4;
-  let loaded = false;
-  let timer = null;
-
-  img.style.display = "none";
-  retryBtn.style.display = "none";
-  downloadBtn.style.display = "none";
 
   status.innerHTML = `
     <div class="loading-wrap">
-      <span class="mini-spinner"></span>
-      <span>Loading Result...</span>
+      <span class="mini-spinner"></span> Loading Result...
     </div>
   `;
-  status.style.display = "block";
 
   function tryLoad(){
     if(loaded) return;
     attempt++;
     img.src = imgUrl + "?t=" + Date.now();
 
-    timer = setTimeout(()=>{
-      if(loaded) return;
-      if(attempt >= maxRetry){
+    setTimeout(()=>{
+      if(!loaded && attempt >= maxRetry){
         status.textContent = "Click Retry to load result";
         retryBtn.style.display = "inline-flex";
         downloadBtn.style.display = "inline-flex";
-        return;
       }
-      tryLoad();
-    }, 4000);
+      if(!loaded && attempt < maxRetry) tryLoad();
+    },4000);
   }
 
   img.onload = ()=>{
-    if(loaded) return;
     loaded = true;
-    clearTimeout(timer);
-
-    img.style.display = "block";
     status.style.display = "none";
     retryBtn.style.display = "none";
     downloadBtn.style.display = "inline-flex";
+    img.style.display = "block";
   };
 
   retryBtn.onclick = ()=>{
     attempt = 0;
     loaded = false;
     retryBtn.style.display = "none";
-    downloadBtn.style.display = "none";
-    status.innerHTML = `
-      <div class="loading-wrap">
-        <span class="mini-spinner"></span>
-        <span>Loading Result...</span>
-      </div>
-    `;
     status.style.display = "block";
     tryLoad();
   };
@@ -102,110 +83,79 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
   tryLoad();
 }
 
-/* ================= MAIN FUNCTION ================= */
+/* ================= MAIN ================= */
 function loadTodayPDF(){
-  
-}
-  
-  wrap.innerHTML = "";
+
+  const morning = document.getElementById("morningResult");
+  const day = document.getElementById("dayResult");
+  const night = document.getElementById("nightResult");
+
+  if(!morning || !day || !night){
+    console.error("❌ Result containers missing");
+    return;
+  }
+
+  morning.innerHTML = "";
+  day.innerHTML = "";
+  night.innerHTML = "";
 
   const today = getTodayIST();
   const code = fileCode(today);
   const readableDate = today.toDateString();
 
-  draws.forEach(draw=>{
-    /* ===== TIME LOCK ===== */
-    if(!isTimeAllowed(draw.prefix)){
-      const lockCard = document.createElement("div");
-      lockCard.className = "card";
+  draws.forEach(draw => {
 
-      let msg = "Result not published yet";
-      if(draw.prefix==="MN") msg="Morning result will be published after 1:00 PM";
-      if(draw.prefix==="DN") msg="Day result will be published after 6:00 PM";
-      if(draw.prefix==="EN") msg="Night result will be published after 8:00 PM";
-
-      lockCard.innerHTML = `
-        <h3>${draw.title}</h3>
-        <div class="status" style="display:block">${msg}</div>
-      `;
-      wrap.appendChild(lockCard);
-      return;
-    }
-
-    /* ===== CARD ===== */
     const card = document.createElement("div");
     card.className = "card";
-    card.innerHTML = `
-      <h3>${draw.title}</h3>
-      <div class="date-show">${readableDate}</div>
-    `;
-    const seoText = document.createElement("div");
-seoText.className = "seo-text";
 
-seoText.innerHTML = `
-  <p>
-  Dear${draw.timeText} lottery result for today has been published.
-    Check the official <strong>${draw.timeText} Lottery Sambad today result</strong>
-    image below and download the PDF for verification.
-    DhankesariToday.in provides accurate Nagaland State Lottery results.
-  </p>
-`;
+    /* ===== TIME LOCK ===== */
+    if(!isTimeAllowed(draw.prefix)){
+      card.innerHTML = `
+        <h3>${draw.title}</h3>
+        <div class="status">Result not published yet</div>
+      `;
+    } else {
 
-card.appendChild(seoText);
-    
+      const img = document.createElement("img");
+      img.className = "pdf-frame";
+      img.alt = `Today Dear ${draw.timeText} Lottery Result ${readableDate}`;
 
-    /* ===== IMAGE ===== */
-    const img = document.createElement("img");
-    img.className = "pdf-frame";
+      const status = document.createElement("div");
+      status.className = "status";
 
-    /* 🔥 SEO FIX: ALT ATTRIBUTE */
-    img.alt = `Today Dear ${draw.timeText} Lottery Result ${readableDate},You Can Download PDF File Link Below.`;
+      const retryBtn = document.createElement("button");
+      retryBtn.textContent = "Retry";
 
-    const status = document.createElement("div");
-    status.className = "status";
+      const downloadBtn = document.createElement("button");
+      downloadBtn.textContent = "Download PDF";
 
-    const retryBtn = document.createElement("button");
-    retryBtn.className = "refresh-btn";
-    retryBtn.textContent = "Retry";
+      const imgUrl = `${BASE_IMG_URL}${draw.imgFolder}/${draw.imgPrefix}${code}.webp`;
+      const pdfUrl = `${BASE_PDF_URL}${draw.prefix}${code}.PDF`;
 
-    const downloadBtn = document.createElement("button");
-    downloadBtn.className = "refresh-btn";
-    downloadBtn.textContent = "Download PDF";
+      downloadBtn.onclick = ()=>{
+        const a = document.createElement("a");
+        a.href = pdfUrl;
+        a.download = draw.prefix + code + ".PDF";
+        a.click();
+      };
 
-    const imgUrl =
-      BASE_IMG_URL +
-      draw.imgFolder + "/" +
-      draw.imgPrefix + code + ".webp";
+      card.innerHTML = `
+        <h3>${draw.title}</h3>
+        <div class="date-show">${readableDate}</div>
+      `;
 
-    const pdfUrl =
-      BASE_PDF_URL +
-      draw.prefix + code + ".PDF";
+      card.append(img, status, retryBtn, downloadBtn);
+      loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl);
+    }
 
-    /* ===== FORCE DOWNLOAD ===== */
-    downloadBtn.onclick = ()=>{
-      const a = document.createElement("a");
-      a.href = pdfUrl;
-      a.download = draw.prefix + code + ".PDF";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    };
-
-    card.append(img, status, retryBtn, downloadBtn);
-    if(draw.prefix === "MN"){
-  document.getElementById("morningResult").appendChild(card);
-}
-if(draw.prefix === "DN"){
-  document.getElementById("dayResult").appendChild(card);
-}
-if(draw.prefix === "EN"){
-  document.getElementById("nightResult").appendChild(card);
-}
-    
-
-    loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl);
+    if(draw.prefix==="MN") morning.appendChild(card);
+    if(draw.prefix==="DN") day.appendChild(card);
+    if(draw.prefix==="EN") night.appendChild(card);
   });
 }
 
 /* ================= AUTO LOAD ================= */
 loadTodayPDF();
+
+});
+
