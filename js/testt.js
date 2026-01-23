@@ -38,14 +38,19 @@ function fileCode(d){
          String(d.getFullYear()).slice(-2);
 }
 
-/* ================= IMAGE LOADER ================= */
+/* ================= IMAGE LOAD WITH RETRY ================= */
 function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
   let attempt = 0, loaded = false;
   const maxRetry = 4;
 
+  img.style.display = "none";
+  retryBtn.style.display = "none";
+  downloadBtn.style.display = "none";
+
   status.innerHTML = `
     <div class="loading-wrap">
-      <span class="mini-spinner"></span> Loading Result...
+      <span class="mini-spinner"></span>
+      <span>Loading Result...</span>
     </div>
   `;
 
@@ -55,27 +60,30 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
     img.src = imgUrl + "?t=" + Date.now();
 
     setTimeout(()=>{
-      if(!loaded && attempt >= maxRetry){
+      if(loaded) return;
+      if(attempt >= maxRetry){
         status.textContent = "Click Retry to load result";
         retryBtn.style.display = "inline-flex";
         downloadBtn.style.display = "inline-flex";
+      } else {
+        tryLoad();
       }
-      if(!loaded && attempt < maxRetry) tryLoad();
-    },4000);
+    }, 4000);
   }
 
   img.onload = ()=>{
     loaded = true;
+    img.style.display = "block";
     status.style.display = "none";
     retryBtn.style.display = "none";
     downloadBtn.style.display = "inline-flex";
-    img.style.display = "block";
   };
 
   retryBtn.onclick = ()=>{
     attempt = 0;
     loaded = false;
     retryBtn.style.display = "none";
+    downloadBtn.style.display = "none";
     status.style.display = "block";
     tryLoad();
   };
@@ -91,7 +99,7 @@ function loadTodayPDF(){
   const night = document.getElementById("nightResult");
 
   if(!morning || !day || !night){
-    console.error("❌ Result containers missing");
+    console.error("Result container missing");
     return;
   }
 
@@ -105,52 +113,68 @@ function loadTodayPDF(){
 
   draws.forEach(draw => {
 
-    const card = document.createElement("div");
-    card.className = "card";
+    let target;
+    if(draw.prefix==="MN") target = morning;
+    if(draw.prefix==="DN") target = day;
+    if(draw.prefix==="EN") target = night;
+    if(!target) return;
 
     /* ===== TIME LOCK ===== */
     if(!isTimeAllowed(draw.prefix)){
-      card.innerHTML = `
-        <h3>${draw.title}</h3>
-        <div class="status">Result not published yet</div>
+      target.innerHTML = `
+        <div class="status">
+          Result not published yet
+        </div>
       `;
-    } else {
-
-      const img = document.createElement("img");
-      img.className = "pdf-frame";
-      img.alt = `Today Dear ${draw.timeText} Lottery Result ${readableDate}`;
-
-      const status = document.createElement("div");
-      status.className = "status";
-
-      const retryBtn = document.createElement("button");
-      retryBtn.textContent = "Retry";
-
-      const downloadBtn = document.createElement("button");
-      downloadBtn.textContent = "Download PDF";
-
-      const imgUrl = `${BASE_IMG_URL}${draw.imgFolder}/${draw.imgPrefix}${code}.webp`;
-      const pdfUrl = `${BASE_PDF_URL}${draw.prefix}${code}.PDF`;
-
-      downloadBtn.onclick = ()=>{
-        const a = document.createElement("a");
-        a.href = pdfUrl;
-        a.download = draw.prefix + code + ".PDF";
-        a.click();
-      };
-
-      card.innerHTML = `
-        <h3>${draw.title}</h3>
-        <div class="date-show">${readableDate}</div>
-      `;
-
-      card.append(img, status, retryBtn, downloadBtn);
-      loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl);
+      return;
     }
 
-    if(draw.prefix==="MN") morning.appendChild(card);
-    if(draw.prefix==="DN") day.appendChild(card);
-    if(draw.prefix==="EN") night.appendChild(card);
+    /* ===== DATE ===== */
+    const dateDiv = document.createElement("div");
+    dateDiv.className = "date-show";
+    dateDiv.textContent = readableDate;
+
+    /* ===== IMAGE ===== */
+    const img = document.createElement("img");
+    img.className = "pdf-frame";
+    img.alt = `Today Dear ${draw.timeText} Lottery Result ${readableDate}`;
+
+    /* ===== STATUS ===== */
+    const status = document.createElement("div");
+    status.className = "status";
+
+    /* ===== BUTTONS ===== */
+    const retryBtn = document.createElement("button");
+    retryBtn.className = "refresh-btn";
+    retryBtn.textContent = "Retry";
+
+    const downloadBtn = document.createElement("button");
+    downloadBtn.className = "refresh-btn";
+    downloadBtn.textContent = "Download PDF";
+
+    const imgUrl =
+      BASE_IMG_URL + draw.imgFolder + "/" + draw.imgPrefix + code + ".webp";
+
+    const pdfUrl =
+      BASE_PDF_URL + draw.prefix + code + ".PDF";
+
+    downloadBtn.onclick = ()=>{
+      const a = document.createElement("a");
+      a.href = pdfUrl;
+      a.download = draw.prefix + code + ".PDF";
+      a.click();
+    };
+
+    /* ===== DIRECT APPEND (NO EXTRA CARD) ===== */
+    target.append(
+      dateDiv,
+      img,
+      status,
+      retryBtn,
+      downloadBtn
+    );
+
+    loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl);
   });
 }
 
@@ -158,4 +182,3 @@ function loadTodayPDF(){
 loadTodayPDF();
 
 });
-
