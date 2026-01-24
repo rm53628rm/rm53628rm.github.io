@@ -1,3 +1,4 @@
+
 /* ================= BASE URLS ================= */
 const BASE_PDF_URL = "https://ldemo.dhankesari.com/download.php?filename=";
 const BASE_IMG_URL = "https://dhankesari.net/old/img/";
@@ -104,14 +105,27 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
 
 /* ================= MAIN FUNCTION ================= */
 function loadTodayPDF(){
-  const wrap = document.getElementById("todayResults");
-  wrap.innerHTML = "";
+
+  const morningWrap = document.getElementById("morningSection");
+  const dayWrap     = document.getElementById("daySection");
+  const nightWrap   = document.getElementById("nightSection");
+
+  morningWrap.innerHTML = "";
+  dayWrap.innerHTML = "";
+  nightWrap.innerHTML = "";
 
   const today = getTodayIST();
   const code = fileCode(today);
   const readableDate = today.toDateString();
 
-  draws.forEach(draw=>{
+  draws.forEach(draw => {
+
+    /* ===== SECTION ROUTING 🔥 ===== */
+    let wrap;
+    if(draw.prefix === "MN") wrap = morningWrap;
+    if(draw.prefix === "DN") wrap = dayWrap;
+    if(draw.prefix === "EN") wrap = nightWrap;
+
     /* ===== TIME LOCK ===== */
     if(!isTimeAllowed(draw.prefix)){
       const lockCard = document.createElement("div");
@@ -137,27 +151,23 @@ function loadTodayPDF(){
       <h3>${draw.title}</h3>
       <div class="date-show">${readableDate}</div>
     `;
+
     const seoText = document.createElement("div");
-seoText.className = "seo-text";
-
-seoText.innerHTML = `
-  <p>
-    ${draw.timeText} lottery result for today has been published.
-    Check the official <strong>${draw.timeText} Lottery Sambad today result</strong>
-    image below and download the PDF for verification.
-    DhankesariToday.in provides accurate Nagaland State Lottery results.
-  </p>
-`;
-
-card.appendChild(seoText);
-    
+    seoText.className = "seo-text";
+    seoText.innerHTML = `
+      <p>
+        ${draw.timeText} lottery result for today has been published.
+        Check the official <strong>${draw.timeText} Lottery Sambad today result</strong>
+        image below and download the PDF for verification.
+        DhankesariToday.in provides accurate Nagaland State Lottery results.
+      </p>
+    `;
+    card.appendChild(seoText);
 
     /* ===== IMAGE ===== */
     const img = document.createElement("img");
     img.className = "pdf-frame";
-
-    /* 🔥 SEO FIX: ALT ATTRIBUTE */
-    img.alt = `Today Dear ${draw.timeText} Lottery Result ${readableDate},You Can Download PDF File Link Below.`;
+    img.alt = `Today Dear ${draw.timeText} Lottery Result ${readableDate}`;
 
     const status = document.createElement("div");
     status.className = "status";
@@ -179,7 +189,6 @@ card.appendChild(seoText);
       BASE_PDF_URL +
       draw.prefix + code + ".PDF";
 
-    /* ===== FORCE DOWNLOAD ===== */
     downloadBtn.onclick = ()=>{
       const a = document.createElement("a");
       a.href = pdfUrl;
@@ -198,3 +207,4 @@ card.appendChild(seoText);
 
 /* ================= AUTO LOAD ================= */
 loadTodayPDF();
+
