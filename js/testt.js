@@ -47,13 +47,14 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
   retryBtn.style.display = "none";
   downloadBtn.style.display = "none";
 
+  status.style.display = "block";
   status.innerHTML = `
     <div class="loading-wrap">
       <span class="mini-spinner"></span>
       <span>Loading Result...</span>
     </div>
   `;
-status.style.display = "block";
+
   function tryLoad(){
     if(loaded) return;
     attempt++;
@@ -85,14 +86,12 @@ status.style.display = "block";
     retryBtn.style.display = "none";
     downloadBtn.style.display = "none";
     status.style.display = "block";
-    
-status.innerHTML = `
-  <div class="loading-wrap">
-    <span class="mini-spinner"></span>
-    <span>Loading Result...</span>
-  </div>
-`;
-    status.style.display = "block";
+    status.innerHTML = `
+      <div class="loading-wrap">
+        <span class="mini-spinner"></span>
+        <span>Loading Result...</span>
+      </div>
+    `;
     tryLoad();
   };
 
@@ -121,37 +120,23 @@ function loadTodayPDF(){
 
   draws.forEach(draw => {
 
-    let target;
-    if(draw.prefix==="MN") target = morning;
-    if(draw.prefix==="DN") target = day;
-    if(draw.prefix==="EN") target = night;
-    if(!target) return;
+    let target =
+      draw.prefix==="MN" ? morning :
+      draw.prefix==="DN" ? day :
+      night;
 
-    /* ===== TIME LOCK ===== */
+    /* ===== TIME LOCK MESSAGE ===== */
     if(!isTimeAllowed(draw.prefix)){
-      
+      const msg = document.createElement("div");
+      msg.className = "status";
+      msg.style.display = "block";
+      msg.style.fontWeight = "600";
 
-  const status = document.createElement("div");
-  status.className = "status";
-  status.style.display = "block";
-  status.style.padding = "12px";
-  status.style.fontWeight = "600";
+      if(draw.prefix==="MN") msg.textContent = "🔒 Morning result will be published after 1:00 PM";
+      if(draw.prefix==="DN") msg.textContent = "🔒 Day result will be published after 6:00 PM";
+      if(draw.prefix==="EN") msg.textContent = "🔒 Night result will be published after 8:00 PM";
 
-  if(draw.prefix==="MN"){
-    status.textContent = "Morning result will be published after 1:00 PM";
-  }
-  if(draw.prefix==="DN"){
-    status.textContent = "Day result will be published after 6:00 PM";
-  }
-  if(draw.prefix==="EN"){
-    status.textContent = "Night result will be published after 8:00 PM";
-  }
-
-  target.appendChild(status);
-  return;
-      }
-      
-      `;
+      target.appendChild(msg);
       return;
     }
 
@@ -191,15 +176,7 @@ function loadTodayPDF(){
       a.click();
     };
 
-    /* ===== DIRECT APPEND (NO EXTRA CARD) ===== */
-    target.append(
-      dateDiv,
-      img,
-      status,
-      retryBtn,
-      downloadBtn
-    );
-
+    target.append(dateDiv, img, status, retryBtn, downloadBtn);
     loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl);
   });
 }
