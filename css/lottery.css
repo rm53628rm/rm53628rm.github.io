@@ -539,20 +539,18 @@ footer{
   background: transparent;
 }
 
-/* RESULT BOX */
 .result-box{
   background: transparent;
   padding: 0;
   text-align: center;
+  width: 100%;
 }
 
-/* HEADINGS */
 .result-box h2{
   font-size: 18px;
   margin-bottom: 6px;
 }
 
-/* IMAGE */
 .result-box img{
   width: 100%;
   max-width: 420px;
@@ -562,10 +560,13 @@ footer{
   border-radius: 0 !important;
 }
 
-/* DESKTOP VIEW (3 COLUMN) */
 @media (min-width: 992px){
   .result-section{
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     align-items: flex-start;
+  }
+
+  .result-box img{
+    max-width: 100% !important;
   }
 }
