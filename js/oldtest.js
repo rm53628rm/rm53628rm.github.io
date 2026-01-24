@@ -1,112 +1,162 @@
-const BASE_PDF = "https://ldemo.dhankesari.com/download.php?filename=";
-const BASE_IMG = "https://dhankesari.net/old/img/";
+/* ================= BASE URLS ================= */
+const OLD_BASE_PDF_URL = "https://ldemo.dhankesari.com/oldresultsdownload.php?filename=";
+const OLD_BASE_IMG_URL = "https://dhankesari.net/old/img/";
 
-function formatDate(d){
+/* ================= DRAWS ================= */
+const draws = [
+  { title:"🌅 Dear Morning", prefix:"MN", imgPrefix:"MD", imgFolder:"1PM", timeText:"1PM" },
+  { title:"☀️ Dear Day",     prefix:"DN", imgPrefix:"DD", imgFolder:"6PM", timeText:"6PM" },
+  { title:"🌙 Dear Night",   prefix:"EN", imgPrefix:"ED", imgFolder:"8PM", timeText:"8PM" }
+];
+
+/* ================= DATE → DDMMYY ================= */
+function fileCode(d){
   return String(d.getDate()).padStart(2,"0") +
          String(d.getMonth()+1).padStart(2,"0") +
          String(d.getFullYear()).slice(-2);
 }
 
-/* IMAGE LOAD WITH RETRY */
-function loadImage(target, imgUrl, pdfUrl){
-  target.innerHTML = "";
+/* ================= IMAGE LOAD WITH RETRY ================= */
+function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
+  let attempt = 0;
+  const MAX_RETRY = 4;
+  let loaded = false;
+  let timer;
 
-  const status = document.createElement("div");
-  status.className = "status";
+  img.style.display = "none";
+  retryBtn.style.display = "none";
+  downloadBtn.style.display = "none";
+
   status.innerHTML = `
     <div class="loading-wrap">
       <span class="mini-spinner"></span>
-      Loading result...
+      <span>Loading Result...</span>
     </div>
   `;
-
-  const img = document.createElement("img");
-  img.style.display = "none";
-
-  const downloadBtn = document.createElement("button");
-  downloadBtn.className = "refresh-btn";
-  downloadBtn.textContent = "Download PDF";
-  downloadBtn.style.display = "none";
-  downloadBtn.onclick = ()=>window.open(pdfUrl,"_blank");
-
-  const retryBtn = document.createElement("button");
-  retryBtn.className = "retry-btn";
-  retryBtn.textContent = "Retry";
-  retryBtn.style.display = "none";
-
-  target.append(status, img, retryBtn, downloadBtn);
-
-  let tries = 0;
-  const MAX_TRY = 3;
+  status.style.display = "block";
 
   function tryLoad(){
-    tries++;
+    if(loaded) return;
+    attempt++;
     img.src = imgUrl + "?t=" + Date.now();
+
+    timer = setTimeout(()=>{
+      if(loaded) return;
+      if(attempt >= MAX_RETRY){
+        status.textContent = "Result not available. Retry or Download PDF.";
+        retryBtn.style.display = "inline-flex";
+        downloadBtn.style.display = "inline-flex";
+        return;
+      }
+      tryLoad();
+    }, 4000);
   }
 
   img.onload = ()=>{
-    status.style.display = "none";
-    img.style.display = "block";
-    downloadBtn.style.display = "inline-block";
-    retryBtn.style.display = "none";
-  };
+    if(loaded) return;
+    loaded = true;
+    clearTimeout(timer);
 
-  img.onerror = ()=>{
-    if(tries >= MAX_TRY){
-      status.textContent = "Result not available. Please retry.";
-      retryBtn.style.display = "inline-block";
-    }else{
-      setTimeout(tryLoad, 2000);
-    }
+    img.style.display = "block";
+    status.style.display = "none";
+    retryBtn.style.display = "none";
+    downloadBtn.style.display = "inline-flex";
   };
 
   retryBtn.onclick = ()=>{
-    tries = 0;
+    attempt = 0;
+    loaded = false;
+    retryBtn.style.display = "none";
+    downloadBtn.style.display = "none";
     status.innerHTML = `
       <div class="loading-wrap">
         <span class="mini-spinner"></span>
-        Loading result...
+        <span>Loading Result...</span>
       </div>
     `;
-    retryBtn.style.display = "none";
+    status.style.display = "block";
     tryLoad();
   };
 
   tryLoad();
 }
 
-/* MAIN */
+/* ================= LOAD OLD RESULTS ================= */
 function loadOldResults(){
-  const val = document.getElementById("resultDate").value;
-  if(!val){
-    alert("Please select date");
+  const wrap = document.getElementById("oldResults");
+  wrap.innerHTML = "";
+
+  const dateVal = document.getElementById("resultDate").value;
+  if(!dateVal){
+    alert("Please select a date");
     return;
   }
 
-  const d = new Date(val);
-  const code = formatDate(d);
+  const selectedDate = new Date(dateVal);
+  const code = fileCode(selectedDate);
+  const readableDate = selectedDate.toDateString();
 
-  loadImage(
-    document.getElementById("morningResult"),
-    BASE_IMG+"1PM/MD"+code+".webp",
-    BASE_PDF+"MN"+code+".PDF"
-  );
+  draws.forEach(draw=>{
+    const card = document.createElement("div");
+    card.className = "card";
 
-  loadImage(
-    document.getElementById("dayResult"),
-    BASE_IMG+"6PM/DD"+code+".webp",
-    BASE_PDF+"DN"+code+".PDF"
-  );
+    card.innerHTML = `
+      <h3>${draw.title} - ${readableDate}</h3>
+    `;
 
-  loadImage(
-    document.getElementById("nightResult"),
-    BASE_IMG+"8PM/ED"+code+".webp",
-    BASE_PDF+"EN"+code+".PDF"
-  );
+    /* ===== IMAGE ===== */
+    const img = document.createElement("img");
+    img.className = "pdf-frame";
+    img.alt = `Dear ${draw.timeText} Lottery Result ${readableDate}`;
+
+    const status = document.createElement("div");
+    status.className = "status";
+
+    const retryBtn = document.createElement("button");
+    retryBtn.className = "refresh-btn";
+    retryBtn.textContent = "Retry";
+
+    const downloadBtn = document.createElement("button");
+    downloadBtn.className = "refresh-btn";
+    downloadBtn.textContent = "Download PDF";
+
+    const imgUrl =
+      OLD_BASE_IMG_URL +
+      draw.imgFolder + "/" +
+      draw.imgPrefix + code + ".webp";
+
+    const pdfUrl =
+      OLD_BASE_PDF_URL +
+      draw.prefix + code + ".PDF";
+
+    /* ===== FORCE PDF DOWNLOAD ===== */
+    downloadBtn.onclick = ()=>{
+      const a = document.createElement("a");
+      a.href = pdfUrl;
+      a.download = draw.prefix + code + ".PDF";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+
+    card.append(img, status, retryBtn, downloadBtn);
+    wrap.appendChild(card);
+
+    loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl);
+  });
 }
 
-/* AUTO LOAD PREVIOUS DAY */
-const prev = new Date();
-prev.setDate(prev.getDate() - 1);
-document.getElementById("resultDate").valueAsDate = prev;
-loadOldResults();
+/* ================= DATE INPUT UI ================= */
+const dateInput = document.getElementById("resultDate");
+const dateBox = dateInput.closest(".date-box");
+
+function toggleDateText(){
+  if(dateInput.value){
+    dateBox.classList.add("has-date");
+  }else{
+    dateBox.classList.remove("has-date");
+  }
+}
+
+dateInput.addEventListener("change", toggleDateText);
+toggleDateText();
