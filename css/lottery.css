@@ -536,37 +536,23 @@ footer{
   grid-template-columns: 1fr;
   gap: 20px;
   padding: 10px;
-  background: transparent;
-}
-
-.result-box{
-  background: transparent;
-  padding: 0;
-  text-align: center;
   width: 100%;
 }
 
-.result-box h2{
-  font-size: 18px;
-  margin-bottom: 6px;
+/* RESULT BOX */
+.result-box{
+  text-align: center;
 }
 
+/* IMAGE */
 .result-box img{
   width: 100%;
-  max-width: 420px;
   height: auto;
-  background: transparent !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
 }
 
-@media (min-width: 992px){
+/* DESKTOP VIEW */
+@media screen and (min-width: 992px){
   .result-section{
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    align-items: flex-start;
-  }
-
-  .result-box img{
-    max-width: 100% !important;
   }
 }
