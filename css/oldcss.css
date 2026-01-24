@@ -1,0 +1,199 @@
+/* ===== RESET ===== */
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+/* ===== BODY ===== */
+body{
+  background:#f5f7fb;
+  color:#111827;
+}
+
+/* ===== CONTAINER ===== */
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:15px;
+}
+
+/* ===== SECTION TITLE ===== */
+.section-title{
+  background:#0f172a;
+  color:#fff;
+  padding:10px;
+  border-radius:6px;
+  text-align:center;
+  margin:20px 0;
+  font-weight:700;
+}
+
+/* ===== RESULT SECTION ===== */
+.result-section{
+  background:#ffffff;
+  border-radius:12px;
+  padding:16px;
+  margin-bottom:25px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+
+/* ===== HEADING ===== */
+.result-section h2{
+  font-size:18px;
+  margin-bottom:8px;
+}
+
+/* ===== SEO TEXT ===== */
+.seo-text{
+  font-size:14px;
+  color:#4b5563;
+  margin-bottom:12px;
+  line-height:1.6;
+}
+
+/* ===== RESULT CARD HOLDER ===== */
+.result-card{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:180px;
+}
+
+/* ===== ACTUAL CARD ===== */
+.card{
+  width:100%;
+  max-width:360px;
+  background:#f9fafb;
+  border-radius:10px;
+  padding:12px;
+  text-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+
+/* ===== RESULT IMAGE ===== */
+.card img{
+  width:100%;
+  border-radius:8px;
+  margin-bottom:10px;
+}
+
+/* ===== STATUS / MESSAGE ===== */
+.status{
+  font-size:14px;
+  font-weight:600;
+  color:#2563eb;
+  margin:10px 0;
+}
+
+/* ===== LOADING ANIMATION ===== */
+.loading{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+}
+
+.loading span{
+  width:8px;
+  height:8px;
+  background:#2563eb;
+  border-radius:50%;
+  animation:bounce 1.4s infinite ease-in-out both;
+}
+
+.loading span:nth-child(1){animation-delay:-0.32s;}
+.loading span:nth-child(2){animation-delay:-0.16s;}
+
+@keyframes bounce{
+  0%,80%,100%{transform:scale(0);}
+  40%{transform:scale(1);}
+}
+
+/* ===== BUTTON COMMON ===== */
+button{
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+}
+
+/* ===== DOWNLOAD BUTTON ===== */
+.download-btn{
+  width:100%;
+  background:#16a34a;
+  color:#fff;
+  padding:10px;
+  border-radius:6px;
+  margin-top:10px;
+}
+
+.download-btn:hover{
+  background:#15803d;
+}
+
+/* ===== RETRY BUTTON ===== */
+.retry-btn{
+  width:100%;
+  background:#dc2626;
+  color:#fff;
+  padding:9px;
+  border-radius:6px;
+  margin-top:8px;
+}
+
+.retry-btn:hover{
+  background:#b91c1c;
+}
+
+/* ===== DATE PICKER ===== */
+.date-picker{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin:20px 0;
+  flex-wrap:wrap;
+}
+
+.date-box{
+  position:relative;
+  flex:1;
+}
+
+.date-box input{
+  width:100%;
+  padding:10px;
+  border-radius:6px;
+  border:1px solid #cbd5f5;
+}
+
+.date-placeholder{
+  position:absolute;
+  left:10px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:13px;
+  color:#6b7280;
+  pointer-events:none;
+}
+
+/* ===== LOAD RESULT BUTTON ===== */
+.date-picker button{
+  background:#2563eb;
+  color:#fff;
+  padding:10px 16px;
+  border-radius:6px;
+}
+
+.date-picker button:hover{
+  background:#1d4ed8;
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:600px){
+  .result-section h2{
+    font-size:16px;
+  }
+  .seo-text{
+    font-size:13px;
+  }
+}
