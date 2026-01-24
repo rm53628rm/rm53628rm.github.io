@@ -38,61 +38,42 @@
   <a href="disclaimer.html">⚠️ Disclaimer</a>
 </div>
 
-<h3 class="date-title">📅 Old Results</h3>
+<div class="container">
 
+<h1>📅 Old Dear Lottery Results</h1>
+
+<!-- DATE PICKER -->
 <div class="date-picker">
-  <div class="date-box">
-    <input type="date" id="resultDate">
-    <span class="date-placeholder">Please select date</span>
-  </div>
-
-  <button onclick="loadOldResults()">Load Result</button>
+  <input type="date" id="resultDate">
+  <button class="refresh-btn" onclick="loadOldResults()">Load Result</button>
 </div>
 
-<!-- ================= OLD RESULT CONTAINER ================= -->
-<div id="oldResults">
+<!-- MORNING -->
+<section class="result-section">
+  <h2>🌅 Dear Morning Lottery Result (1 PM)</h2>
+  <p class="seo-text">
+    Check old Dear Morning Lottery Sambad Result (1 PM) date wise.
+  </p>
+  <div class="result-card" id="morningResult"></div>
+</section>
 
-  <!-- ===== MORNING RESULT ===== -->
-  <section class="result-section" id="old-morning">
-    <h2>🌅 Dear Morning Lottery Result (1 PM)</h2>
+<!-- DAY -->
+<section class="result-section">
+  <h2>☀️ Dear Day Lottery Result (6 PM)</h2>
+  <p class="seo-text">
+    View previous Dear Day Lottery Sambad Result (6 PM) with PDF.
+  </p>
+  <div class="result-card" id="dayResult"></div>
+</section>
 
-    <p class="seo-text" id="seo-morning">
-      Dear Morning Lottery Sambad Result for 1 PM draw will be shown here.
-      Select a date to view result image and download PDF.
-    </p>
-
-    <div class="result-card" id="oldMorningResult">
-      <!-- JS inject image / message here -->
-    </div>
-  </section>
-
-  <!-- ===== DAY RESULT ===== -->
-  <section class="result-section" id="old-day">
-    <h2>☀️ Dear Day Lottery Result (6 PM)</h2>
-
-    <p class="seo-text" id="seo-day">
-      Dear Day Lottery Sambad Result for 6 PM draw will be displayed here.
-      Official result image and PDF download available.
-    </p>
-
-    <div class="result-card" id="oldDayResult">
-      <!-- JS inject image / message here -->
-    </div>
-  </section>
-
-  <!-- ===== NIGHT RESULT ===== -->
-  <section class="result-section" id="old-night">
-    <h2>🌙 Dear Night Lottery Result (8 PM)</h2>
-
-    <p class="seo-text" id="seo-night">
-      Dear Night Lottery Sambad Result for 8 PM draw will appear here.
-      Check daily updated night lottery results with PDF.
-    </p>
-
-    <div class="result-card" id="oldNightResult">
-      <!-- JS inject image / message here -->
-    </div>
-  </section>
+<!-- NIGHT -->
+<section class="result-section">
+  <h2>🌙 Dear Night Lottery Result (8 PM)</h2>
+  <p class="seo-text">
+    Old Dear Night Lottery Sambad Result (8 PM) date wise.
+  </p>
+  <div class="result-card" id="nightResult"></div>
+</section>
 
 </div>
   
