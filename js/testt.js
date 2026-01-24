@@ -1,160 +1,81 @@
-document.addEventListener("DOMContentLoaded", function () {
-
 /* ================= BASE URLS ================= */
 const BASE_PDF_URL = "https://ldemo.dhankesari.com/download.php?filename=";
 const BASE_IMG_URL = "https://dhankesari.net/old/img/";
 
 /* ================= DRAWS ================= */
 const draws = [
-  { title:"🌅 Dear Morning 1PM Lottery Sambad", prefix:"MN", imgPrefix:"MD", imgFolder:"1PM", timeText:"1PM" },
-  { title:"☀️ Dear Day 6PM Lottery Sambad",     prefix:"DN", imgPrefix:"DD", imgFolder:"6PM", timeText:"6PM" },
-  { title:"🌙 Dear Night 8PM Lottery Sambad",   prefix:"EN", imgPrefix:"ED", imgFolder:"8PM", timeText:"8PM" }
+  { title:"🌅 Dear Morning Lottery Result (1 PM)", prefix:"MN", imgPrefix:"MD", imgFolder:"1PM", timeText:"1PM" },
+  { title:"☀️ Dear Day Lottery Result (6 PM)",     prefix:"DN", imgPrefix:"DD", imgFolder:"6PM", timeText:"6PM" },
+  { title:"🌙 Dear Night Lottery Result (8 PM)",   prefix:"EN", imgPrefix:"ED", imgFolder:"8PM", timeText:"8PM" }
 ];
 
-/* ================= TIME LOCK ================= */
-const TIME_LOCK = { MN:13, DN:18, EN:20 };
-
-function isTimeAllowed(prefix){
-  const hour = Number(
-    new Date().toLocaleString("en-IN", {
-      timeZone:"Asia/Kolkata",
-      hour:"2-digit",
-      hour12:false
-    })
-  );
-  return hour >= TIME_LOCK[prefix];
-}
-
-/* ================= DATE ================= */
-function getTodayIST(){
-  return new Date(
-    new Date().toLocaleDateString("en-CA",{ timeZone:"Asia/Kolkata" })
-  );
-}
-
+/* ================= HELPERS ================= */
 function fileCode(d){
   return String(d.getDate()).padStart(2,"0") +
          String(d.getMonth()+1).padStart(2,"0") +
          String(d.getFullYear()).slice(-2);
 }
 
-/* ================= IMAGE LOAD WITH RETRY ================= */
-function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
-  let attempt = 0, loaded = false;
-  const maxRetry = 4;
-
+/* ================= IMAGE LOADER ================= */
+function loadImage(img, status, retryBtn, downloadBtn, imgUrl){
   img.style.display = "none";
   retryBtn.style.display = "none";
   downloadBtn.style.display = "none";
 
   status.style.display = "block";
-  status.innerHTML = `
-    <div class="loading-wrap">
-      <span class="mini-spinner"></span>
-      <span>Loading Result...</span>
-    </div>
-  `;
-
-  function tryLoad(){
-    if(loaded) return;
-    attempt++;
-    img.src = imgUrl + "?t=" + Date.now();
-
-    setTimeout(()=>{
-      if(loaded) return;
-      if(attempt >= maxRetry){
-        status.textContent = "Click Retry to load result";
-        retryBtn.style.display = "inline-flex";
-        downloadBtn.style.display = "inline-flex";
-      } else {
-        tryLoad();
-      }
-    }, 4000);
-  }
+  status.textContent = "Loading Result...";
 
   img.onload = ()=>{
-    loaded = true;
     img.style.display = "block";
     status.style.display = "none";
-    retryBtn.style.display = "none";
+    downloadBtn.style.display = "inline-flex";
+  };
+
+  img.onerror = ()=>{
+    status.textContent = "Result not available";
+    retryBtn.style.display = "inline-flex";
     downloadBtn.style.display = "inline-flex";
   };
 
   retryBtn.onclick = ()=>{
-    attempt = 0;
-    loaded = false;
+    status.textContent = "Loading Result...";
     retryBtn.style.display = "none";
-    downloadBtn.style.display = "none";
-    status.style.display = "block";
-    status.innerHTML = `
-      <div class="loading-wrap">
-        <span class="mini-spinner"></span>
-        <span>Loading Result...</span>
-      </div>
-    `;
-    tryLoad();
+    img.src = imgUrl + "?t=" + Date.now();
   };
 
-  tryLoad();
+  img.src = imgUrl;
 }
 
-/* ================= MAIN ================= */
-function loadTodayPDF(){
+/* ================= MAIN FUNCTION ================= */
+function loadOldResults(){
 
-  const morning = document.getElementById("morningResult");
-  const day = document.getElementById("dayResult");
-  const night = document.getElementById("nightResult");
+  const dateInput = document.getElementById("resultDate").value;
+  const container = document.getElementById("oldResults");
 
-  if(!morning || !day || !night){
-    console.error("Result container missing");
+  if(!dateInput){
+    alert("Please select a date");
     return;
   }
 
-  morning.innerHTML = "";
-  day.innerHTML = "";
-  night.innerHTML = "";
+  const dateObj = new Date(dateInput);
+  const code = fileCode(dateObj);
 
-  const today = getTodayIST();
-  const code = fileCode(today);
-  const readableDate = today.toDateString();
+  container.innerHTML = ""; // clear previous
 
   draws.forEach(draw => {
 
-    let target =
-      draw.prefix==="MN" ? morning :
-      draw.prefix==="DN" ? day :
-      night;
+    const section = document.createElement("div");
+    section.className = "old-result-section";
 
-    /* ===== TIME LOCK MESSAGE ===== */
-    if(!isTimeAllowed(draw.prefix)){
-      const msg = document.createElement("div");
-      msg.className = "status";
-      msg.style.display = "block";
-      msg.style.fontWeight = "600";
+    const heading = document.createElement("h3");
+    heading.textContent = draw.title;
 
-      if(draw.prefix==="MN") msg.textContent = "🔒 Morning result will be published after 1:00 PM";
-      if(draw.prefix==="DN") msg.textContent = "🔒 Day result will be published after 6:00 PM";
-      if(draw.prefix==="EN") msg.textContent = "🔒 Night result will be published after 8:00 PM";
-
-      target.appendChild(msg);
-      return;
-    }
-
-    /* ===== DATE ===== */
-    const dateDiv = document.createElement("div");
-    dateDiv.className = "date-show";
-    dateDiv.textContent = readableDate;
-
-    /* ===== IMAGE ===== */
     const img = document.createElement("img");
     img.className = "pdf-frame";
-    img.alt = `Today Dear ${draw.timeText} Lottery Result ${readableDate}`;
 
-    /* ===== STATUS ===== */
     const status = document.createElement("div");
     status.className = "status";
 
-    /* ===== BUTTONS ===== */
     const retryBtn = document.createElement("button");
     retryBtn.className = "refresh-btn";
     retryBtn.textContent = "Retry";
@@ -176,12 +97,20 @@ function loadTodayPDF(){
       a.click();
     };
 
-    target.append(dateDiv, img, status, retryBtn, downloadBtn);
-    loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl);
+    section.append(heading, img, status, retryBtn, downloadBtn);
+    container.appendChild(section);
+
+    loadImage(img, status, retryBtn, downloadBtn, imgUrl);
   });
 }
 
-/* ================= AUTO LOAD ================= */
-loadTodayPDF();
+/* ================= AUTO LOAD YESTERDAY ================= */
+(function(){
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
 
-});
+  const y = d.toISOString().split("T")[0];
+  document.getElementById("resultDate").value = y;
+
+  loadOldResults();
+})();
