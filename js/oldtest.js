@@ -1,162 +1,112 @@
-/* ================= BASE URLS ================= */
-const OLD_BASE_PDF_URL = "https://ldemo.dhankesari.com/oldresultsdownload.php?filename=";
-const OLD_BASE_IMG_URL = "https://dhankesari.net/old/img/";
+const BASE_PDF = "https://ldemo.dhankesari.com/download.php?filename=";
+const BASE_IMG = "https://dhankesari.net/old/img/";
 
-/* ================= DRAWS ================= */
-const draws = [
-  { title:"🌅 Dear Morning", prefix:"MN", imgPrefix:"MD", imgFolder:"1PM", timeText:"1PM" },
-  { title:"☀️ Dear Day",     prefix:"DN", imgPrefix:"DD", imgFolder:"6PM", timeText:"6PM" },
-  { title:"🌙 Dear Night",   prefix:"EN", imgPrefix:"ED", imgFolder:"8PM", timeText:"8PM" }
-];
-
-/* ================= DATE → DDMMYY ================= */
-function fileCode(d){
+function formatDate(d){
   return String(d.getDate()).padStart(2,"0") +
          String(d.getMonth()+1).padStart(2,"0") +
          String(d.getFullYear()).slice(-2);
 }
 
-/* ================= IMAGE LOAD WITH RETRY ================= */
-function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
-  let attempt = 0;
-  const MAX_RETRY = 4;
-  let loaded = false;
-  let timer;
+/* IMAGE LOAD WITH RETRY */
+function loadImage(target, imgUrl, pdfUrl){
+  target.innerHTML = "";
 
-  img.style.display = "none";
-  retryBtn.style.display = "none";
-  downloadBtn.style.display = "none";
-
+  const status = document.createElement("div");
+  status.className = "status";
   status.innerHTML = `
     <div class="loading-wrap">
       <span class="mini-spinner"></span>
-      <span>Loading Result...</span>
+      Loading result...
     </div>
   `;
-  status.style.display = "block";
+
+  const img = document.createElement("img");
+  img.style.display = "none";
+
+  const downloadBtn = document.createElement("button");
+  downloadBtn.className = "refresh-btn";
+  downloadBtn.textContent = "Download PDF";
+  downloadBtn.style.display = "none";
+  downloadBtn.onclick = ()=>window.open(pdfUrl,"_blank");
+
+  const retryBtn = document.createElement("button");
+  retryBtn.className = "retry-btn";
+  retryBtn.textContent = "Retry";
+  retryBtn.style.display = "none";
+
+  target.append(status, img, retryBtn, downloadBtn);
+
+  let tries = 0;
+  const MAX_TRY = 3;
 
   function tryLoad(){
-    if(loaded) return;
-    attempt++;
+    tries++;
     img.src = imgUrl + "?t=" + Date.now();
-
-    timer = setTimeout(()=>{
-      if(loaded) return;
-      if(attempt >= MAX_RETRY){
-        status.textContent = "Result not available. Retry or Download PDF.";
-        retryBtn.style.display = "inline-flex";
-        downloadBtn.style.display = "inline-flex";
-        return;
-      }
-      tryLoad();
-    }, 4000);
   }
 
   img.onload = ()=>{
-    if(loaded) return;
-    loaded = true;
-    clearTimeout(timer);
-
-    img.style.display = "block";
     status.style.display = "none";
+    img.style.display = "block";
+    downloadBtn.style.display = "inline-block";
     retryBtn.style.display = "none";
-    downloadBtn.style.display = "inline-flex";
+  };
+
+  img.onerror = ()=>{
+    if(tries >= MAX_TRY){
+      status.textContent = "Result not available. Please retry.";
+      retryBtn.style.display = "inline-block";
+    }else{
+      setTimeout(tryLoad, 2000);
+    }
   };
 
   retryBtn.onclick = ()=>{
-    attempt = 0;
-    loaded = false;
-    retryBtn.style.display = "none";
-    downloadBtn.style.display = "none";
+    tries = 0;
     status.innerHTML = `
       <div class="loading-wrap">
         <span class="mini-spinner"></span>
-        <span>Loading Result...</span>
+        Loading result...
       </div>
     `;
-    status.style.display = "block";
+    retryBtn.style.display = "none";
     tryLoad();
   };
 
   tryLoad();
 }
 
-/* ================= LOAD OLD RESULTS ================= */
+/* MAIN */
 function loadOldResults(){
-  const wrap = document.getElementById("oldResults");
-  wrap.innerHTML = "";
-
-  const dateVal = document.getElementById("resultDate").value;
-  if(!dateVal){
-    alert("Please select a date");
+  const val = document.getElementById("resultDate").value;
+  if(!val){
+    alert("Please select date");
     return;
   }
 
-  const selectedDate = new Date(dateVal);
-  const code = fileCode(selectedDate);
-  const readableDate = selectedDate.toDateString();
+  const d = new Date(val);
+  const code = formatDate(d);
 
-  draws.forEach(draw=>{
-    const card = document.createElement("div");
-    card.className = "card";
+  loadImage(
+    document.getElementById("morningResult"),
+    BASE_IMG+"1PM/MD"+code+".webp",
+    BASE_PDF+"MN"+code+".PDF"
+  );
 
-    card.innerHTML = `
-      <h3>${draw.title} - ${readableDate}</h3>
-    `;
+  loadImage(
+    document.getElementById("dayResult"),
+    BASE_IMG+"6PM/DD"+code+".webp",
+    BASE_PDF+"DN"+code+".PDF"
+  );
 
-    /* ===== IMAGE ===== */
-    const img = document.createElement("img");
-    img.className = "pdf-frame";
-    img.alt = `Dear ${draw.timeText} Lottery Result ${readableDate}`;
-
-    const status = document.createElement("div");
-    status.className = "status";
-
-    const retryBtn = document.createElement("button");
-    retryBtn.className = "refresh-btn";
-    retryBtn.textContent = "Retry";
-
-    const downloadBtn = document.createElement("button");
-    downloadBtn.className = "refresh-btn";
-    downloadBtn.textContent = "Download PDF";
-
-    const imgUrl =
-      OLD_BASE_IMG_URL +
-      draw.imgFolder + "/" +
-      draw.imgPrefix + code + ".webp";
-
-    const pdfUrl =
-      OLD_BASE_PDF_URL +
-      draw.prefix + code + ".PDF";
-
-    /* ===== FORCE PDF DOWNLOAD ===== */
-    downloadBtn.onclick = ()=>{
-      const a = document.createElement("a");
-      a.href = pdfUrl;
-      a.download = draw.prefix + code + ".PDF";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    };
-
-    card.append(img, status, retryBtn, downloadBtn);
-    wrap.appendChild(card);
-
-    loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl);
-  });
+  loadImage(
+    document.getElementById("nightResult"),
+    BASE_IMG+"8PM/ED"+code+".webp",
+    BASE_PDF+"EN"+code+".PDF"
+  );
 }
 
-/* ================= DATE INPUT UI ================= */
-const dateInput = document.getElementById("resultDate");
-const dateBox = dateInput.closest(".date-box");
-
-function toggleDateText(){
-  if(dateInput.value){
-    dateBox.classList.add("has-date");
-  }else{
-    dateBox.classList.remove("has-date");
-  }
-}
-
-dateInput.addEventListener("change", toggleDateText);
-toggleDateText();
+/* AUTO LOAD PREVIOUS DAY */
+const prev = new Date();
+prev.setDate(prev.getDate() - 1);
+document.getElementById("resultDate").valueAsDate = prev;
+loadOldResults();
