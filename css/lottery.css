@@ -177,16 +177,10 @@ h1.page-title{
 
 /* ================= BUTTON ================= */
 .refresh-btn{
-  width:100%;
-  padding:12px 16px;
-  border:none;
-  border-radius:10px;
-  font-size:14px;
-  font-weight:700;
-  cursor:pointer;
-  background:#16a34a;
-  color:#fff;
-  display:none;
+  width: auto;
+  padding:8px 16px;
+  font-size:13px;
+  border-radius:8px;
 }
 
 /* ================= LOADING ================= */
@@ -229,5 +223,87 @@ footer{
 
   .header-text h1{
     font-size:20px;
+  }
+}
+.view-old-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+
+    padding:12px 22px;
+    font-size:15px;
+    font-weight:700;
+
+    color:#ffffff;
+    background:linear-gradient(135deg,#1e3a8a,#2563eb);
+    border:none;
+    border-radius:10px;
+
+    text-decoration:none;
+    cursor:pointer;
+    box-shadow:0 6px 14px rgba(37,99,235,0.35);
+    transition:all .25s ease;
+}
+
+/* Hover effect */
+.view-old-btn:hover{
+    background:linear-gradient(135deg,#1e40af,#1d4ed8);
+    transform:translateY(-1px);
+    box-shadow:0 10px 20px rgba(29,78,216,0.45);
+}
+
+/* Active click */
+.view-old-btn:active{
+    transform:scale(.97);
+}
+
+/* Center wrapper (optional) */
+.view-old-wrap{
+    display:flex;
+    justify-content:center;
+    margin:18px 0;
+}
+.lottery-content{
+  max-width: 1100px;        /* content ko premium width */
+  margin: 0 auto;          /* center align */
+  padding: 18px 20px;      /* 🔥 left-right gap */
+  line-height: 1.75;
+  font-size: 15.5px;
+  color: #2c2c2c;
+}
+
+/* Heading */
+.lottery-content h1{
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: #111;
+}
+
+/* Paragraph */
+.lottery-content p{
+  margin-bottom: 14px;
+  text-align: justify;     /* premium reading */
+}
+
+/* Links inside text */
+.lottery-content a{
+  color: #0b57d0;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.lottery-content a:hover{
+  text-decoration: underline;
+}
+@media(max-width:768px){
+  .lottery-content{
+    padding: 16px 14px;   /* mobile gap */
+    font-size: 15px;
+  }
+
+  .lottery-content h1{
+    font-size: 18px;
   }
 }
