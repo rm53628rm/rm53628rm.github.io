@@ -1,20 +1,35 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+  /* ================= BASE URLS ================= */
   const BASE_PDF_URL = "https://ldemo.dhankesari.com/download.php?filename=";
   const BASE_IMG_URL = "https://dhankesari.net/old/img/";
 
+  /* ================= DRAWS ================= */
   const draws = [
-    { title:"🌅 Dear Morning 1PM Lottery Sambad", prefix:"MN", imgPrefix:"MD", imgFolder:"1PM", timeText:"1PM" },
-    { title:"☀️ Dear Day 6PM Lottery Sambad",     prefix:"DN", imgPrefix:"DD", imgFolder:"6PM", timeText:"6PM" },
-    { title:"🌙 Dear Night 8PM Lottery Sambad",   prefix:"EN", imgPrefix:"ED", imgFolder:"8PM", timeText:"8PM" }
+    { title:"🌅 Dear Morning 1PM Lottery Sambad", prefix:"MN", imgPrefix:"MD", imgFolder:"1PM", timeText:"1PM", containerId:"oldMorningResult" },
+    { title:"☀️ Dear Day 6PM Lottery Sambad",     prefix:"DN", imgPrefix:"DD", imgFolder:"6PM", timeText:"6PM", containerId:"oldDayResult" },
+    { title:"🌙 Dear Night 8PM Lottery Sambad",   prefix:"EN", imgPrefix:"ED", imgFolder:"8PM", timeText:"8PM", containerId:"oldNightResult" }
   ];
 
-  function formatDate(d){
+  /* ================= DATE ================= */
+  function getDateFromInput(){
+    const input = document.getElementById("resultDate").value;
+    if(input){
+      return new Date(input + "T00:00:00");
+    } else {
+      const d = new Date();
+      d.setDate(d.getDate() - 1); // yesterday
+      return d;
+    }
+  }
+
+  function fileCode(d){
     return String(d.getDate()).padStart(2,"0") +
            String(d.getMonth()+1).padStart(2,"0") +
            String(d.getFullYear()).slice(-2);
   }
 
+  /* ================= IMAGE LOAD WITH RETRY ================= */
   function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
     let attempt = 0, loaded = false;
     const maxRetry = 4;
@@ -62,7 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
       retryBtn.style.display = "none";
       downloadBtn.style.display = "none";
       status.style.display = "block";
-
       status.innerHTML = `
         <div class="loading-wrap">
           <span class="mini-spinner"></span>
@@ -75,47 +89,34 @@ document.addEventListener("DOMContentLoaded", function () {
     tryLoad();
   }
 
+  /* ================= MAIN ================= */
   function loadOldResults(){
-    const dateInput = document.getElementById("resultDate");
-    const oldResults = document.getElementById("oldResults");
-
-    if(!dateInput || !oldResults){
-      console.error("Date picker or oldResults container missing");
-      return;
-    }
-
-    const selectedDate = new Date(dateInput.value);
-    if(!dateInput.value){
-      alert("Please select a date");
-      return;
-    }
-
-    const code = formatDate(selectedDate);
+    const selectedDate = getDateFromInput();
+    const code = fileCode(selectedDate);
     const readableDate = selectedDate.toDateString();
 
-    oldResults.innerHTML = "";  // Clear previous results
-
     draws.forEach(draw => {
+      const target = document.getElementById(draw.containerId);
+      if(!target) return;
 
-      // Create main container for each time
-      const resultDiv = document.createElement("div");
-      resultDiv.className = "result-card";
+      // Clear old content
+      target.innerHTML = "";
 
-      // Date
+      // DATE SHOW
       const dateDiv = document.createElement("div");
       dateDiv.className = "date-show";
       dateDiv.textContent = readableDate;
 
-      // Image
+      // IMAGE
       const img = document.createElement("img");
       img.className = "pdf-frame";
-      img.alt = `Old ${draw.timeText} Lottery Result ${readableDate}`;
+      img.alt = `Dear ${draw.timeText} Lottery Result ${readableDate}`;
 
-      // Status
+      // STATUS
       const status = document.createElement("div");
       status.className = "status";
 
-      // Buttons
+      // BUTTONS
       const retryBtn = document.createElement("button");
       retryBtn.className = "refresh-btn";
       retryBtn.textContent = "Retry";
@@ -124,32 +125,35 @@ document.addEventListener("DOMContentLoaded", function () {
       downloadBtn.className = "refresh-btn";
       downloadBtn.textContent = "Download PDF";
 
-      const imgUrl =
-        BASE_IMG_URL + draw.imgFolder + "/" + draw.imgPrefix + code + ".webp";
-
-      const pdfUrl =
-        BASE_PDF_URL + draw.prefix + code + ".PDF";
+      const imgUrl = BASE_IMG_URL + draw.imgFolder + "/" + draw.imgPrefix + code + ".webp";
+      const pdfUrl = BASE_PDF_URL + draw.prefix + code + ".PDF";
 
       downloadBtn.onclick = ()=>{
         const a = document.createElement("a");
         a.href = pdfUrl;
         a.download = draw.prefix + code + ".PDF";
-        document.body.appendChild(a);
         a.click();
-        document.body.removeChild(a);
       };
 
-      // Append inside each time section
-      resultDiv.append(dateDiv, img, status, retryBtn, downloadBtn);
+      target.append(
+        dateDiv,
+        img,
+        status,
+        retryBtn,
+        downloadBtn
+      );
 
-      // Append to main container
-      oldResults.appendChild(resultDiv);
-
-      // Load image with retry
       loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl);
     });
   }
 
-  window.loadOldResults = loadOldResults;  // Make function accessible from button
+  // Auto load yesterday on page load
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  document.getElementById("resultDate").valueAsDate = yesterday;
+  loadOldResults();
+
+  // Global function for button
+  window.loadOldResults = loadOldResults;
 
 });
