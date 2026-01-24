@@ -1,112 +1,149 @@
-const BASE_PDF = "https://ldemo.dhankesari.com/download.php?filename=";
-const BASE_IMG = "https://dhankesari.net/old/img/";
+/* ================= BASE URLS ================= */
+const OLD_BASE_PDF_URL = "https://ldemo.dhankesari.com/oldresultsdownload.php?filename=";
+const OLD_BASE_IMG_URL = "https://dhankesari.net/old/img/";
 
-function formatDate(d){
+/* ================= DRAWS ================= */
+const draws = [
+  {
+    id: "morningSection",
+    title: "🌅 Dear Morning 1PM",
+    prefix: "MN",
+    imgPrefix: "MD",
+    imgFolder: "1PM",
+    timeText: "1PM"
+  },
+  {
+    id: "daySection",
+    title: "☀️ Dear Day 6PM",
+    prefix: "DN",
+    imgPrefix: "DD",
+    imgFolder: "6PM",
+    timeText: "6PM"
+  },
+  {
+    id: "nightSection",
+    title: "🌙 Dear Night 8PM",
+    prefix: "EN",
+    imgPrefix: "ED",
+    imgFolder: "8PM",
+    timeText: "8PM"
+  }
+];
+
+/* ================= DATE → DDMMYY ================= */
+function fileCode(d){
   return String(d.getDate()).padStart(2,"0") +
          String(d.getMonth()+1).padStart(2,"0") +
          String(d.getFullYear()).slice(-2);
 }
 
-/* IMAGE LOAD WITH RETRY */
-function loadImage(target, imgUrl, pdfUrl){
-  target.innerHTML = "";
+/* ================= IMAGE LOAD WITH RETRY ================= */
+function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
+  let attempt = 0;
+  const MAX_RETRY = 4;
+  let loaded = false;
+  let timer;
 
-  const status = document.createElement("div");
-  status.className = "status";
-  status.innerHTML = `
-    <div class="loading-wrap">
-      <span class="mini-spinner"></span>
-      Loading result...
-    </div>
-  `;
-
-  const img = document.createElement("img");
   img.style.display = "none";
-
-  const downloadBtn = document.createElement("button");
-  downloadBtn.className = "refresh-btn";
-  downloadBtn.textContent = "Download PDF";
-  downloadBtn.style.display = "none";
-  downloadBtn.onclick = ()=>window.open(pdfUrl,"_blank");
-
-  const retryBtn = document.createElement("button");
-  retryBtn.className = "retry-btn";
-  retryBtn.textContent = "Retry";
   retryBtn.style.display = "none";
+  downloadBtn.style.display = "none";
 
-  target.append(status, img, retryBtn, downloadBtn);
-
-  let tries = 0;
-  const MAX_TRY = 3;
+  status.textContent = "Loading Result...";
+  status.style.display = "block";
 
   function tryLoad(){
-    tries++;
+    if(loaded) return;
+    attempt++;
     img.src = imgUrl + "?t=" + Date.now();
+
+    timer = setTimeout(()=>{
+      if(loaded) return;
+      if(attempt >= MAX_RETRY){
+        status.textContent = "Result not available";
+        retryBtn.style.display = "inline-flex";
+        downloadBtn.style.display = "inline-flex";
+        return;
+      }
+      tryLoad();
+    }, 4000);
   }
 
   img.onload = ()=>{
-    status.style.display = "none";
+    loaded = true;
+    clearTimeout(timer);
     img.style.display = "block";
-    downloadBtn.style.display = "inline-block";
+    status.style.display = "none";
     retryBtn.style.display = "none";
-  };
-
-  img.onerror = ()=>{
-    if(tries >= MAX_TRY){
-      status.textContent = "Result not available. Please retry.";
-      retryBtn.style.display = "inline-block";
-    }else{
-      setTimeout(tryLoad, 2000);
-    }
+    downloadBtn.style.display = "inline-flex";
   };
 
   retryBtn.onclick = ()=>{
-    tries = 0;
-    status.innerHTML = `
-      <div class="loading-wrap">
-        <span class="mini-spinner"></span>
-        Loading result...
-      </div>
-    `;
-    retryBtn.style.display = "none";
+    attempt = 0;
+    loaded = false;
     tryLoad();
   };
 
   tryLoad();
 }
 
-/* MAIN */
-function loadOldResults(){
-  const val = document.getElementById("resultDate").value;
-  if(!val){
-    alert("Please select date");
-    return;
-  }
+/* ================= LOAD OLD RESULTS ================= */
+function loadOldResults(date){
+  const code = fileCode(date);
+  const readableDate = date.toDateString();
 
-  const d = new Date(val);
-  const code = formatDate(d);
+  draws.forEach(draw=>{
+    const box = document.getElementById(draw.id);
+    if(!box) return;
 
-  loadImage(
-    document.getElementById("morningResult"),
-    BASE_IMG+"1PM/MD"+code+".webp",
-    BASE_PDF+"MN"+code+".PDF"
-  );
+    box.innerHTML = `
+      <h3>${draw.title}</h3>
+      <div class="date-show">${readableDate}</div>
 
-  loadImage(
-    document.getElementById("dayResult"),
-    BASE_IMG+"6PM/DD"+code+".webp",
-    BASE_PDF+"DN"+code+".PDF"
-  );
+      <img class="pdf-frame"
+        alt="Dear ${draw.timeText} Lottery Result ${readableDate}">
 
-  loadImage(
-    document.getElementById("nightResult"),
-    BASE_IMG+"8PM/ED"+code+".webp",
-    BASE_PDF+"EN"+code+".PDF"
-  );
+      <div class="status"></div>
+
+      <button class="refresh-btn retry">Retry</button>
+      <button class="refresh-btn download">Download PDF</button>
+    `;
+
+    const img = box.querySelector(".pdf-frame");
+    const status = box.querySelector(".status");
+    const retryBtn = box.querySelector(".retry");
+    const downloadBtn = box.querySelector(".download");
+
+    const imgUrl =
+      OLD_BASE_IMG_URL + draw.imgFolder + "/" +
+      draw.imgPrefix + code + ".webp";
+
+    const pdfUrl =
+      OLD_BASE_PDF_URL + draw.prefix + code + ".PDF";
+
+    downloadBtn.onclick = ()=>{
+      const a = document.createElement("a");
+      a.href = pdfUrl;
+      a.download = draw.prefix + code + ".PDF";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+
+    loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl);
+  });
 }
 
-/* AUTO LOAD PREVIOUS DAY */
-const prev = new Date();
-prev.setDate(prev.getDate() - 1);
-document.getElementById("resultDate").valueAsDate = prev;
-loadOldResults();
+/* ================= DEFAULT = YESTERDAY ================= */
+const dateInput = document.getElementById("resultDate");
+const yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+
+dateInput.valueAsDate = yesterday;
+loadOldResults(yesterday);
+
+/* ================= DATE CHANGE ================= */
+dateInput.addEventListener("change", ()=>{
+  if(dateInput.value){
+    loadOldResults(new Date(dateInput.value));
+  }
+});
