@@ -4,30 +4,9 @@ const OLD_BASE_IMG_URL = "https://dhankesari.net/old/img/";
 
 /* ================= DRAWS ================= */
 const draws = [
-  {
-    id: "morningSection",
-    title: "🌅 Dear Morning 1PM",
-    prefix: "MN",
-    imgPrefix: "MD",
-    imgFolder: "1PM",
-    timeText: "1PM"
-  },
-  {
-    id: "daySection",
-    title: "☀️ Dear Day 6PM",
-    prefix: "DN",
-    imgPrefix: "DD",
-    imgFolder: "6PM",
-    timeText: "6PM"
-  },
-  {
-    id: "nightSection",
-    title: "🌙 Dear Night 8PM",
-    prefix: "EN",
-    imgPrefix: "ED",
-    imgFolder: "8PM",
-    timeText: "8PM"
-  }
+  { title:"🌅 Dear Morning", prefix:"MN", imgPrefix:"MD", imgFolder:"1PM", timeText:"1PM" },
+  { title:"☀️ Dear Day",     prefix:"DN", imgPrefix:"DD", imgFolder:"6PM", timeText:"6PM" },
+  { title:"🌙 Dear Night",   prefix:"EN", imgPrefix:"ED", imgFolder:"8PM", timeText:"8PM" }
 ];
 
 /* ================= DATE → DDMMYY ================= */
@@ -48,7 +27,12 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
   retryBtn.style.display = "none";
   downloadBtn.style.display = "none";
 
-  status.textContent = "Loading Result...";
+  status.innerHTML = `
+    <div class="loading-wrap">
+      <span class="mini-spinner"></span>
+      <span>Loading Result...</span>
+    </div>
+  `;
   status.style.display = "block";
 
   function tryLoad(){
@@ -59,7 +43,7 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
     timer = setTimeout(()=>{
       if(loaded) return;
       if(attempt >= MAX_RETRY){
-        status.textContent = "Result not available";
+        status.textContent = "Result not available. Retry or Download PDF.";
         retryBtn.style.display = "inline-flex";
         downloadBtn.style.display = "inline-flex";
         return;
@@ -69,8 +53,10 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
   }
 
   img.onload = ()=>{
+    if(loaded) return;
     loaded = true;
     clearTimeout(timer);
+
     img.style.display = "block";
     status.style.display = "none";
     retryBtn.style.display = "none";
@@ -80,6 +66,15 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
   retryBtn.onclick = ()=>{
     attempt = 0;
     loaded = false;
+    retryBtn.style.display = "none";
+    downloadBtn.style.display = "none";
+    status.innerHTML = `
+      <div class="loading-wrap">
+        <span class="mini-spinner"></span>
+        <span>Loading Result...</span>
+      </div>
+    `;
+    status.style.display = "block";
     tryLoad();
   };
 
@@ -87,39 +82,54 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
 }
 
 /* ================= LOAD OLD RESULTS ================= */
-function loadOldResults(date){
-  const code = fileCode(date);
-  const readableDate = date.toDateString();
+function loadOldResults(){
+  const wrap = document.getElementById("oldResults");
+  wrap.innerHTML = "";
+
+  const dateVal = document.getElementById("resultDate").value;
+  if(!dateVal){
+    alert("Please select a date");
+    return;
+  }
+
+  const selectedDate = new Date(dateVal);
+  const code = fileCode(selectedDate);
+  const readableDate = selectedDate.toDateString();
 
   draws.forEach(draw=>{
-    const box = document.getElementById(draw.id);
-    if(!box) return;
+    const card = document.createElement("div");
+    card.className = "card";
 
-    box.innerHTML = `
-      <h3>${draw.title}</h3>
-      <div class="date-show">${readableDate}</div>
-
-      <img class="pdf-frame"
-        alt="Dear ${draw.timeText} Lottery Result ${readableDate}">
-
-      <div class="status"></div>
-
-      <button class="refresh-btn retry">Retry</button>
-      <button class="refresh-btn download">Download PDF</button>
+    card.innerHTML = `
+      <h3>${draw.title} - ${readableDate}</h3>
     `;
 
-    const img = box.querySelector(".pdf-frame");
-    const status = box.querySelector(".status");
-    const retryBtn = box.querySelector(".retry");
-    const downloadBtn = box.querySelector(".download");
+    /* ===== IMAGE ===== */
+    const img = document.createElement("img");
+    img.className = "pdf-frame";
+    img.alt = `Dear ${draw.timeText} Lottery Result ${readableDate}`;
+
+    const status = document.createElement("div");
+    status.className = "status";
+
+    const retryBtn = document.createElement("button");
+    retryBtn.className = "refresh-btn";
+    retryBtn.textContent = "Retry";
+
+    const downloadBtn = document.createElement("button");
+    downloadBtn.className = "refresh-btn";
+    downloadBtn.textContent = "Download PDF";
 
     const imgUrl =
-      OLD_BASE_IMG_URL + draw.imgFolder + "/" +
+      OLD_BASE_IMG_URL +
+      draw.imgFolder + "/" +
       draw.imgPrefix + code + ".webp";
 
     const pdfUrl =
-      OLD_BASE_PDF_URL + draw.prefix + code + ".PDF";
+      OLD_BASE_PDF_URL +
+      draw.prefix + code + ".PDF";
 
+    /* ===== FORCE PDF DOWNLOAD ===== */
     downloadBtn.onclick = ()=>{
       const a = document.createElement("a");
       a.href = pdfUrl;
@@ -129,21 +139,24 @@ function loadOldResults(date){
       document.body.removeChild(a);
     };
 
+    card.append(img, status, retryBtn, downloadBtn);
+    wrap.appendChild(card);
+
     loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl);
   });
 }
 
-/* ================= DEFAULT = YESTERDAY ================= */
+/* ================= DATE INPUT UI ================= */
 const dateInput = document.getElementById("resultDate");
-const yesterday = new Date();
-yesterday.setDate(yesterday.getDate() - 1);
+const dateBox = dateInput.closest(".date-box");
 
-dateInput.valueAsDate = yesterday;
-loadOldResults(yesterday);
-
-/* ================= DATE CHANGE ================= */
-dateInput.addEventListener("change", ()=>{
+function toggleDateText(){
   if(dateInput.value){
-    loadOldResults(new Date(dateInput.value));
+    dateBox.classList.add("has-date");
+  }else{
+    dateBox.classList.remove("has-date");
   }
-});
+}
+
+dateInput.addEventListener("change", toggleDateText);
+toggleDateText();
