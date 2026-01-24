@@ -102,18 +102,7 @@ header{
 }
 
 
-.card{
-  background:#fff;
-  border-radius:14px;
-  padding:10px;
-  text-align:center;
-  box-shadow:0 10px 25px rgba(0,0,0,.08);
-  width: 100%;
-  max-width: 720px;
-  margin: 12px auto;
-  box-sizing: border-box;
-  overflow: hidden;
-}
+
 .card h3{
   margin:6px 0 0;
   color:#0a2a66
