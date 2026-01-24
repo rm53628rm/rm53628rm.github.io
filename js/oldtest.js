@@ -50,21 +50,20 @@ document.addEventListener("DOMContentLoaded", function () {
       if(draw.prefix === "DN") target = day;
       if(draw.prefix === "EN") target = night;
 
-      // ===== DATE =====
+      const card = document.createElement("div");
+      card.className = "card";   // same as Today page
+
       const dateDiv = document.createElement("div");
       dateDiv.className = "date-show";
       dateDiv.textContent = readableDate;
 
-      // ===== IMAGE =====
       const img = document.createElement("img");
       img.className = "pdf-frame";
       img.alt = `Old Dear ${draw.timeText} Lottery Result ${readableDate}`;
 
-      // ===== STATUS =====
       const status = document.createElement("div");
       status.className = "status";
 
-      // ===== BUTTONS =====
       const retryBtn = document.createElement("button");
       retryBtn.className = "refresh-btn";
       retryBtn.textContent = "Retry";
@@ -83,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
         a.click();
       };
 
-      target.append(
+      card.append(
         dateDiv,
         img,
         status,
@@ -91,9 +90,9 @@ document.addEventListener("DOMContentLoaded", function () {
         downloadBtn
       );
 
-      // Image load with retry
-      loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl);
+      target.appendChild(card);
 
+      loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl);
     });
 
   }
@@ -103,6 +102,65 @@ document.addEventListener("DOMContentLoaded", function () {
     const maxRetry = 4;
 
     img.style.display = "none";
+    retryBtn.style.display = "none";
+    downloadBtn.style.display = "none";
+
+    status.innerHTML = `
+      <div class="loading-wrap">
+        <span class="mini-spinner"></span>
+        <span>Loading Result...</span>
+      </div>
+    `;
+    status.style.display = "block";
+
+    function tryLoad(){
+      if(loaded) return;
+      attempt++;
+      img.src = imgUrl + "?t=" + Date.now();
+
+      setTimeout(()=>{
+        if(loaded) return;
+        if(attempt >= maxRetry){
+          status.textContent = "Click Retry to load result";
+          retryBtn.style.display = "inline-flex";
+          downloadBtn.style.display = "inline-flex";
+        } else {
+          tryLoad();
+        }
+      }, 4000);
+    }
+
+    img.onload = () => {
+      loaded = true;
+      img.style.display = "block";
+      status.style.display = "none";
+      retryBtn.style.display = "none";
+      downloadBtn.style.display = "inline-flex";
+    };
+
+    retryBtn.onclick = () => {
+      attempt = 0;
+      loaded = false;
+      retryBtn.style.display = "none";
+      downloadBtn.style.display = "none";
+      status.style.display = "block";
+
+      status.innerHTML = `
+        <div class="loading-wrap">
+          <span class="mini-spinner"></span>
+          <span>Loading Result...</span>
+        </div>
+      `;
+
+      tryLoad();
+    };
+
+    tryLoad();
+  }
+
+  loadOldResults();
+
+});
     retryBtn.style.display = "none";
     downloadBtn.style.display = "none";
 
