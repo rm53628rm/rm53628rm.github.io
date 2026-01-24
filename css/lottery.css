@@ -530,3 +530,42 @@ footer{
   text-decoration:none;
   font-weight:500;
 }
+/* MAIN SECTION */
+.result-section{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  padding: 10px;
+  background: transparent;
+}
+
+/* RESULT BOX */
+.result-box{
+  background: transparent;
+  padding: 0;
+  text-align: center;
+}
+
+/* HEADINGS */
+.result-box h2{
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+/* IMAGE */
+.result-box img{
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* DESKTOP VIEW (3 COLUMN) */
+@media (min-width: 992px){
+  .result-section{
+    grid-template-columns: repeat(3, 1fr);
+    align-items: flex-start;
+  }
+}
