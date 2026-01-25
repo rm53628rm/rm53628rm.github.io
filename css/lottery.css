@@ -84,16 +84,50 @@ header{
   color:#0a2a66;
   margin:20px 0 10px
 }
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:15px;
+}
+
+/* ================= CARD ================= */
 
 
 
+.card{
+  background:#fff;
+  border-radius:14px;
+  padding:10px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
+  width: 100%;
+  max-width: 720px;
+  margin: 12px auto;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.card h3{
+  margin:6px 0 0;
+  color:#0a2a66
+}
 .date-show{
   margin-top:6px;
   font-size:13px;
   color:#555
 }
 
-
+/* ================= PDF ================= */
+  .pdf-frame{
+  display:block;
+  width:100%;
+  max-width:420px;
+  margin:12px auto;
+  background:transparent !important;
+  box-shadow:none !important;
+  padding:0 !important;
+  border-radius:0 !important;
+  
+}
 
 /* ================= STATUS ================= */
 .status{
@@ -163,7 +197,23 @@ header{
     background:#374bbb;
 }
 
+/* ===== CARD ACTION BUTTONS CENTER ===== */
+.card{
+    text-align:center;
+}
 
+/* ===== STATUS TEXT CENTER ===== */
+.status{
+    text-align:center;
+    margin:12px 0;
+    font-size:14px;
+}
+/* ==== LOADING ANIMATION (GUARANTEED) ==== */
+.loading-wrap{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
 
 .mini-spinner{
   width:14px;
@@ -354,7 +404,30 @@ footer{
 }
 
 #oldResults{
+  width:100%;
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:20px;
+  margin-top:20px;
+  padding-left:12px;   /* 👈 LEFT GAP */
+  padding-right:12px;
+}
 
+
+@media(max-width:768px){
+  #oldResults{
+    grid-template-columns:1fr;
+    padding-left:16px;   /* 👈 LEFT GAP */
+  padding-right:16px;
+  }
+}
+
+
+/* ================= MOBILE ================= */
+@media(max-width:600px){
+  .grid{grid-template-columns:1fr}
+  .pdf-frame{height:440px}
+}
 
 .lottery-content{
   max-width: 1100px;        /* content ko premium width */
@@ -365,6 +438,7 @@ footer{
   color: #2c2c2c;
 }
 
+/* Heading */
 .lottery-content h1{
   font-size: 20px;
   font-weight: 700;
@@ -507,4 +581,4 @@ footer{
   .result-section{
     flex-direction:column;
   }
-}
+    }
