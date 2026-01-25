@@ -531,47 +531,55 @@ footer{
   font-weight:500;
 }
 /* MAIN SECTION */
+
 .result-section{
-  width:100%;
-  padding:15px;
   display:flex;
   gap:16px;
-  flex-wrap:nowrap;   /* ⭐ IMPORTANT */
+  width:100%;
+  padding:15px;
 }
 
-/* each seo text box */
+/* CARD */
 .seo-block{
   flex:1;
-  padding:14px;
-  border:1px solid #e5e7eb;
-  border-radius:6px;
   background:#fff;
-  box-sizing:border-box;
+  border:1px solid #e5e7eb;
+  border-radius:8px;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
 }
 
-/* headings */
+/* TITLE */
 .seo-block h2{
   font-size:18px;
-  margin-bottom:6px;
-  color:#0f172a;
+  margin-bottom:10px;
 }
 
-/* image fix */
-.seo-block img{
+/* 🔥 IMAGE FIX */
+.img-wrap{
   width:100%;
-  max-width:100%;
-  height:auto;
-  display:block;
+  aspect-ratio: 2 / 3;   /* ⭐ MAGIC LINE */
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
-/* paragraph */
+.img-wrap img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+}
+
+/* TEXT */
 .seo-block p{
   font-size:14px;
   line-height:1.6;
-  color:#334155;
+  margin-top:10px;
 }
 
-/* Mobile */
+/* MOBILE */
 @media(max-width:768px){
   .result-section{
     flex-direction:column;
