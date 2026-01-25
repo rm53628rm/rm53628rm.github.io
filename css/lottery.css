@@ -532,27 +532,42 @@ footer{
 }
 /* MAIN SECTION */
 .result-section{
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  padding: 10px;
-  width: 100%;
+  width:100%;
+  padding:15px;
 }
 
-/* RESULT BOX */
-.result-box{
-  text-align: center;
+/* 3 column layout */
+.result-section{
+  display:flex;
+  gap:16px;
 }
 
-/* IMAGE */
-.result-box img{
-  width: 100%;
-  height: auto;
+/* each seo text box */
+.seo-block{
+  flex:1;
+  padding:14px;
+  border:1px solid #e5e7eb;
+  border-radius:6px;
+  background:#fff;
 }
 
-/* DESKTOP VIEW */
-@media screen and (min-width: 992px){
+/* headings */
+.seo-block h2{
+  font-size:18px;
+  margin-bottom:6px;
+  color:#0f172a;
+}
+
+/* paragraph */
+.seo-block p{
+  font-size:14px;
+  line-height:1.6;
+  color:#334155;
+}
+
+/* 📱 Mobile */
+@media(max-width:768px){
   .result-section{
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    flex-direction:column;
   }
 }
