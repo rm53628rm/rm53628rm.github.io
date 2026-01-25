@@ -188,12 +188,23 @@ function loadTodayPDF(){
       document.body.removeChild(a);
     };
 
-    card.append(img, status, retryBtn, downloadBtn);
-    wrap.appendChild(card);
+    // 🔹 IMAGE WRAPPER (FIXED HEIGHT)
+const imageWrap = document.createElement("div");
+imageWrap.className = "image-wrap";
 
-    loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl);
-  });
-}
+// image + status wrapper ke andar
+imageWrap.appendChild(img);
+imageWrap.appendChild(status);
+
+// card ke andar wrapper + buttons
+card.append(imageWrap, retryBtn, downloadBtn);
+
+// card ko page pe add karo
+wrap.appendChild(card);
+
+// image load function
+loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl);
+    
 
 /* ================= AUTO LOAD ================= */
 loadTodayPDF();
