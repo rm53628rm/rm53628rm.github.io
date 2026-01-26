@@ -9,6 +9,7 @@ const draws = [
     prefix: "MN",
     imgPrefix: "MD",
     imgFolder: "1PM",
+    timeText: "1PM",
     target: "morningResults"
   },
   {
@@ -16,6 +17,7 @@ const draws = [
     prefix: "DN",
     imgPrefix: "DD",
     imgFolder: "6PM",
+    timeText: "6PM",
     target: "dayResults"
   },
   {
@@ -23,6 +25,7 @@ const draws = [
     prefix: "EN",
     imgPrefix: "ED",
     imgFolder: "8PM",
+    timeText: "8PM",
     target: "nightResults"
   }
 ];
@@ -37,7 +40,7 @@ function fileCode(d) {
 }
 
 /* ================= IMAGE LOAD WITH RETRY ================= */
-function loadImageWithRetry(img, status, retryBtn, downloadBtn, shareBtn, imgUrl) {
+function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl) {
   let attempt = 0;
   const MAX_RETRY = 4;
   let loaded = false;
@@ -46,7 +49,6 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, shareBtn, imgUrl
   img.style.display = "none";
   retryBtn.style.display = "none";
   downloadBtn.style.display = "none";
-  shareBtn.style.display = "none";
 
   status.innerHTML = `
     <div class="loading-wrap">
@@ -59,17 +61,14 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, shareBtn, imgUrl
   function tryLoad() {
     if (loaded) return;
     attempt++;
-
     img.src = imgUrl + "?t=" + Date.now();
 
     timer = setTimeout(() => {
       if (loaded) return;
-
       if (attempt >= MAX_RETRY) {
-        status.textContent = "Result not available.";
+        status.textContent = "Result not available. Retry or Download PDF.";
         retryBtn.style.display = "inline-flex";
-        downloadBtn.style.display = "none";
-        shareBtn.style.display = "none";
+        downloadBtn.style.display = "inline-flex";
         return;
       }
       tryLoad();
@@ -83,20 +82,15 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, shareBtn, imgUrl
 
     img.style.display = "block";
     status.style.display = "none";
-
     retryBtn.style.display = "none";
     downloadBtn.style.display = "inline-flex";
-    shareBtn.style.display = "inline-flex";
   };
 
   retryBtn.onclick = () => {
     attempt = 0;
     loaded = false;
-
     retryBtn.style.display = "none";
     downloadBtn.style.display = "none";
-    shareBtn.style.display = "none";
-
     status.innerHTML = `
       <div class="loading-wrap">
         <span class="mini-spinner"></span>
@@ -104,14 +98,13 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, shareBtn, imgUrl
       </div>
     `;
     status.style.display = "block";
-
     tryLoad();
   };
 
   tryLoad();
 }
 
-/* ================= LOAD RESULTS ================= */
+/* ================= LOAD RESULTS (CORE) ================= */
 function loadOldResults(selectedDate) {
   const code = fileCode(selectedDate);
   const readableDate = selectedDate.toDateString();
@@ -134,23 +127,13 @@ function loadOldResults(selectedDate) {
     const status = document.createElement("div");
     status.className = "status";
 
-    /* ===== BUTTON ROW ===== */
-    const btnRow = document.createElement("div");
-    btnRow.className = "btn-row";
-
     const retryBtn = document.createElement("button");
-    retryBtn.className = "refresh-btn retry-btn";
+    retryBtn.className = "refresh-btn";
     retryBtn.textContent = "Retry";
 
     const downloadBtn = document.createElement("button");
-    downloadBtn.className = "refresh-btn download-btn";
+    downloadBtn.className = "refresh-btn";
     downloadBtn.textContent = "Download PDF";
-
-    const shareBtn = document.createElement("button");
-    shareBtn.className = "refresh-btn share-btn";
-    shareBtn.textContent = "Share";
-
-    btnRow.append(retryBtn, downloadBtn, shareBtn);
 
     const imgUrl =
       OLD_BASE_IMG_URL +
@@ -170,39 +153,21 @@ function loadOldResults(selectedDate) {
       document.body.removeChild(a);
     };
 
-    shareBtn.onclick = () => {
-      if (navigator.share) {
-        navigator.share({
-          title: document.title,
-          url: pdfUrl
-        });
-      } else {
-        alert("Sharing not supported on this device");
-      }
-    };
-
-    card.append(img, status, btnRow);
+    card.append(img, status, retryBtn, downloadBtn);
     wrap.appendChild(card);
 
-    loadImageWithRetry(
-      img,
-      status,
-      retryBtn,
-      downloadBtn,
-      shareBtn,
-      imgUrl
-    );
+    loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl);
   });
 }
 
-/* ================= YESTERDAY ================= */
+/* ================= YESTERDAY AUTO LOAD ================= */
 function getYesterday() {
   const d = new Date();
   d.setDate(d.getDate() - 1);
   return d;
 }
 
-/* ================= DATE INPUT ================= */
+/* ================= DATE INPUT HANDLING ================= */
 const dateInput = document.getElementById("resultDate");
 
 dateInput.addEventListener("change", function () {
@@ -211,7 +176,7 @@ dateInput.addEventListener("change", function () {
   }
 });
 
-/* ================= PAGE LOAD ================= */
+/* ================= ON PAGE LOAD ================= */
 window.addEventListener("load", () => {
   const yesterday = getYesterday();
   dateInput.valueAsDate = yesterday;
