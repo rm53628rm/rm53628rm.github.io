@@ -150,11 +150,12 @@ header{
   
 }
 .status{
-  text-align:center;
-  font-size:14px;
-  color:#777;
-  margin:10px 0;
+  width:100%;
+  display:flex;
+  justify-content:center;   /* center horizontally */
+  margin:12px 0;
 }
+
 
 /* ===== BUTTONS ===== */
 .refresh-btn{
@@ -236,12 +237,11 @@ header{
   .result-section{flex-direction:column;}
 }
 .loading-wrap{
-  display: flex;
-  align-items: center;      /* vertical center */
-  justify-content: center;  /* horizontal center */
-  gap: 8px;                 /* spinner aur text ke beech gap */
-  text-align: center;
+  display:flex;
+  align-items:center;
+  gap:8px;
 }
+
 .mini-spinner{
   width:14px;
   height:14px;
