@@ -65,7 +65,7 @@ function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
     timer = setTimeout(()=>{
       if(loaded) return;
       if(attempt >= maxRetry){
-        status.textContent = "Click Retry to load result";
+        status.textContent = "Result Not Published. Click Retry After Sometime to load result";
         retryBtn.style.display = "inline-flex";
         downloadBtn.style.display = "inline-flex";
         return;
@@ -132,9 +132,9 @@ function loadTodayPDF(){
       lockCard.className = "card";
 
       let msg = "Result not published yet";
-      if(draw.prefix==="MN") msg="Morning result will be published after 1:00 PM";
-      if(draw.prefix==="DN") msg="Day result will be published after 6:00 PM";
-      if(draw.prefix==="EN") msg="Night result will be published after 8:00 PM";
+      if(draw.prefix==="MN") msg="Dear Morning result will be published after 1:00 PM";
+      if(draw.prefix==="DN") msg="Dear Day result will be published after 6:00 PM";
+      if(draw.prefix==="EN") msg="Dear Night result will be published after 8:00 PM";
 
       lockCard.innerHTML = `
         <h3>${draw.title}</h3>
