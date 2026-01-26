@@ -236,25 +236,22 @@ header{
   .result-section{flex-direction:column;}
 }
 .loading-wrap{
-  display:flex;
-  align-items:center;
-  gap:8px;
+  display: flex;
+  align-items: center;      /* vertical center */
+  justify-content: center;  /* horizontal center */
+  gap: 8px;                 /* spinner aur text ke beech gap */
+  text-align: center;
 }
-
 .mini-spinner{
   width:14px;
   height:14px;
-
-  display:inline-block;          /* 🔴 MUST */
-
   border:2px solid #ddd;
   border-top:2px solid #1e3a8a;
-
   border-radius:50%;
-  animation: miniSpin 0.7s linear infinite;
+  animation:miniSpin 0.7s linear infinite;
 }
 
 @keyframes miniSpin{
-  from{ transform:rotate(0deg); }
-  to{ transform:rotate(360deg); }
+  0%{ transform:rotate(0deg); }
+  100%{ transform:rotate(360deg); }
 }
