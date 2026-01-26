@@ -149,12 +149,7 @@ header{
   margin-bottom:6px; /* 👈 gap kam */
   
 }
-.status{
-  width:100%;
-  display:flex;
-  justify-content:center;   /* center horizontally */
-  margin:12px 0;
-}
+
 
 
 /* ===== BUTTONS ===== */
@@ -236,10 +231,21 @@ header{
 @media(max-width:768px){
   .result-section{flex-direction:column;}
 }
+.status{
+  position:relative;
+  min-height:40px;
+}
+
 .loading-wrap{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
   display:flex;
   align-items:center;
   gap:8px;
+  font-size:14px;
+  color:#666;
 }
 
 .mini-spinner{
@@ -252,6 +258,6 @@ header{
 }
 
 @keyframes miniSpin{
-  0%{ transform:rotate(0deg); }
-  100%{ transform:rotate(360deg); }
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
 }
