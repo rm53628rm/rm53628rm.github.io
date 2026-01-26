@@ -153,14 +153,7 @@ header{
 
 
 /* ===== BUTTONS ===== */
-.refresh-btn{
-  padding:10px 16px;
-  border-radius:8px;
-  border:none;
-  font-weight:600;
-  cursor:pointer;
-  margin:6px;
-}
+
 
 /* Retry – Blue */
 .card .refresh-btn{
@@ -260,4 +253,55 @@ header{
 @keyframes miniSpin{
   from{transform:rotate(0deg);}
   to{transform:rotate(360deg);}
+}
+
+/* ===== BUTTON ROW ===== */
+.btn-row{
+  display:flex;
+  gap:10px;
+  justify-content:center;   /* auto center when 1 or 2 buttons */
+  align-items:center;
+  margin-top:8px;
+  flex-wrap:wrap;
+}
+
+/* common button */
+.refresh-btn{
+  padding:8px 14px;
+  font-size:14px;
+  font-weight:600;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  transition:.2s ease;
+}
+
+/* retry – navy blue */
+.retry-btn{
+  background:#1e3a8a;
+  color:#fff;
+}
+.retry-btn:hover{
+  background:#1e40af;
+}
+
+/* download – green */
+.download-btn{
+  background:#16a34a;
+  color:#fff;
+}
+.download-btn:hover{
+  background:#15803d;
+}
+
+/* share – blue */
+.share-btn{
+  background:#2563eb;
+  color:#fff;
+}
+.share-btn:hover{
+  background:#1d4ed8;
 }
