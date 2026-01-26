@@ -123,15 +123,19 @@ header{
 /* ===== CARD (JS GENERATED) ===== */
 .card{
   width:100%;
+  height:100%;              /* 🔥 parent ki poori height le */
   background:#fff;
   border-radius:12px;
-  padding:4px;
+  padding:6px;
   text-align:center;
   margin-top:auto;
+
+  display:flex;             /* 🔥 MOST IMPORTANT */
+  flex-direction:column;
 }
+
 .pdf-frame{
   width:100%;
-  height:400px;
   object-fit:cover;
   display:block;
 }
