@@ -1,15 +1,13 @@
-*{
-  box-sizing:border-box;
-  font-family:Segoe UI, Arial, sans-serif;
-}
-
+/* ===== BASE ===== */
+*{ box-sizing:border-box; }
 body{
   margin:0;
   background:#f4f6fb;
+  font-family:Segoe UI, Arial, sans-serif;
   color:#222;
 }
 
-/* ================= HEADER ================= */
+/* ===== HEADER ===== */
 header{
   background:linear-gradient(135deg,#0a2a66,#123d9c);
   color:#fff;
@@ -22,7 +20,7 @@ header{
 .header-text h1{margin:0;font-size:22px}
 .header-text p{margin:4px 0 0;font-size:13px;opacity:.9}
 
-/* ================= MENU ================= */
+/* ===== MENU ===== */
 .overlay{
   position:fixed;
   inset:0;
@@ -47,538 +45,164 @@ header{
   color:#fff;
   text-decoration:none;
   padding:12px 0;
-  border-bottom:1px solid rgba(255,255,255,.25)
+  border-bottom:1px solid rgba(255,255,255,.25);
 }
 .menu-header{
   display:flex;
-  align-items:center;
   justify-content:space-between;
   padding:12px;
   margin-bottom:10px;
   border-radius:14px;
-  color:#ffffff;
-  background:rgba(255,255,255,.15)
+  background:rgba(255,255,255,.15);
 }
 .menu-logo{
-  width:42px;
-  height:42px;
+  width:42px;height:42px;
   border-radius:50%;
   background:#fff;
   color:#0a2a66;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-weight:700
-}
-.menu-close{font-size:32px;color:#fff;cursor:pointer}
-
-/* ================= CONTENT ================= */
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:15px;
-}
-.section-title{
-  font-size:18px;
   font-weight:700;
-  color:#0a2a66;
-  margin:20px 0 10px
 }
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:15px;
-}
+.menu-close{font-size:32px;cursor:pointer;color:#fff}
 
-/* ================= CARD ================= */
-
-
-
-.card{
-  background:#fff;
-  border-radius:14px;
-  padding:10px;
-  text-align:center;
-  box-shadow:0 10px 25px rgba(0,0,0,.08);
-  width: 100%;
-  max-width: 720px;
-  margin: 12px auto;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-.card h3{
-  margin:6px 0 0;
-  color:#0a2a66
-}
-.date-show{
-  margin-top:6px;
-  font-size:13px;
-  color:#555
-}
-
-/* ================= PDF ================= */
-  .pdf-frame{
-  display:block;
-  width:100%;
-  max-width:420px;
-  margin:12px auto;
-  background:transparent !important;
-  box-shadow:none !important;
-  padding:0 !important;
-  border-radius:0 !important;
-  
-}
-
-/* ================= STATUS ================= */
-.status{
-  text-align:center;
-  padding:16px;
-  font-size:15px;
-  color:#777;
-  font-weight:600;
-  display:none;
-}
-
-/* ================= BUTTON ================= */
-.refresh-btn{
-  margin-top:14px;
-  padding:10px 26px;
-  border:none;
-  border-radius:25px;
-  background:#0a2a66;
-  color:#fff;
-  font-weight:600;
-  cursor:pointer;
-  display:none;
-}
-
-/* ================= CALENDAR ================= */
-.calendar-box{
-  background:#fff;
-  padding:18px;
-  border-radius:16px;
-  box-shadow:0 8px 20px rgba(0,0,0,.08)
-}
-.calendar-box input{
-  width:100%;
-  padding:14px;
-  font-size:16px;
-  border-radius:12px;
-  border:1px solid #ccc
-}
-
-
-.date-picker input[type="date"]{
-    padding:5px 10px;
-    font-size:15px;
-    border-radius:8px;
-    border:1px solid #cbd5e1;
-    outline:none;
-    background:#f8fafc;
-}
-
-.date-picker input[type="date"]:focus{
-    border-color:#1e3a8a;
-}
-
-/* ===== LOAD RESULT BUTTON ===== */
-.date-picker button{
-    padding:6px 14px;
-    font-size:15px;
-    border:none;
-    border-radius:8px;
-    background:#1e3a8a;
-    color:#fff;
-    cursor:pointer;
-    font-weight:600;
-}
-
-.date-picker button:hover{
-    background:#374bbb;
-}
-
-/* ===== CARD ACTION BUTTONS CENTER ===== */
-.card{
-    text-align:center;
-}
-
-/* ===== STATUS TEXT CENTER ===== */
-.status{
-    text-align:center;
-    margin:12px 0;
-    font-size:14px;
-}
-/* ==== LOADING ANIMATION (GUARANTEED) ==== */
-.loading-wrap{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-}
-
-.mini-spinner{
-  width:14px;
-  height:14px;
-  border:2px solid #ddd;
-  border-top:2px solid #1e3a8a;
-  border-radius:50%;
-  animation:miniSpin 0.7s linear infinite;
-}
-
-@keyframes miniSpin{
-  0%{ transform:rotate(0deg); }
-  100%{ transform:rotate(360deg); }
-}
-
-
-/* ===== RETRY + DOWNLOAD CENTER ===== */
-.card .refresh-btn{
-    display:inline-flex;
-    justify-content:center;
-    align-items:center;
-    margin:8px 6px;
-    padding:10px 18px;
-    font-size:14px;
-    font-weight:600;
-    border-radius:8px;
-}
-
-/* ===== DOWNLOAD PDF SPECIAL STYLE ===== */
-.card a.refresh-btn{
-    background:#16a34a;
-}
-
-.card a.refresh-btn:hover{
-    background:#15803d;
-}
-
-/* ===== VIEW OLD RESULT BUTTON ===== */
-.view-old-btn{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-
-    padding:12px 22px;
-    font-size:15px;
-    font-weight:700;
-
-    color:#ffffff;
-    background:linear-gradient(135deg,#1e3a8a,#2563eb);
-    border:none;
-    border-radius:10px;
-
-    text-decoration:none;
-    cursor:pointer;
-    box-shadow:0 6px 14px rgba(37,99,235,0.35);
-    transition:all .25s ease;
-}
-
-/* Hover effect */
-.view-old-btn:hover{
-    background:linear-gradient(135deg,#1e40af,#1d4ed8);
-    transform:translateY(-1px);
-    box-shadow:0 10px 20px rgba(29,78,216,0.45);
-}
-
-/* Active click */
-.view-old-btn:active{
-    transform:scale(.97);
-}
-
-/* Center wrapper (optional) */
-.view-old-wrap{
-    display:flex;
-    justify-content:center;
-    margin:18px 0;
-}
-
-/* ================= FOOTER ================= */
-footer{
-  text-align:center;
-  font-size:12px;
-  color:#777;
-  padding:20px
-}
-
-/* ===== DATE PICKER WRAP ===== */
-.date-picker{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:14px;
-    margin-bottom:28px;
-    flex-wrap:wrap;
-}
-
-/* ===== CUSTOM DATE FIELD ===== */
-.date-box{
-    position:relative;
-}
-
-.date-box input[type="date"]{
-    width:220px;
-    padding:14px 14px;
-    font-size:15px;
-    font-weight:600;
-
-    border-radius:12px;
-    border:1px solid #dbe2f1;
-    background:#ffffff;
-    color:#111827;
-
-    box-shadow:0 6px 16px rgba(0,0,0,.08);
-    outline:none;
-}
-
-/* remove default placeholder look */
-.date-box input[type="date"]::-webkit-calendar-picker-indicator{
-    cursor:pointer;
-    opacity:.6;
-}
-
-/* focus effect */
-.date-box input[type="date"]:focus{
-    border-color:#2563eb;
-    box-shadow:0 8px 20px rgba(37,99,235,.25);
-}
-
-/* ===== FAKE PLACEHOLDER TEXT ===== */
-.date-placeholder{
-    position:absolute;
-    left:14px;
-    top:50%;
-    transform:translateY(-50%);
-    font-size:14px;
-    font-weight:600;
-    color:#9ca3af;
-    pointer-events:none;
-    transition:.2s ease;
-}
-
-/* hide text when date selected */
-.date-box.has-date .date-placeholder{
-    opacity:0;
-}
-
-/* ===== LOAD RESULT BUTTON (PREMIUM) ===== */
-.date-picker button{
-    padding:14px 26px;
-    font-size:15px;
-    font-weight:700;
-
-    border:none;
-    border-radius:12px;
-    cursor:pointer;
-
-    color:#ffffff;
-    background:linear-gradient(135deg,#1e3a8a,#2563eb);
-    box-shadow:0 8px 18px rgba(37,99,235,.35);
-    transition:.25s ease;
-}
-
-.date-picker button:hover{
-    background:linear-gradient(135deg,#1e40af,#1d4ed8);
-    transform:translateY(-2px);
-    box-shadow:0 12px 26px rgba(29,78,216,.45);
-}
-
-.date-picker button:active{
-    transform:scale(.97);
-}
-
-.date-box{
-    display:block;
-}
-
-.load-btn{
-    display:block;
-    margin-top:14px;
-}
-
+/* ===== DATE PICKER ===== */
 .date-title{
-    text-align:center;
-    font-size:16px;
-    font-weight:700;
-    color:#1e3a8a;
-    margin-bottom:10px;
+  text-align:center;
+  font-size:16px;
+  font-weight:700;
+  color:#1e3a8a;
+  margin:16px 0;
 }
-
-#oldResults{
-  width:100%;
-  display:grid !important;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:20px;
-  margin-top:20px;
-  padding-left:12px;   /* 👈 LEFT GAP */
-  padding-right:12px;
+.date-picker{
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  flex-wrap:wrap;
 }
-
-
-@media(max-width:768px){
-  #oldResults{
-    grid-template-columns:1fr;
-    padding-left:16px;   /* 👈 LEFT GAP */
-  padding-right:16px;
-  }
-}
-
-
-/* ================= MOBILE ================= */
-@media(max-width:600px){
-  .grid{grid-template-columns:1fr}
-  .pdf-frame{height:440px}
-}
-
-.lottery-content{
-  max-width: 1100px;        /* content ko premium width */
-  margin: 0 auto;          /* center align */
-  padding: 18px 20px;      /* 🔥 left-right gap */
-  line-height: 1.75;
-  font-size: 15.5px;
-  color: #2c2c2c;
-}
-
-/* Heading */
-.lottery-content h1{
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 14px;
-  color: #111;
-}
-
-/* Paragraph */
-.lottery-content p{
-  margin-bottom: 14px;
-  text-align: justify;     /* premium reading */
-}
-
-/* Links inside text */
-.lottery-content a{
-  color: #0b57d0;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.lottery-content a:hover{
-  text-decoration: underline;
-}
-@media(max-width:768px){
-  .lottery-content{
-    padding: 16px 14px;   /* mobile gap */
-    font-size: 15px;
-  }
-
-  .lottery-content h1{
-    font-size: 18px;
-  }
-}
-
-
-
-/* ===== GREEN BUTTON ===== */
-.refresh-btn{
-  background:#16a34a;
-  color:#fff;
-  border:none;
-  padding:10px 16px;
-  border-radius:8px;
+.date-box input{
+  width:220px;
+  padding:14px;
+  font-size:15px;
   font-weight:600;
-  cursor:pointer;
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
+  border-radius:12px;
+  border:1px solid #dbe2f1;
 }
 
-.refresh-btn:disabled{
-  opacity:.8;
-  cursor:not-allowed;
-}
-
-/* ===== DOWNLOADING SPINNER ===== */
-.btn-spinner{
-  width:16px;
-  height:16px;
-  border:2px solid rgba(255,255,255,.4);
-  border-top:2px solid #fff;
-  border-radius:50%;
-  animation:spin .8s linear infinite;
-}
-
-@keyframes spin{
-  to{ transform:rotate(360deg); }
-}
-
-
-
-.seo-text{
-  font-size:14px;
-  line-height:1.6;
-  color:#334155;
-  margin:8px 0 12px;
-}
-.seo-text strong{
-  color:#0f172a;
-}
-
-.breadcrumb{
-  font-size:13px;
-  color:#475569;
-  margin:6px 0 10px;
-}
-.breadcrumb a{
-  color:#1e40af;
-  text-decoration:none;
-  font-weight:500;
-}
-/* MAIN SECTION */
+/* ===== RESULT SECTION ===== */
 .result-section{
-  width:100%;
+  display:flex;
+  gap:16px;
   padding:15px;
 }
-
-/* 3 column layout */
-.result-section{
-  display:flex;
-  gap:16px;
-  align-items:stretch;
-}
-.result-section{
-  display:flex;
-  gap:16px;
-  align-items:stretch;
-}
-
-/* each seo text box */
-.seo-block{
+.result-box{
   flex:1;
-  padding:14px;
-  border:1px solid #e5e7eb;
-  border-radius:6px;
-  background:#fff;
   display:flex;
   flex-direction:column;
-  min-height:260px; /* adjust as needed */
-
+  border:1px solid #e5e7eb;
+  border-radius:8px;
+  padding:14px;
+  background:#fff;
 }
-
-
-/* headings */
-.seo-block h2{
+.result-box h2{
   font-size:18px;
   margin-bottom:6px;
   color:#0f172a;
 }
-
-/* paragraph */
-.seo-block p{
+.seo-text{
   font-size:14px;
   line-height:1.6;
   color:#334155;
 }
+.result-box > div[id$="Results"]{
+  flex-grow:1;
+  display:flex;
+}
 
-/* 📱 Mobile */
+/* ===== CARD (JS GENERATED) ===== */
+.card{
+  width:100%;
+  background:#fff;
+  border-radius:12px;
+  padding:10px;
+  text-align:center;
+  margin-top:auto;
+}
+.pdf-frame{
+  width:100%;
+  height:220px;
+  object-fit:contain;
+  display:block;
+}
+.status{
+  text-align:center;
+  font-size:14px;
+  color:#777;
+  margin:10px 0;
+}
+
+/* ===== BUTTONS ===== */
+.refresh-btn{
+  padding:10px 16px;
+  border-radius:8px;
+  border:none;
+  font-weight:600;
+  cursor:pointer;
+  margin:6px;
+}
+
+/* Retry – Blue */
+.card .refresh-btn{
+  background:#1e3a8a;
+  color:#fff;
+}
+
+/* Download – Green */
+.card .download-btn{
+  background:#16a34a;
+  color:#fff;
+}
+.card .download-btn:hover{
+  background:#15803d;
+}
+
+/* ===== VIEW OLD RESULT BUTTON ===== */
+.view-old-wrap{
+  display:flex;
+  justify-content:center;
+  margin:18px 0;
+}
+.view-old-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:12px 22px;
+  font-size:15px;
+  font-weight:700;
+  color:#fff;
+  background:linear-gradient(135deg,#1e3a8a,#2563eb);
+  border-radius:10px;
+  text-decoration:none;
+  box-shadow:0 6px 14px rgba(37,99,235,.35);
+  transition:.25s;
+}
+.view-old-btn:hover{
+  background:linear-gradient(135deg,#1e40af,#1d4ed8);
+  transform:translateY(-1px);
+}
+
+/* ===== SEO CONTENT ===== */
+.lottery-content{
+  max-width:1100px;
+  margin:auto;
+  padding:18px;
+  line-height:1.75;
+  font-size:15px;
+}
+
+/* ===== MOBILE ===== */
 @media(max-width:768px){
-  .result-section{
-    flex-direction:column;
-  }
-    }
+  .result-section{flex-direction:column;}
+}
