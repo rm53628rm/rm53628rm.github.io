@@ -261,3 +261,23 @@ header{
   from{transform:rotate(0deg);}
   to{transform:rotate(360deg);}
 }
+.result-nav{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding:10px;
+  background:#f8fafc;
+  border-radius:10px;
+  margin:12px 0;
+}
+.result-nav a{
+  padding:8px 14px;
+  background:#1e3a8a;
+  color:#fff;
+  border-radius:20px;
+  font-size:14px;
+  white-space:nowrap;
+}
+.result-nav a.active{
+  background:#0f172a;
+}
