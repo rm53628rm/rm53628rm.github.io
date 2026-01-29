@@ -1,17 +1,17 @@
-const BASE_URL = "https://nagalandstatelotterysambad.com/wp-content/uploads/2026/01/";
 
+/* ================= BASE URLS ================= */
+const BASE_PDF_URL = "https://ldemo.dhankesari.com/download.php?filename=";
+const BASE_IMG_URL = "https://dhankesari.net/old/img/";
+
+/* ================= DRAWS ================= */
 const draws = [
-  { title:"🌅 Dear Morning 1PM", prefix:"MN" },
-  { title:"☀️ Dear Day 6PM",     prefix:"DN" },
-  { title:"🌙 Dear Night 8PM",   prefix:"EN" }
+  { title:"🌅 Dear Morning 1PM", prefix:"MN", imgPrefix:"MD", imgFolder:"1PM", timeText:"1PM" },
+  { title:"☀️ Dear Day 6PM",     prefix:"DN", imgPrefix:"DD", imgFolder:"6PM", timeText:"6PM" },
+  { title:"🌙 Dear Night 8PM",   prefix:"EN", imgPrefix:"ED", imgFolder:"8PM", timeText:"8PM" }
 ];
 
 /* ================= TIME LOCK (IST) ================= */
-const TIME_LOCK = {
-  MN: 13, // 1 PM
-  DN: 18, // 6 PM
-  EN: 20  // 8 PM
-};
+const TIME_LOCK = { MN:13, DN:18, EN:20 };
 
 function isTimeAllowed(prefix){
   const hour = Number(
@@ -24,7 +24,7 @@ function isTimeAllowed(prefix){
   return hour >= TIME_LOCK[prefix];
 }
 
-/* ================= INDIA DATE ================= */
+/* ================= TODAY DATE (IST) ================= */
 function getTodayIST(){
   return new Date(
     new Date().toLocaleDateString("en-CA",{ timeZone:"Asia/Kolkata" })
@@ -38,58 +38,49 @@ function fileCode(d){
          String(d.getFullYear()).slice(-2);
 }
 
-/* ================= PDF AUTO RETRY ================= */
-function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
-
+/* ================= IMAGE LOAD WITH RETRY ================= */
+function loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl){
   let attempt = 0;
   const maxRetry = 4;
   let loaded = false;
   let timer = null;
 
-  iframe.style.display = "none";
+  img.style.display = "none";
   retryBtn.style.display = "none";
   downloadBtn.style.display = "none";
 
   status.innerHTML = `
-  <div class="loading-wrap">
-    <span class="mini-spinner"></span>
-    <span>Loading Result...</span>
-  </div>
-`;
-  
+    <div class="loading-wrap">
+      <span class="mini-spinner"></span>
+      <span>Loading Result...</span>
+    </div>
+  `;
   status.style.display = "block";
 
-  const loadOnce = () => {
-    iframe.src =
-      "https://docs.google.com/gview?embedded=true&url=" +
-      encodeURIComponent(pdfUrl) +
-      "&t=" + Date.now();
-  };
-
-  const tryLoad = () => {
+  function tryLoad(){
     if(loaded) return;
     attempt++;
-    loadOnce();
+    img.src = imgUrl + "?t=" + Date.now();
 
     timer = setTimeout(()=>{
       if(loaded) return;
-
       if(attempt >= maxRetry){
-        status.textContent = "Click Retry to load result";
+        status.textContent =
+          "Result Not Published. Click Retry After Sometime to load result";
         retryBtn.style.display = "inline-flex";
         downloadBtn.style.display = "inline-flex";
         return;
       }
       tryLoad();
-    },5000);
-  };
+    }, 4000);
+  }
 
-  iframe.onload = ()=>{
+  img.onload = ()=>{
     if(loaded) return;
     loaded = true;
     clearTimeout(timer);
 
-    iframe.style.display = "block";
+    img.style.display = "block";
     status.style.display = "none";
     retryBtn.style.display = "none";
     downloadBtn.style.display = "inline-flex";
@@ -98,64 +89,76 @@ function loadPDFWithRetry(iframe, status, retryBtn, downloadBtn, pdfUrl){
   retryBtn.onclick = ()=>{
     attempt = 0;
     loaded = false;
-
     retryBtn.style.display = "none";
     downloadBtn.style.display = "none";
     status.innerHTML = `
-  <div class="loading-wrap">
-    <span class="mini-spinner"></span>
-    <span>Loading Result...</span>
-  </div>
-`;
-    
+      <div class="loading-wrap">
+        <span class="mini-spinner"></span>
+        <span>Loading Result...</span>
+      </div>
+    `;
     status.style.display = "block";
-
     tryLoad();
   };
 
   tryLoad();
 }
 
-/* ================= MAIN ================= */
+/* ================= MAIN FUNCTION ================= */
 function loadTodayPDF(){
 
-  const wrap = document.getElementById("todayResults");
-  wrap.innerHTML = "";
+  const morningWrap = document.getElementById("morningSection");
+  const dayWrap     = document.getElementById("daySection");
+  const nightWrap   = document.getElementById("nightSection");
+
+  if(morningWrap) morningWrap.innerHTML = "";
+  if(dayWrap) dayWrap.innerHTML = "";
+  if(nightWrap) nightWrap.innerHTML = "";
 
   const today = getTodayIST();
+  const code = fileCode(today);
+  const readableDate = today.toDateString();
 
   draws.forEach(draw => {
 
-    /* 🔒 TIME LOCK */
+    /* ===== SECTION ROUTING (SAFE) ===== */
+    let wrap = null;
+    if(draw.prefix === "MN") wrap = morningWrap;
+    if(draw.prefix === "DN") wrap = dayWrap;
+    if(draw.prefix === "EN") wrap = nightWrap;
+
+    if(!wrap) return; // 🔥 SINGLE PAGE FIX
+
+    /* ===== TIME LOCK ===== */
     if(!isTimeAllowed(draw.prefix)){
       const lockCard = document.createElement("div");
       lockCard.className = "card";
 
       let msg = "Result not published yet";
-      if(draw.prefix === "MN") msg = "Morning result will be published after 1:00 PM";
-      if(draw.prefix === "DN") msg = "Day result will be published after 6:00 PM";
-      if(draw.prefix === "EN") msg = "Night result will be published after 8:00 PM";
+      if(draw.prefix==="MN") msg="Dear Morning result will be published after 1:00 PM";
+      if(draw.prefix==="DN") msg="Dear Day result will be published after 6:00 PM";
+      if(draw.prefix==="EN") msg="Dear Night result will be published after 8:00 PM";
 
       lockCard.innerHTML = `
         <h3>${draw.title}</h3>
         <div class="status" style="display:block">${msg}</div>
       `;
-
       wrap.appendChild(lockCard);
-      return; // ⛔ STOP HERE
+      return;
     }
 
-    /* ✅ NORMAL LOAD */
+    /* ===== CARD ===== */
     const card = document.createElement("div");
     card.className = "card";
-
     card.innerHTML = `
       <h3>${draw.title}</h3>
-      <div class="date-show">${today.toDateString()}</div>
+      <div class="date-show">${readableDate}</div>
     `;
 
-    const iframe = document.createElement("iframe");
-    iframe.className = "pdf-frame";
+    /* ===== IMAGE ===== */
+    const img = document.createElement("img");
+    img.className = "pdf-frame";
+    img.alt = `Today Dear ${draw.timeText} Lottery Result ${readableDate}`;
 
     const status = document.createElement("div");
     status.className = "status";
@@ -164,25 +167,35 @@ function loadTodayPDF(){
     retryBtn.className = "refresh-btn";
     retryBtn.textContent = "Retry";
 
-    const downloadBtn = document.createElement("a");
+    const downloadBtn = document.createElement("button");
     downloadBtn.className = "refresh-btn";
     downloadBtn.textContent = "Download PDF";
-    downloadBtn.target = "_blank";
+
+    const imgUrl =
+      BASE_IMG_URL +
+      draw.imgFolder + "/" +
+      draw.imgPrefix + code + ".webp";
 
     const pdfUrl =
-      BASE_URL + draw.prefix + fileCode(today) + ".pdf";
+      BASE_PDF_URL +
+      draw.prefix + code + ".PDF";
 
-    downloadBtn.href = pdfUrl;
+    downloadBtn.onclick = ()=>{
+      const a = document.createElement("a");
+      a.href = pdfUrl;
+      a.download = draw.prefix + code + ".PDF";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
 
-    card.append(iframe, status, retryBtn, downloadBtn);
+    card.append(img, status, retryBtn, downloadBtn);
     wrap.appendChild(card);
 
-    loadPDFWithRetry(
-      iframe, status, retryBtn, downloadBtn, pdfUrl
-    );
+    loadImageWithRetry(img, status, retryBtn, downloadBtn, imgUrl);
   });
 }
 
 /* ================= AUTO LOAD ================= */
-loadTodayPDF();
+document.addEventListener("DOMContentLoaded", loadTodayPDF);
 
