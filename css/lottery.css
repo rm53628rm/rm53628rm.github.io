@@ -261,45 +261,48 @@ header{
   from{transform:rotate(0deg);}
   to{transform:rotate(360deg);}
 }
-/* ================= RESULT NAV BAR ================= */
-/* ===== RESULT NAV (SLIM STYLE) ===== */
-.result-nav{
+.breadcrumb-nav{
   display:flex;
   flex-wrap:wrap;
   justify-content:center;
   gap:8px;
-  margin:14px auto 18px;
+  margin:12px auto 16px;
   padding:6px;
   max-width:1000px;
 }
 
-.result-nav a{
+.breadcrumb-nav a,
+.breadcrumb-nav span{
   text-decoration:none;
-  padding:7px 14px;          /* 🔽 height kam */
+  padding:7px 14px;
   font-size:13.5px;
   font-weight:600;
   color:#1e293b;
   background:#ffffff;
   border:1px solid #dbe2f1;
-  border-radius:6px;         /* 🔽 pill nahi */
+  border-radius:6px;
   transition:all .2s ease;
 }
 
-.result-nav a:hover{
+/* Hover only links */
+.breadcrumb-nav a:hover{
   background:#f1f5ff;
   color:#1e40af;
   border-color:#c7d2fe;
 }
 
-.result-nav a.active{
+/* Current page */
+.breadcrumb-nav .active{
   background:#1e3a8a;
   color:#ffffff;
   border-color:#1e3a8a;
+  cursor:default;
 }
 
-/* Mobile fine-tune */
+/* Mobile */
 @media(max-width:480px){
-  .result-nav a{
+  .breadcrumb-nav a,
+  .breadcrumb-nav span{
     padding:6px 12px;
     font-size:13px;
   }
