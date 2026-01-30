@@ -55,6 +55,12 @@ header{
   border-radius:14px;
   background:rgba(255,255,255,.15);
 }
+.menu-header div:nth-child(2){
+  color:#1e40af;
+  font-size:18px;
+  letter-spacing:.4px;
+}
+
 .menu-logo{
   width:42px;height:42px;
   border-radius:50%;
@@ -65,7 +71,7 @@ header{
   justify-content:center;
   font-weight:700;
 }
-.menu-close{font-size:32px;cursor:pointer;color:#fff}
+.menu-close{font-size:40px;cursor:pointer;color:#fff}
 
 /* ===== DATE PICKER ===== */
 .date-title{
