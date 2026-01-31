@@ -240,6 +240,7 @@ header{
 .status{
   position:relative;
   min-height:40px;
+  color:#ea580c;
 }
 
 .loading-wrap{
