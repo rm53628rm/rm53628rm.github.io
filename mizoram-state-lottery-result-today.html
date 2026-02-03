@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Today Lottery Result PDF</title>
+<title>Today Lottery Result – Download PDF</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
@@ -17,18 +17,21 @@
 </div>
 
 <script>
-const BASE_URL =
+/* ================= PDF BASE ================= */
+const BASE_PDF_URL =
   "https://mizoramlottery.com/Home/PrintToday?dateTime=";
 
+/* ================= DRAWS ================= */
 const draws = [
-  { title:"🕚 11 AM Draw Result", time:10, lock:11 },
-  { title:"🕛 12 PM Draw Result", time:11, lock:12 },
-  { title:"🕓 4 PM Draw Result",  time:3,  lock:16 },
-  { title:"🕖 7 PM Draw Result",  time:7,  lock:19 },
-  { title:"🕘 9 PM Draw Result",  time:9,  lock:21 }
+  { title:"🕚 11 AM Draw Result", pdfTime:10, lock:11 },
+  { title:"🕛 12 PM Draw Result", pdfTime:11, lock:12 },
+  { title:"🕓 4 PM Draw Result",  pdfTime:3,  lock:16 },
+  { title:"🕖 7 PM Draw Result",  pdfTime:7,  lock:19 },
+  { title:"🕘 9 PM Draw Result",  pdfTime:9,  lock:21 }
 ];
 
-function istHour(){
+/* ================= IST HOUR ================= */
+function getISTHour(){
   return Number(
     new Date().toLocaleString("en-IN",{
       timeZone:"Asia/Kolkata",
@@ -38,53 +41,64 @@ function istHour(){
   );
 }
 
-function todayIST(){
+/* ================= TODAY DATE ================= */
+function getTodayIST(){
   return new Date(
     new Date().toLocaleDateString("en-CA",{ timeZone:"Asia/Kolkata" })
   );
 }
 
-function loadResults(){
+/* ================= MAIN ================= */
+function loadTodayDownloads(){
 
   const wrap = document.getElementById("resultSection");
   wrap.innerHTML = "";
 
-  const hour = istHour();
-  const date = todayIST().toDateString();
+  const hour = getISTHour();
+  const dateText = getTodayIST().toDateString();
 
-  draws.forEach(d => {
+  draws.forEach(draw => {
 
     const card = document.createElement("div");
     card.className = "card";
 
     card.innerHTML = `
-      <h3>${d.title}</h3>
-      <div class="date-show">${date}</div>
+      <h3>${draw.title}</h3>
+      <div class="date-show">${dateText}</div>
     `;
 
-    if(hour < d.lock){
-      const s = document.createElement("div");
-      s.className = "status";
-      s.textContent =
-        "Result will be published after " + d.lock + ":00 IST";
-      card.appendChild(s);
-    } else {
-      const btn = document.createElement("button");
-      btn.className = "refresh-btn";
-      btn.textContent = "View Result PDF";
-
-      btn.onclick = ()=>{
-        window.open(BASE_URL + d.time, "_blank");
-      };
-
-      card.appendChild(btn);
+    /* ===== TIME LOCK ===== */
+    if(hour < draw.lock){
+      const status = document.createElement("div");
+      status.className = "status";
+      status.textContent =
+        "Result will be published after " + draw.lock + ":00 IST";
+      card.appendChild(status);
+      wrap.appendChild(card);
+      return;
     }
 
+    /* ===== DOWNLOAD BUTTON ===== */
+    const downloadBtn = document.createElement("button");
+    downloadBtn.className = "refresh-btn";
+    downloadBtn.textContent = "Download PDF";
+
+    downloadBtn.onclick = ()=>{
+      const a = document.createElement("a");
+      a.href = BASE_PDF_URL + draw.pdfTime;
+      a.download = "";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+
+    card.appendChild(downloadBtn);
     wrap.appendChild(card);
   });
 }
 
-loadResults();
+/* ================= AUTO LOAD ================= */
+loadTodayDownloads();
 </script>
 
 </body>
