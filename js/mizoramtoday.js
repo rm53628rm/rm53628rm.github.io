@@ -1,205 +1,129 @@
-/* ================= BASE PDF URLS ================= */
-const BASE_PDF_URL_NORMAL = "https://mizoramlottery.com/Home/PrintToday?dateTime=";
-const BASE_PDF_URL_11AM   = "https://mizoramlottery.com/Home/PrintsToday?dateTime=";
 
-/* ================= DRAWS CONFIG ================= */
+/* ================= DRAW CONFIG ================= */
 const draws = [
-  {
-    title: "🕚 11 AM Draw",
-    hour: 11,
-    label: "11:00 AM",
-    timeCode: 10,
-    sectionId: "section11",
-    special: true
-  },
-  {
-    title: "🕛 12 PM Draw",
-    hour: 12,
-    label: "12:00 PM",
-    timeCode: 11,
-    sectionId: "section12",
-    special: false
-  },
-  {
-    title: "🕓 4 PM Draw",
-    hour: 16,
-    label: "4:00 PM",
-    timeCode: 3,
-    sectionId: "section4",
-    special: false
-  },
-  {
-    title: "🕖 7 PM Draw",
-    hour: 19,
-    label: "7:00 PM",
-    timeCode: 7,
-    sectionId: "section7",
-    special: false
-  },
-  {
-    title: "🕘 9 PM Draw",
-    hour: 21,
-    label: "9:00 PM",
-    timeCode: 9,
-    sectionId: "section9",
-    special: false
-  }
+  { sectionId:"section11", hour:11, pdfParam:10, extraS:true },
+  { sectionId:"section12", hour:12, pdfParam:11, extraS:false },
+  { sectionId:"section4",  hour:16, pdfParam:3,  extraS:false },
+  { sectionId:"section7",  hour:19, pdfParam:7,  extraS:false },
+  { sectionId:"section9",  hour:21, pdfParam:9,  extraS:false }
 ];
 
-/* ================= IST CURRENT HOUR ================= */
+const MAX_RETRY = 5;
+const RETRY_DELAY = 10000; // 10 sec
+
+/* ================= IST HOUR ================= */
 function getISTHour(){
   return Number(
-    new Date().toLocaleString("en-IN", {
-      timeZone: "Asia/Kolkata",
-      hour: "2-digit",
-      hour12: false
+    new Date().toLocaleString("en-IN",{
+      timeZone:"Asia/Kolkata",
+      hour:"2-digit",
+      hour12:false
     })
   );
 }
 
-/* ================= TODAY DATE (IST) ================= */
-function getTodayIST(){
-  return new Date(
-    new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" })
-  );
-}
+/* ================= LOAD RESULT ================= */
+function loadDraw(draw){
+  const wrap = document.getElementById(draw.sectionId);
+  if(!wrap) return;
 
-/* ================= PDF LOAD WITH RETRY ================= */
-function loadPDFWithRetry(frame, status, retryBtn, downloadBtn, pdfUrl){
+  wrap.innerHTML = "";
+  let retryCount = 0;
+  let retryTimer = null;
 
-  let attempt = 0;
-  const maxRetry = 4;
-  let loaded = false;
-  let timer = null;
+  const baseURL =
+    "https://mizoramlottery.com/Home/" +
+    (draw.extraS ? "PrintsToday" : "PrintToday") +
+    "?dateTime=" + draw.pdfParam;
 
-  frame.style.display = "none";
-  retryBtn.style.display = "none";
+  const card = document.createElement("div");
+  card.className = "card";
+
+  const iframe = document.createElement("iframe");
+  iframe.className = "pdf-frame";
+  iframe.style.display = "none";
+
+  const status = document.createElement("div");
+  status.className = "status";
+  status.innerHTML = "Loading result…";
+
+  const downloadBtn = document.createElement("button");
+  downloadBtn.className = "refresh-btn";
+  downloadBtn.textContent = "Download PDF";
   downloadBtn.style.display = "none";
 
-  status.innerHTML = `
-    <div class="loading-wrap">
-      <span class="mini-spinner"></span>
-      <span>Loading Result...</span>
-    </div>
-  `;
-  status.style.display = "block";
+  const retryBtn = document.createElement("button");
+  retryBtn.className = "refresh-btn";
+  retryBtn.textContent = "Retry After Some Time";
+  retryBtn.style.display = "none";
 
-  function tryLoad(){
-    if(loaded) return;
-    attempt++;
-
-    frame.src = pdfUrl + "&t=" + Date.now();
-
-    timer = setTimeout(() => {
-      if(loaded) return;
-
-      if(attempt >= maxRetry){
-        status.textContent =
-          "Result Not Published. Click Retry After Sometime";
-        retryBtn.style.display = "inline-flex";
-        return;
-      }
-      tryLoad();
-    }, 4000);
-  }
-
-  frame.onload = () => {
-    if(loaded) return;
-    loaded = true;
-    clearTimeout(timer);
-
-    frame.style.display = "block";
-    status.style.display = "none";
-    retryBtn.style.display = "none";
-    downloadBtn.style.display = "inline-flex";
+  downloadBtn.onclick = () => {
+    window.open(baseURL, "_blank");
   };
 
   retryBtn.onclick = () => {
-    attempt = 0;
-    loaded = false;
-
     retryBtn.style.display = "none";
-    downloadBtn.style.display = "none";
-
-    status.innerHTML = `
-      <div class="loading-wrap">
-        <span class="mini-spinner"></span>
-        <span>Loading Result...</span>
-      </div>
-    `;
+    retryCount = 0;
     status.style.display = "block";
-
-    tryLoad();
+    status.textContent = "Retrying…";
+    startRetry();
   };
 
-  tryLoad();
+  function startRetry(){
+    iframe.src = baseURL + "&t=" + Date.now();
+
+    retryTimer = setTimeout(()=>{
+      retryCount++;
+
+      if(retryCount >= MAX_RETRY){
+        status.textContent = "Result not available yet.";
+        retryBtn.style.display = "inline-flex";
+        return;
+      }
+
+      status.textContent = `Retrying... (${retryCount}/${MAX_RETRY})`;
+      startRetry();
+    }, RETRY_DELAY);
+  }
+
+  iframe.onload = () => {
+    clearTimeout(retryTimer);
+    status.style.display = "none";
+    iframe.style.display = "block";
+    downloadBtn.style.display = "inline-flex";
+    retryBtn.style.display = "none";
+  };
+
+  card.appendChild(iframe);
+  card.appendChild(status);
+  card.appendChild(downloadBtn);
+  card.appendChild(retryBtn);
+  wrap.appendChild(card);
+
+  startRetry();
 }
 
-/* ================= MAIN FUNCTION ================= */
-function loadTodayResults(){
+/* ================= MAIN ================= */
+function init(){
+  const now = getISTHour();
 
-  const currentHour = getISTHour();
-  const today = getTodayIST();
-  const readableDate = today.toDateString();
-
-  draws.forEach(draw => {
-
+  draws.forEach(draw=>{
     const wrap = document.getElementById(draw.sectionId);
     if(!wrap) return;
 
-    wrap.innerHTML = "";
-
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <h3>${draw.title}</h3>
-      <div class="date-show">${readableDate}</div>
-    `;
-
-    const iframe = document.createElement("iframe");
-    iframe.className = "pdf-frame";
-    iframe.setAttribute("loading", "lazy");
-
-    const status = document.createElement("div");
-    status.className = "status";
-
-    const retryBtn = document.createElement("button");
-    retryBtn.className = "refresh-btn";
-    retryBtn.textContent = "Retry";
-
-    const downloadBtn = document.createElement("button");
-    downloadBtn.className = "refresh-btn";
-    downloadBtn.textContent = "Download PDF";
-
-    card.append(iframe, status, retryBtn, downloadBtn);
-    wrap.appendChild(card);
-
-    /* ===== TIME LOCK 🔒 ===== */
-    if(currentHour < draw.hour){
-      status.style.display = "block";
-      status.textContent =
-        `Result will be published after ${draw.label}`;
-      return;
+    if(now < draw.hour){
+      wrap.innerHTML = `
+        <div class="card">
+          <div class="status">
+            Result will be published after ${draw.hour <= 12 ? draw.hour+" AM" : (draw.hour-12)+" PM"}
+          </div>
+        </div>
+      `;
+    } else {
+      loadDraw(draw);
     }
-
-    /* ===== PDF URL ===== */
-    const pdfUrl = draw.special
-      ? BASE_PDF_URL_11AM + draw.timeCode
-      : BASE_PDF_URL_NORMAL + draw.timeCode;
-
-    downloadBtn.onclick = () => {
-      window.open(pdfUrl, "_blank");
-    };
-
-    loadPDFWithRetry(
-      iframe,
-      status,
-      retryBtn,
-      downloadBtn,
-      pdfUrl
-    );
   });
 }
 
-/* ================= AUTO LOAD ================= */
-loadTodayResults();
+document.addEventListener("DOMContentLoaded", init);
+
