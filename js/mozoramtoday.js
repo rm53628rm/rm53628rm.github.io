@@ -1,76 +1,167 @@
-/* ================= PDF BASE ================= */
-const BASE_PDF_VIEW_URL =
-  "https://mizoramlottery.com/Home/PrintToday?dateTime=";
+/* ================= BASE PDF URLS ================= */
+const BASE_PDF_URL_NORMAL = "https://mizoramlottery.com/Home/PrintToday?dateTime=";
+const BASE_PDF_URL_11AM   = "https://mizoramlottery.com/Home/PrintsToday?dateTime=";
 
-/* ================= DRAWS ================= */
+/* ================= DRAWS CONFIG ================= */
 const draws = [
-  { title:"🕚 11 AM Draw Result", pdfTime:10, lock:11 },
-  { title:"🕛 12 PM Draw Result", pdfTime:11, lock:12 },
-  { title:"🕓 4 PM Draw Result",  pdfTime:3,  lock:16 },
-  { title:"🕖 7 PM Draw Result",  pdfTime:7,  lock:19 },
-  { title:"🕘 9 PM Draw Result",  pdfTime:9,  lock:21 }
+  {
+    title: "🕚 11 AM Draw",
+    hour: 11,
+    label: "11:00 AM",
+    timeCode: 10,
+    sectionId: "section11",
+    special: true
+  },
+  {
+    title: "🕛 12 PM Draw",
+    hour: 12,
+    label: "12:00 PM",
+    timeCode: 11,
+    sectionId: "section12",
+    special: false
+  },
+  {
+    title: "🕓 4 PM Draw",
+    hour: 16,
+    label: "4:00 PM",
+    timeCode: 3,
+    sectionId: "section4",
+    special: false
+  },
+  {
+    title: "🕖 7 PM Draw",
+    hour: 19,
+    label: "7:00 PM",
+    timeCode: 7,
+    sectionId: "section7",
+    special: false
+  },
+  {
+    title: "🕘 9 PM Draw",
+    hour: 21,
+    label: "9:00 PM",
+    timeCode: 9,
+    sectionId: "section9",
+    special: false
+  }
 ];
 
-/* ================= IST HOUR ================= */
+/* ================= IST CURRENT HOUR ================= */
 function getISTHour(){
   return Number(
-    new Date().toLocaleString("en-IN",{
-      timeZone:"Asia/Kolkata",
-      hour:"2-digit",
-      hour12:false
+    new Date().toLocaleString("en-IN", {
+      timeZone: "Asia/Kolkata",
+      hour: "2-digit",
+      hour12: false
     })
   );
 }
 
-/* ================= TODAY DATE ================= */
+/* ================= TODAY DATE (IST) ================= */
 function getTodayIST(){
   return new Date(
-    new Date().toLocaleDateString("en-CA",{ timeZone:"Asia/Kolkata" })
+    new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" })
   );
 }
 
-/* ================= MAIN ================= */
-function loadTodayPDF(){
+/* ================= PDF LOAD WITH RETRY ================= */
+function loadPDFWithRetry(frame, status, retryBtn, downloadBtn, pdfUrl){
 
-  const wrap = document.getElementById("resultSection");
-  wrap.innerHTML = "";
+  let attempt = 0;
+  const maxRetry = 4;
+  let loaded = false;
+  let timer = null;
 
+  frame.style.display = "none";
+  retryBtn.style.display = "none";
+  downloadBtn.style.display = "none";
+
+  status.innerHTML = `
+    <div class="loading-wrap">
+      <span class="mini-spinner"></span>
+      <span>Loading Result...</span>
+    </div>
+  `;
+  status.style.display = "block";
+
+  function tryLoad(){
+    if(loaded) return;
+    attempt++;
+
+    frame.src = pdfUrl + "&t=" + Date.now();
+
+    timer = setTimeout(() => {
+      if(loaded) return;
+
+      if(attempt >= maxRetry){
+        status.textContent =
+          "Result Not Published. Click Retry After Sometime";
+        retryBtn.style.display = "inline-flex";
+        return;
+      }
+      tryLoad();
+    }, 4000);
+  }
+
+  frame.onload = () => {
+    if(loaded) return;
+    loaded = true;
+    clearTimeout(timer);
+
+    frame.style.display = "block";
+    status.style.display = "none";
+    retryBtn.style.display = "none";
+    downloadBtn.style.display = "inline-flex";
+  };
+
+  retryBtn.onclick = () => {
+    attempt = 0;
+    loaded = false;
+
+    retryBtn.style.display = "none";
+    downloadBtn.style.display = "none";
+
+    status.innerHTML = `
+      <div class="loading-wrap">
+        <span class="mini-spinner"></span>
+        <span>Loading Result...</span>
+      </div>
+    `;
+    status.style.display = "block";
+
+    tryLoad();
+  };
+
+  tryLoad();
+}
+
+/* ================= MAIN FUNCTION ================= */
+function loadTodayResults(){
+
+  const currentHour = getISTHour();
   const today = getTodayIST();
   const readableDate = today.toDateString();
-  const currentHour = getISTHour();
 
   draws.forEach(draw => {
 
+    const wrap = document.getElementById(draw.sectionId);
+    if(!wrap) return;
+
+    wrap.innerHTML = "";
+
     const card = document.createElement("div");
     card.className = "card";
-
     card.innerHTML = `
       <h3>${draw.title}</h3>
       <div class="date-show">${readableDate}</div>
     `;
 
-    /* ===== TIME LOCK ===== */
-    if(currentHour < draw.lock){
-      const status = document.createElement("div");
-      status.className = "status";
-      status.style.display = "block";
-      status.textContent =
-        `Result will be published after ${draw.lock}:00 IST`;
-
-      card.appendChild(status);
-      wrap.appendChild(card);
-      return;
-    }
-
-    /* ===== PDF FRAME ===== */
-    const pdfFrame = document.createElement("iframe");
-    pdfFrame.className = "pdf-frame";
-    pdfFrame.src = BASE_PDF_VIEW_URL + draw.pdfTime;
-    pdfFrame.loading = "lazy";
+    const iframe = document.createElement("iframe");
+    iframe.className = "pdf-frame";
+    iframe.setAttribute("loading", "lazy");
 
     const status = document.createElement("div");
     status.className = "status";
-    status.textContent = "Loading Result...";
 
     const retryBtn = document.createElement("button");
     retryBtn.className = "refresh-btn";
@@ -80,28 +171,35 @@ function loadTodayPDF(){
     downloadBtn.className = "refresh-btn";
     downloadBtn.textContent = "Download PDF";
 
-    retryBtn.onclick = ()=>{
-      pdfFrame.src =
-        BASE_PDF_VIEW_URL + draw.pdfTime + "&t=" + Date.now();
-    };
-
-    downloadBtn.onclick = ()=>{
-      window.open(
-        BASE_PDF_VIEW_URL + draw.pdfTime,
-        "_blank"
-      );
-    };
-
-    pdfFrame.onload = ()=> status.style.display = "none";
-    pdfFrame.onerror = ()=>{
-      status.textContent =
-        "Result not published. Please retry later.";
-    };
-
-    card.append(pdfFrame, status, retryBtn, downloadBtn);
+    card.append(iframe, status, retryBtn, downloadBtn);
     wrap.appendChild(card);
+
+    /* ===== TIME LOCK 🔒 ===== */
+    if(currentHour < draw.hour){
+      status.style.display = "block";
+      status.textContent =
+        `Result will be published after ${draw.label}`;
+      return;
+    }
+
+    /* ===== PDF URL ===== */
+    const pdfUrl = draw.special
+      ? BASE_PDF_URL_11AM + draw.timeCode
+      : BASE_PDF_URL_NORMAL + draw.timeCode;
+
+    downloadBtn.onclick = () => {
+      window.open(pdfUrl, "_blank");
+    };
+
+    loadPDFWithRetry(
+      iframe,
+      status,
+      retryBtn,
+      downloadBtn,
+      pdfUrl
+    );
   });
 }
 
 /* ================= AUTO LOAD ================= */
-loadTodayPDF();
+loadTodayResults();
