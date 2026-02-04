@@ -1,5 +1,4 @@
 
-/* ================= DRAW CONFIG ================= */
 const draws = [
   { sectionId:"section11", hour:11, pdfParam:10, extraS:true },
   { sectionId:"section12", hour:12, pdfParam:11, extraS:false },
@@ -9,10 +8,10 @@ const draws = [
 ];
 
 const MAX_RETRY = 5;
-const RETRY_DELAY = 10000; // 10 sec
+const RETRY_DELAY = 10000;
 
-/* ================= IST HOUR ================= */
-function getISTHour(){
+/* ================= IST TIME ================= */
+function istHour(){
   return Number(
     new Date().toLocaleString("en-IN",{
       timeZone:"Asia/Kolkata",
@@ -22,16 +21,23 @@ function getISTHour(){
   );
 }
 
-/* ================= LOAD RESULT ================= */
+/* ================= CHECK PDF EXISTS ================= */
+function checkPDF(url){
+  return fetch(url, { method:"HEAD", cache:"no-store" })
+    .then(r => r.ok)
+    .catch(() => false);
+}
+
+/* ================= LOAD DRAW ================= */
 function loadDraw(draw){
   const wrap = document.getElementById(draw.sectionId);
   if(!wrap) return;
 
   wrap.innerHTML = "";
-  let retryCount = 0;
-  let retryTimer = null;
+  let retry = 0;
+  let stopped = false;
 
-  const baseURL =
+  const pdfURL =
     "https://mizoramlottery.com/Home/" +
     (draw.extraS ? "PrintsToday" : "PrintToday") +
     "?dateTime=" + draw.pdfParam;
@@ -39,13 +45,13 @@ function loadDraw(draw){
   const card = document.createElement("div");
   card.className = "card";
 
+  const status = document.createElement("div");
+  status.className = "status";
+  status.textContent = "Checking result availability…";
+
   const iframe = document.createElement("iframe");
   iframe.className = "pdf-frame";
   iframe.style.display = "none";
-
-  const status = document.createElement("div");
-  status.className = "status";
-  status.innerHTML = "Loading result…";
 
   const downloadBtn = document.createElement("button");
   downloadBtn.className = "refresh-btn";
@@ -57,55 +63,52 @@ function loadDraw(draw){
   retryBtn.textContent = "Retry After Some Time";
   retryBtn.style.display = "none";
 
-  downloadBtn.onclick = () => {
-    window.open(baseURL, "_blank");
-  };
+  downloadBtn.onclick = () => window.open(pdfURL, "_blank");
 
   retryBtn.onclick = () => {
+    retry = 0;
     retryBtn.style.display = "none";
-    retryCount = 0;
     status.style.display = "block";
-    status.textContent = "Retrying…";
-    startRetry();
+    attempt();
   };
 
-  function startRetry(){
-    iframe.src = baseURL + "&t=" + Date.now();
+  function attempt(){
+    if(stopped) return;
 
-    retryTimer = setTimeout(()=>{
-      retryCount++;
+    checkPDF(pdfURL + "&t=" + Date.now()).then(found=>{
+      if(found){
+        stopped = true;
+        status.style.display = "none";
+        iframe.src = pdfURL;
+        iframe.style.display = "block";
+        downloadBtn.style.display = "inline-flex";
+        return;
+      }
 
-      if(retryCount >= MAX_RETRY){
+      retry++;
+      if(retry >= MAX_RETRY){
         status.textContent = "Result not available yet.";
         retryBtn.style.display = "inline-flex";
         return;
       }
 
-      status.textContent = `Retrying... (${retryCount}/${MAX_RETRY})`;
-      startRetry();
-    }, RETRY_DELAY);
+      status.textContent = `Waiting for result… (${retry}/${MAX_RETRY})`;
+      setTimeout(attempt, RETRY_DELAY);
+    });
   }
 
-  iframe.onload = () => {
-    clearTimeout(retryTimer);
-    status.style.display = "none";
-    iframe.style.display = "block";
-    downloadBtn.style.display = "inline-flex";
-    retryBtn.style.display = "none";
-  };
-
-  card.appendChild(iframe);
   card.appendChild(status);
+  card.appendChild(iframe);
   card.appendChild(downloadBtn);
   card.appendChild(retryBtn);
   wrap.appendChild(card);
 
-  startRetry();
+  attempt();
 }
 
-/* ================= MAIN ================= */
-function init(){
-  const now = getISTHour();
+/* ================= INIT ================= */
+document.addEventListener("DOMContentLoaded", ()=>{
+  const now = istHour();
 
   draws.forEach(draw=>{
     const wrap = document.getElementById(draw.sectionId);
@@ -115,15 +118,13 @@ function init(){
       wrap.innerHTML = `
         <div class="card">
           <div class="status">
-            Result will be published after ${draw.hour <= 12 ? draw.hour+" AM" : (draw.hour-12)+" PM"}
+            Result will be published after
+            ${draw.hour <= 12 ? draw.hour+" AM" : (draw.hour-12)+" PM"}
           </div>
-        </div>
-      `;
+        </div>`;
     } else {
       loadDraw(draw);
     }
   });
-}
-
-document.addEventListener("DOMContentLoaded", init);
+});
 
