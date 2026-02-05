@@ -3,127 +3,103 @@
 <head>
 <meta charset="UTF-8">
 <title>Mizoram Lottery Today Result</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
 body{
   font-family: Arial, sans-serif;
   background:#f4f6fb;
   margin:0;
-  padding:10px;
 }
 
-/* ===== RESULT BOX ===== */
 .result-box{
   background:#fff;
   padding:15px;
-  margin:15px 0;
-  border-radius:10px;
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  margin:15px;
+  border-radius:14px;
+  box-shadow:0 4px 14px rgba(0,0,0,.08);
+}
+
+.seo-text{
+  color:#555;
+  font-size:14px;
+  margin-bottom:10px;
 }
 
 .draw-title{
-  font-size:18px;
+  font-size:22px;
   font-weight:700;
   margin-bottom:4px;
 }
 
 .draw-date{
-  font-size:14px;
-  color:#555;
-  margin-bottom:8px;
+  font-size:15px;
+  color:#666;
+  margin-bottom:12px;
 }
 
 .status{
   padding:10px;
   background:#fff3cd;
   border-radius:6px;
-  margin-top:10px;
   font-size:14px;
 }
 
-/* ===== BUTTONS ===== */
-.download-btn, .retry-btn{
-  display:none;
-  margin-top:10px;
-  padding:10px 14px;
-  border-radius:6px;
-  background:#007bff;
-  color:#fff;
-  text-decoration:none;
-  border:none;
-  cursor:pointer;
-  font-size:14px;
+/* ===== PDF FRAME ===== */
+.pdf-wrap{
+  width:100%;
+  overflow:hidden;
+  border-radius:12px;
+  background:#fff;
 }
-.retry-btn{background:#dc3545}
+
+.pdf-frame{
+  width:100%;
+  border:0;
+  display:block;
+  background:#fff;
+  min-height:480px;
+}
 
 /* ===== SPINNER ===== */
 .spinner{
-  width:22px;
-  height:22px;
-  border:3px solid #ddd;
-  border-top:3px solid #007bff;
+  width:32px;
+  height:32px;
+  border:4px solid #ddd;
+  border-top:4px solid #007bff;
   border-radius:50%;
   animation:spin 1s linear infinite;
-  display:inline-block;
-  vertical-align:middle;
-  margin-right:8px;
+  margin:15px auto;
 }
-@keyframes spin{to{transform:rotate(360deg)}}
 
-/* ===== RESPONSIVE PDF ===== */
-.pdf-container{
-  position:relative;
-  width:100%;
-  padding-top:140%;
+@keyframes spin{
+  to{transform:rotate(360deg);}
+}
+
+.download-btn{
+  display:inline-block;
+  margin-top:12px;
+  padding:12px 18px;
+  border-radius:8px;
+  background:#0d6efd;
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+}
+
+.pdf-note{
+  font-size:13px;
+  color:#555;
   margin-top:10px;
-  display:none;
-}
-.pdf-container iframe{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  border:none;
-  border-radius:6px;
-  background:#000;
-}
-@media(min-width:768px){
-  .pdf-container{padding-top:100%}
 }
 </style>
 </head>
 
 <body>
 
-<section class="result-section">
-
 <div class="result-box">
-  <p class="seo-text">SEO text yahan</p>
+  <div class="seo-text">SEO text yahan</div>
   <div id="draw11"></div>
 </div>
-
-<div class="result-box">
-  <p class="seo-text">SEO text yahan</p>
-  <div id="draw12"></div>
-</div>
-
-<div class="result-box">
-  <p class="seo-text">SEO text yahan</p>
-  <div id="draw16"></div>
-</div>
-
-<div class="result-box">
-  <p class="seo-text">SEO text yahan</p>
-  <div id="draw19"></div>
-</div>
-
-<div class="result-box">
-  <p class="seo-text">SEO text yahan</p>
-  <div id="draw21"></div>
-</div>
-
-</section>
 
 <script>
 /* ================= IST TIME ================= */
@@ -136,112 +112,90 @@ function istHour(){
     })
   );
 }
-function istDate(){
-  return new Date(
-    new Date().toLocaleDateString("en-CA",{timeZone:"Asia/Kolkata"})
-  );
+
+function todayDate(){
+  return new Date().toLocaleDateString("en-IN",{
+    timeZone:"Asia/Kolkata",
+    weekday:"short",
+    day:"2-digit",
+    month:"short",
+    year:"numeric"
+  });
 }
 
-/* ================= DRAWS ================= */
-const draws = [
- { id:"draw11", hour:11, title:"Mizoram Lottery 11 AM Result", param:10, extraS:true },
- { id:"draw12", hour:12, title:"Mizoram Lottery 12 PM Result", param:11 },
- { id:"draw16", hour:16, title:"Mizoram Lottery 4 PM Result",  param:3 },
- { id:"draw19", hour:19, title:"Mizoram Lottery 7 PM Result",  param:7 },
- { id:"draw21", hour:21, title:"Mizoram Lottery 9 PM Result",  param:9 }
-];
+/* ================= DRAW CONFIG ================= */
+const draw = {
+  id:"draw11",
+  title:"Mizoram Lottery 11 AM Result",
+  hour:11,
+  param:10,
+  extraS:true
+};
 
-draws.forEach(draw=>{
-  const wrap=document.getElementById(draw.id);
-  if(!wrap) return;
+const wrap = document.getElementById(draw.id);
+const now = istHour();
 
-  const now=istHour();
-  const dateStr=istDate().toDateString();
+wrap.innerHTML = `
+  <div class="draw-title">${draw.title}</div>
+  <div class="draw-date">Date: ${todayDate()}</div>
+`;
 
-  /* title + date ALWAYS */
-  wrap.innerHTML=`
-    <div class="draw-title">${draw.title}</div>
-    <div class="draw-date">Date: ${dateStr}</div>
+if(now < draw.hour){
+  wrap.innerHTML += `
+    <div class="status">
+      Result will be published after ${draw.hour}:00 AM
+    </div>
   `;
+}else{
 
-  /* ===== TIME LOCK ===== */
-  if(now < draw.hour){
-    wrap.innerHTML+=`
-      <div class="status">
-        Result will be published after ${draw.hour}:00
-      </div>
-    `;
-    return;
-  }
-
-  /* ===== LINK ===== */
-  const base = draw.extraS
+  const base =
+    draw.extraS
     ? "https://mizoramlottery.com/Home/PrintsToday?dateTime="
     : "https://mizoramlottery.com/Home/PrintToday?dateTime=";
 
   const pdfUrl = base + draw.param;
 
-  const status=document.createElement("div");
-  status.className="status";
-  status.innerHTML=`<span class="spinner"></span>Loading result...`;
+  const spinner = document.createElement("div");
+  spinner.className="spinner";
 
-  const pdfBox=document.createElement("div");
-  pdfBox.className="pdf-container";
+  const pdfWrap = document.createElement("div");
+  pdfWrap.className="pdf-wrap";
 
-  const iframe=document.createElement("iframe");
-  pdfBox.appendChild(iframe);
+  const iframe = document.createElement("iframe");
+  iframe.className="pdf-frame";
 
-  const download=document.createElement("a");
+  const download = document.createElement("a");
   download.className="download-btn";
-  download.textContent="Download PDF";
-  download.href=pdfUrl;
+  download.href = pdfUrl;
   download.target="_blank";
+  download.textContent="Download PDF";
 
-  const retry=document.createElement("button");
-  retry.className="retry-btn";
-  retry.textContent="Retry";
+  const note = document.createElement("div");
+  note.className="pdf-note";
+  note.textContent="Note: Official Mizoram State Lottery PDF";
 
-  wrap.append(status,pdfBox,download,retry);
+  pdfWrap.appendChild(iframe);
+  wrap.append(spinner, pdfWrap, note, download);
 
-  let attempt=0,max=5,loaded=false;
+  iframe.src =
+    "https://docs.google.com/gview?embedded=true&url="
+    + encodeURIComponent(pdfUrl);
 
-  function loadPDF(){
-    if(loaded) return;
-    attempt++;
-    iframe.src=
-      "https://docs.google.com/gview?embedded=true&url="
-      + encodeURIComponent(pdfUrl)
-      + "&t="+Date.now();
+  iframe.onload = ()=>{
+    spinner.remove();
 
-    setTimeout(()=>{
-      if(!loaded && attempt>=max){
-        status.textContent="Result not available. Retry after sometime.";
-        retry.style.display="inline-block";
-      }else if(!loaded){
-        loadPDF();
-      }
-    },30000);
-  }
-
-  iframe.onload=()=>{
-    loaded=true;
-    status.style.display="none";
-    pdfBox.style.display="block";
-    download.style.display="inline-block";
-    retry.style.display="none";
+    try{
+      const d = iframe.contentWindow.document;
+      const h = Math.max(
+        d.body.scrollHeight,
+        d.documentElement.scrollHeight
+      );
+      iframe.style.height = h + "px";
+    }catch(e){
+      iframe.style.height = "75vh";
+    }
   };
-
-  retry.onclick=()=>{
-    attempt=0;
-    loaded=false;
-    status.innerHTML=`<span class="spinner"></span>Retrying...`;
-    status.style.display="block";
-    retry.style.display="none";
-    loadPDF();
-  };
-
-  loadPDF();
-});
+}
 </script>
 
 </body>
