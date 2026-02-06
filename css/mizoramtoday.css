@@ -54,7 +54,94 @@ header{
   justify-content:space-between;
   padding:12px;
   margin-bottom:10px;
-  border-radius:14px;
+  border-radius:14p/* ================= RESULT BOX CENTER SYSTEM ================= */
+
+/* Har draw container ko flex center bana do */
+[id^="draw"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* horizontal center */
+  justify-content: center;  /* vertical flow center */
+  text-align: center;
+  width: 100%;
+}
+
+/* Status text + spinner */
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #374151;
+  margin: 12px 0;
+  text-align: center;
+}
+
+/* Spinner */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid #e5e7eb;
+  border-top: 3px solid #2563eb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Date + Draw title (jo JS inject karta hai) */
+.draw-title,
+.draw-date {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* PDF container CENTER */
+.pdf-container {
+  width: 100%;
+  max-width: 720px;
+  height: 520px;
+  margin: 14px auto;
+  display: none;
+}
+
+.pdf-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Download button CENTER */
+.download-btn {
+  display: none;
+  margin: 14px auto 0;
+  padding: 12px 24px;
+  background: linear-gradient(135deg,#16a34a,#22c55e);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  text-align: center;
+}
+
+/* Retry button CENTER */
+.retry-btn {
+  display: none;
+  margin: 14px auto 0;
+  padding: 10px 22px;
+  background: #f97316;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+x;
   background:rgba(255,255,255,.15);
 }
 .menu-header div:nth-child(2){
@@ -77,111 +164,6 @@ header{
 
 
 
-/* ===== RESULT SECTION ===== */
-.result-section{
-  padding:15px;
-}
-.result-box{
-  background:#fff;
-  border-radius:12px;
-  padding:14px;
-  margin-bottom:16px;
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
-}
-
-/* ===== CARD ===== */
-.card{
-  width:100%;
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  text-align:center;
-}
-
-/* ===== TITLE + DATE ===== */
-.draw-title{
-  font-size:16px;
-  font-weight:700;
-  color:#0a2a66;
-  margin-bottom:4px;
-}
-.draw-date{
-  font-size:13px;
-  font-weight:600;
-  color:#475569;
-  margin-bottom:6px;
-}
-
-/* ===== STATUS ===== */
-.status{
-  position:relative;
-  min-height:42px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:600;
-  color:#ea580c;
-}
-
-/* ===== SPINNER ===== */
-.spinner{
-  width:14px;
-  height:14px;
-  border:2px solid #ddd;
-  border-top:2px solid #1e3a8a;
-  border-radius:50%;
-  animation:spin .7s linear infinite;
-  margin-right:6px;
-}
-@keyframes spin{
-  from{transform:rotate(0deg);}
-  to{transform:rotate(360deg);}
-}
-
-/* ===== PDF ===== */
-.pdf-container{
-  width:100%;
-  flex:1;
-  display:none;
-}
-.pdf-container iframe{
-  width:100%;
-  height:520px;
-  border:none;
-}
-
-/* ===== BUTTONS ===== */
-.btn-wrap{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  margin-top:8px;
-  flex-wrap:wrap;
-}
-.download-btn,
-.retry-btn{
-  display:none;
-  padding:10px 18px;
-  font-size:14px;
-  font-weight:600;
-  border-radius:8px;
-  border:none;
-  cursor:pointer;
-  color:#fff;
-  text-decoration:none;
-}
-.download-btn{
-  background:#16a34a;
-}
-.download-btn:hover{
-  background:#15803d;
-}
-.retry-btn{
-  background:#1e3a8a;
-}
-.retry-btn:hover{
-  background:#1e40af;
-}
 .result-nav{
   display:flex;
   flex-wrap:wrap;
