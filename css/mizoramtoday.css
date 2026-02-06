@@ -9,6 +9,12 @@
   text-align: center;
   width: 100%;
 }
+/* ===== RESULT SECTION ===== */
+.result-section{
+  display:flex;
+  gap:16px;
+  padding:5px;
+}
 .result-box{
   flex:1;
   display:flex;
