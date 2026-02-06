@@ -2,92 +2,247 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dhankesari Today Result SEO Demo</title>
+<title>Mizoram Lottery Today Result</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-/* ===== RESULT SECTION ===== */
-.result-section{
-  width:100%;
-  max-width:1200px;
-  margin:20px auto;
-  padding:15px;
-  display:flex;
-  gap:16px;
-  box-sizing:border-box;
-}
-
-/* ===== SEO BLOCK ===== */
-.seo-block{
-  flex:1;
-  padding:15px;
-  border:1px solid #e5e7eb;
-  border-radius:6px;
-  background:#ffffff;
-}
-
-/* ===== HEADINGS ===== */
-.seo-block h2{
-  font-size:18px;
-  margin:0 0 6px;
-  color:#0f172a;
-}
-
-/* ===== TEXT ===== */
-.seo-block p{
-  font-size:14px;
-  line-height:1.6;
+body{
+  font-family: Arial, sans-serif;
+  background:#f4f6fb;
   margin:0;
-  color:#334155;
+  padding:10px;
 }
 
-/* ===== MOBILE VIEW ===== */
-@media(max-width:768px){
-  .result-section{
-    flex-direction:column;
-  }
+/* ===== RESULT BOX ===== */
+.result-box{
+  background:#fff;
+  padding:15px;
+  margin:15px 0;
+  border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.draw-title{
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:4px;
+}
+
+.draw-date{
+  font-size:14px;
+  color:#555;
+  margin-bottom:8px;
+}
+
+.status{
+  padding:10px;
+  background:#fff3cd;
+  border-radius:6px;
+  margin-top:10px;
+  font-size:14px;
+}
+
+/* ===== BUTTONS ===== */
+.download-btn, .retry-btn{
+  display:none;
+  margin-top:10px;
+  padding:10px 14px;
+  border-radius:6px;
+  background:#007bff;
+  color:#fff;
+  text-decoration:none;
+  border:none;
+  cursor:pointer;
+  font-size:14px;
+}
+.retry-btn{background:#dc3545}
+
+/* ===== SPINNER ===== */
+.spinner{
+  width:22px;
+  height:22px;
+  border:3px solid #ddd;
+  border-top:3px solid #007bff;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  display:inline-block;
+  vertical-align:middle;
+  margin-right:8px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== RESPONSIVE PDF ===== */
+.pdf-container{
+  position:relative;
+  width:100%;
+  padding-top:140%;
+  margin-top:10px;
+  display:none;
+}
+.pdf-container iframe{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:none;
+  border-radius:6px;
+  background:#000;
+}
+@media(min-width:768px){
+  .pdf-container{padding-top:100%}
 }
 </style>
 </head>
 
 <body>
-<nav class="result-nav">
-  <a href="/lottery-sambad-today-result-1-pm.html" class="active">🌅 1 PM Result</a>
-  <a href="/nagaland-state-lottery-sambad-today-result-6-pm.html">☀️ 6 PM Result</a>
-  <a href="/nagaland-state-lottery-sambad-today-result-8-pm.html">🌙 8 PM Result</a>
-  <a href="/">📊 Today Results</a>
-  <a href="/old-result.html">📅 Old Results</a>
-</nav>
-  
+
 <section class="result-section">
 
-  <section class="seo-block">
-    <h2>Morning Lottery Result</h2>
-    <p>
-      Dhankesari Morning lottery result daily yahin update hota hai.
-      Morning draw ka latest aur fast result check karne ke liye page
-      ko bookmark karein.
-    </p>
-  </section>
+<div class="result-box">
+  <p class="seo-text">SEO text yahan</p>
+  <div id="draw11"></div>
+</div>
 
-  <section class="seo-block">
-    <h2>Day Lottery Result</h2>
-    <p>
-      Day lottery result Dhankesari ke official draw ke baad publish
-      kiya jata hai. Accurate aur trusted daily result ke liye
-      website par visit karte rahein.
-    </p>
-  </section>
+<div class="result-box">
+  <p class="seo-text">SEO text yahan</p>
+  <div id="draw12"></div>
+</div>
 
-  <section class="seo-block">
-    <h2>Night Lottery Result</h2>
-    <p>
-      Dhankesari Night lottery result sabse pehle yahin update hota hai.
-      Night draw ke result ke liye is page ko regularly check karein.
-    </p>
-  </section>
+<div class="result-box">
+  <p class="seo-text">SEO text yahan</p>
+  <div id="draw16"></div>
+</div>
+
+<div class="result-box">
+  <p class="seo-text">SEO text yahan</p>
+  <div id="draw19"></div>
+</div>
+
+<div class="result-box">
+  <p class="seo-text">SEO text yahan</p>
+  <div id="draw21"></div>
+</div>
 
 </section>
+
+<script>
+/* ================= IST TIME ================= */
+function istHour(){
+  return Number(
+    new Date().toLocaleString("en-IN",{
+      timeZone:"Asia/Kolkata",
+      hour:"2-digit",
+      hour12:false
+    })
+  );
+}
+function istDate(){
+  return new Date(
+    new Date().toLocaleDateString("en-CA",{timeZone:"Asia/Kolkata"})
+  );
+}
+
+/* ================= DRAWS ================= */
+const draws = [
+ { id:"draw11", hour:11, title:"Mizoram Lottery 11 AM Result", param:10, extraS:true },
+ { id:"draw12", hour:12, title:"Mizoram Lottery 12 PM Result", param:11 },
+ { id:"draw16", hour:16, title:"Mizoram Lottery 4 PM Result",  param:3 },
+ { id:"draw19", hour:19, title:"Mizoram Lottery 7 PM Result",  param:7 },
+ { id:"draw21", hour:21, title:"Mizoram Lottery 9 PM Result",  param:9 }
+];
+
+draws.forEach(draw=>{
+  const wrap=document.getElementById(draw.id);
+  if(!wrap) return;
+
+  const now=istHour();
+  const dateStr=istDate().toDateString();
+
+  /* title + date ALWAYS */
+  wrap.innerHTML=`
+    <div class="draw-title">${draw.title}</div>
+    <div class="draw-date">Date: ${dateStr}</div>
+  `;
+
+  /* ===== TIME LOCK ===== */
+  if(now < draw.hour){
+    wrap.innerHTML+=`
+      <div class="status">
+        Result will be published after ${draw.hour}:00
+      </div>
+    `;
+    return;
+  }
+
+  /* ===== LINK ===== */
+  const base = draw.extraS
+    ? "https://mizoramlottery.com/Home/PrintsToday?dateTime="
+    : "https://mizoramlottery.com/Home/PrintToday?dateTime=";
+
+  const pdfUrl = base + draw.param;
+
+  const status=document.createElement("div");
+  status.className="status";
+  status.innerHTML=`<span class="spinner"></span>Loading result...`;
+
+  const pdfBox=document.createElement("div");
+  pdfBox.className="pdf-container";
+
+  const iframe=document.createElement("iframe");
+  pdfBox.appendChild(iframe);
+
+  const download=document.createElement("a");
+  download.className="download-btn";
+  download.textContent="Download PDF";
+  download.href=pdfUrl;
+  download.target="_blank";
+
+  const retry=document.createElement("button");
+  retry.className="retry-btn";
+  retry.textContent="Retry";
+
+  wrap.append(status,pdfBox,download,retry);
+
+  let attempt=0,max=5,loaded=false;
+
+  function loadPDF(){
+    if(loaded) return;
+    attempt++;
+    iframe.src=
+      "https://docs.google.com/gview?embedded=true&url="
+      + encodeURIComponent(pdfUrl)
+      + "&t="+Date.now();
+
+    setTimeout(()=>{
+      if(!loaded && attempt>=max){
+        status.textContent="Result not available. Retry after sometime.";
+        retry.style.display="inline-block";
+      }else if(!loaded){
+        loadPDF();
+      }
+    },30000);
+  }
+
+  iframe.onload=()=>{
+    loaded=true;
+    status.style.display="none";
+    pdfBox.style.display="block";
+    download.style.display="inline-block";
+    retry.style.display="none";
+  };
+
+  retry.onclick=()=>{
+    attempt=0;
+    loaded=false;
+    status.innerHTML=`<span class="spinner"></span>Retrying...`;
+    status.style.display="block";
+    retry.style.display="none";
+    loadPDF();
+  };
+
+  loadPDF();
+});
+</script>
 
 </body>
 </html>
