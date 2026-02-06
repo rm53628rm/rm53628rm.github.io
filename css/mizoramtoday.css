@@ -6,63 +6,80 @@ body{
   padding:10px;
 }
 
-/* ===== RESULT BOX ===== */
-.result-box{
-  background:#fff;
-  padding:15px;
-  margin:15px 0;
-  border-radius:10px;
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
+/* ================= RESULT BOX CENTER SYSTEM ================= */
+
+/* Har draw container ko flex center bana do */
+[id^="draw"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* horizontal center */
+  justify-content: center;  /* vertical flow center */
+  text-align: center;
+  width: 100%;
 }
 
-.draw-title{
-  font-size:18px;
-  font-weight:700;
-  margin-bottom:4px;
+/* Status text + spinner */
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #374151;
+  margin: 12px 0;
+  text-align: center;
 }
 
-.draw-date{
-  font-size:14px;
-  color:#555;
-  margin-bottom:8px;
+/* Spinner */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid #e5e7eb;
+  border-top: 3px solid #2563eb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-.status{
-  padding:10px;
-  background:#fff3cd;
-  border-radius:6px;
-  margin-top:10px;
-  font-size:14px;
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
-/* ===== BUTTONS ===== */
-.download-btn, .retry-btn{
-  display:none;
-  margin-top:10px;
-  padding:10px 14px;
-  border-radius:6px;
-  background:#007bff;
-  color:#fff;
-  text-decoration:none;
-  border:none;
-  cursor:pointer;
-  font-size:14px;
+/* Date + Draw title (jo JS inject karta hai) */
+.draw-title,
+.draw-date {
+  font-weight: 600;
+  margin-bottom: 6px;
 }
-.retry-btn{background:#dc3545}
 
-/* ===== SPINNER ===== */
-.spinner{
-  width:22px;
-  height:22px;
-  border:3px solid #ddd;
-  border-top:3px solid #007bff;
-  border-radius:50%;
-  animation:spin 1s linear infinite;
-  display:inline-block;
-  vertical-align:middle;
-  margin-right:8px;
+
+
+/* Download button CENTER */
+.download-btn {
+  display: none;
+  margin: 14px auto 0;
+  padding: 12px 24px;
+  background: linear-gradient(135deg,#16a34a,#22c55e);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  text-align: center;
 }
-@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Retry button CENTER */
+.retry-btn {
+  display: none;
+  margin: 14px auto 0;
+  padding: 10px 22px;
+  background: #f97316;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
 
 /* ===== RESPONSIVE PDF ===== */
 .pdf-container{
