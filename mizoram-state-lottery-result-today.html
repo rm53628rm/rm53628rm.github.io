@@ -23,7 +23,7 @@ Dhankesari Today – Dear Lottery Result Morning 8pm, Day 6pm & Night 8pm </titl
 <meta name="twitter:image" content="https://dhankesaritoday.in/og-image.jpg">
 
 <link rel="canonical" href="https://dhankesaritoday.in/">
-<link rel="stylesheet" href="css/mizoramtoday.css">
+<link rel="stylesheet" href="css/lottery.css">
   <link rel="stylesheet" href="css/drawtable.css">
   <link rel="stylesheet" href="css/faq.css">
   <!-- Favicon -->
@@ -154,7 +154,7 @@ draws.forEach(draw=>{
   const now=istHour();
   const dateStr=istDate().toDateString();
 
-  /* title + date ALWAYS */
+  /* TITLE + DATE ALWAYS */
   wrap.innerHTML=`
     <div class="draw-title">${draw.title}</div>
     <div class="draw-date">Date: ${dateStr}</div>
@@ -187,6 +187,9 @@ draws.forEach(draw=>{
   const iframe=document.createElement("iframe");
   pdfBox.appendChild(iframe);
 
+  const btnWrap=document.createElement("div");
+  btnWrap.className="btn-wrap";
+
   const download=document.createElement("a");
   download.className="download-btn";
   download.textContent="Download PDF";
@@ -197,13 +200,15 @@ draws.forEach(draw=>{
   retry.className="retry-btn";
   retry.textContent="Retry";
 
-  wrap.append(status,pdfBox,download,retry);
+  btnWrap.append(download,retry);
+  wrap.append(status,pdfBox,btnWrap);
 
   let attempt=0,max=5,loaded=false;
 
   function loadPDF(){
     if(loaded) return;
     attempt++;
+
     iframe.src=
       "https://docs.google.com/gview?embedded=true&url="
       + encodeURIComponent(pdfUrl)
@@ -212,7 +217,7 @@ draws.forEach(draw=>{
     setTimeout(()=>{
       if(!loaded && attempt>=max){
         status.textContent="Result not available. Retry after sometime.";
-        retry.style.display="inline-block";
+        retry.style.display="inline-flex";
       }else if(!loaded){
         loadPDF();
       }
@@ -223,7 +228,7 @@ draws.forEach(draw=>{
     loaded=true;
     status.style.display="none";
     pdfBox.style.display="block";
-    download.style.display="inline-block";
+    download.style.display="inline-flex";
     retry.style.display="none";
   };
 
@@ -231,7 +236,7 @@ draws.forEach(draw=>{
     attempt=0;
     loaded=false;
     status.innerHTML=`<span class="spinner"></span>Retrying...`;
-    status.style.display="block";
+    status.style.display="flex";
     retry.style.display="none";
     loadPDF();
   };
