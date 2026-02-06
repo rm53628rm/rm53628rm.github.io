@@ -1,60 +1,4 @@
-
-/* ===== BASE ===== */
-*{ box-sizing:border-box; }
-body{
-  margin:0;
-  background:#f4f6fb;
-  font-family:Segoe UI, Arial, sans-serif;
-  color:#222;
-}
-
-
-/* ===== HEADER ===== */
-header{
-  background:linear-gradient(135deg,#0a2a66,#123d9c);
-  color:#fff;
-  padding:14px 16px;
-  display:flex;
-  align-items:center;
-}
-.menu-btn{font-size:26px;cursor:pointer}
-.header-text{flex:1;text-align:center}
-.header-text h1{margin:0;font-size:22px}
-.header-text p{margin:4px 0 0;font-size:13px;opacity:.9}
-
-/* ===== MENU ===== */
-.overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.45);
-  display:none;
-  z-index:9;
-}
-.side-menu{
-  position:fixed;
-  top:0;
-  left:-260px;
-  width:260px;
-  height:100%;
-  background:#0a2a66;
-  padding:20px;
-  transition:.3s;
-  z-index:10;
-}
-.side-menu.active{left:0}
-.side-menu a{
-  display:block;
-  color:#fff;
-  text-decoration:none;
-  padding:12px 0;
-  border-bottom:1px solid rgba(255,255,255,.25);
-}
-.menu-header{
-  display:flex;
-  justify-content:space-between;
-  padding:12px;
-  margin-bottom:10px;
-  border-radius:14p/* ================= RESULT BOX CENTER SYSTEM ================= */
+/* ================= RESULT BOX CENTER SYSTEM ================= */
 
 /* Har draw container ko flex center bana do */
 [id^="draw"] {
@@ -100,20 +44,7 @@ header{
   margin-bottom: 6px;
 }
 
-/* PDF container CENTER */
-.pdf-container {
-  width: 100%;
-  max-width: 720px;
-  height: 520px;
-  margin: 14px auto;
-  display: none;
-}
 
-.pdf-container iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
 
 /* Download button CENTER */
 .download-btn {
@@ -141,67 +72,24 @@ header{
   font-size: 14px;
   cursor: pointer;
 }
-x;
-  background:rgba(255,255,255,.15);
+
+/* ===== RESPONSIVE PDF ===== */
+.pdf-container{
+  position:relative;
+  width:100%;
+  padding-top:140%;
+  margin-top:10px;
+  display:none;
 }
-.menu-header div:nth-child(2){
-  color:#ffffff;
-  font-size:18px;
-  letter-spacing:.4px;
+.pdf-container iframe{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:none;
+  border-radius:6px;
+  background:#000;
 }
-
-.menu-logo{
-  width:42px;height:42px;
-  border-radius:50%;
-  background:#fff;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
-}
-.menu-close{font-size:40px;cursor:pointer;color:#fff}
-
-
-
-.result-nav{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:8px;
-  margin:14px auto 18px;
-  padding:6px;
-  max-width:1000px;
-}
-
-.result-nav a{
-  text-decoration:none;
-  padding:7px 14px;          /* 🔽 height kam */
-  font-size:13.5px;
-  font-weight:600;
-  color:#1e293b;
-  background:#ffffff;
-  border:1px solid #dbe2f1;
-  border-radius:6px;         /* 🔽 pill nahi */
-  transition:all .2s ease;
-}
-
-.result-nav a:hover{
-  background:#f1f5ff;
-  color:#1e40af;
-  border-color:#c7d2fe;
-}
-
-.result-nav a.active{
-  background:#1e3a8a;
-  color:#ffffff;
-  border-color:#1e3a8a;
-}
-
-/* Mobile fine-tune */
-@media(max-width:480px){
-  .result-nav a{
-    padding:6px 12px;
-    font-size:13px;
-  }
+@media(min-width:768px){
+  .pdf-container{padding-top:100%}
 }
