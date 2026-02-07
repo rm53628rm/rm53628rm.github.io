@@ -309,3 +309,48 @@ header{
     font-size:13px;
   }
 }
+
+
+
+
+
+/* ===== MAIN PAGE H1 ===== */
+.page-title,
+h1{
+  font-size: 26px;
+  font-weight: 800;
+  text-align: center;
+  color: #0a2a66;              /* deep navy */
+  line-height: 1.35;
+  margin: 16px auto 18px;
+  max-width: 1000px;
+  padding: 0 12px;
+}
+
+/* subtle underline */
+.page-title::after,
+h1::after{
+  content:"";
+  display:block;
+  width:60px;
+  height:4px;
+  margin:10px auto 0;
+  border-radius:4px;
+  background:linear-gradient(135deg,#2563eb,#1e40af);
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+  .page-title,
+  h1{
+    font-size:22px;
+    line-height:1.4;
+  }
+}
+
+@media(max-width:480px){
+  .page-title,
+  h1{
+    font-size:20px;
+  }
+}
