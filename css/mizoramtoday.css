@@ -21,6 +21,7 @@
   flex-direction:column;
   border:1px solid #e5e7eb;
   border-radius:8px;
+  margin: 12px 0;
   padding:14px;
   background:#fff;
 }
