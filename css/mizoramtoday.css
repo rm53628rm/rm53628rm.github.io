@@ -25,19 +25,12 @@
   padding:14px;
   background:#fff;
 }
-/* Status text + spinner */
-.status {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 15px;
-  font-weight: 500;
-  color: #374151;
-  margin: 12px 0;
-  text-align: center;
-}
 
+.status{
+  position:relative;
+  min-height:40px;
+  color:#ea580c;
+}
 /* Spinner */
 .spinner {
   width: 18px;
