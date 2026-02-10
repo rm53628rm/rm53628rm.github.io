@@ -37,6 +37,14 @@
   color:#334155;
 }
 
+.date-title{
+  text-align:center;
+  font-size:16px;
+  font-weight:700;
+  color:#1e3a8a;
+  margin:16px 0;
+}
+
 /* Status text + spinner */
 .status {
   display: flex;
