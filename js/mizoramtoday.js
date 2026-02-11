@@ -1,3 +1,4 @@
+
 /* ===== IST DATE / TIME ===== */
 function istNow(){
   return new Date(
@@ -6,6 +7,16 @@ function istNow(){
 }
 function istHour(){ return istNow().getHours(); }
 function showDate(){ return istNow().toDateString(); }
+
+/* ===== CHECK PDF EXISTS ===== */
+async function pdfExists(url){
+  try{
+    const res = await fetch(url,{method:"HEAD"});
+    return res.ok && res.headers.get("content-type")?.includes("pdf");
+  }catch{
+    return false;
+  }
+}
 
 /* ===== DRAWS ===== */
 const draws = [
@@ -31,7 +42,7 @@ draws.forEach(draw=>{
 
   wrap.append(title, date);
 
-  /* 🔒 TIME LOCK (NO SPINNER) */
+  /* 🔒 TIME LOCK */
   if(istHour() < draw.hour){
     wrap.innerHTML += `
       <div class="status">
@@ -40,7 +51,7 @@ draws.forEach(draw=>{
     return;
   }
 
-  /* PDF LINK (UNCHANGED) */
+  /* PDF LINK */
   const pdfUrl = draw.extraS
     ? "https://mizoramlottery.com/Home/PrintsToday?dateTime=" + draw.param
     : "https://mizoramlottery.com/Home/PrintToday?dateTime=" + draw.param;
@@ -65,32 +76,38 @@ draws.forEach(draw=>{
 
   let attempt=0, max=5, loaded=false;
 
-  function load(){
+  async function load(){
+
     if(loaded) return;
     attempt++;
+
+    const exists = await pdfExists(pdfUrl);
+
+    if(!exists){
+
+      if(attempt>=max){
+        status.textContent="Please try after sometime.";
+        retry.style.display="inline-block";
+        return;
+      }
+
+      setTimeout(load,15000); // retry delay
+      return;
+    }
 
     iframe.src =
       "https://docs.google.com/gview?embedded=true&url="
       + encodeURIComponent(pdfUrl)
       + "&t=" + Date.now();
 
-    setTimeout(()=>{
-      if(!loaded && attempt>=max){
-        status.textContent="Result not available. Retry after sometime.";
-        retry.style.display="inline-block";
-      }else if(!loaded){
-        load();
-      }
-    },30000);
+    iframe.onload=()=>{
+      loaded=true;
+      iframe.style.display="block";
+      status.style.display="none";
+      retry.style.display="none";
+      download.style.display="inline-block";
+    };
   }
-
-  iframe.onload=()=>{
-    loaded=true;
-    iframe.style.display="block";
-    status.style.display="none";
-    retry.style.display="none";
-    download.style.display="inline-block";
-  };
 
   retry.onclick=()=>{
     attempt=0;
@@ -103,3 +120,4 @@ draws.forEach(draw=>{
 
   load();
 });
+
