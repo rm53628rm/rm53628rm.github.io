@@ -30,6 +30,7 @@
 <lastmod>2026-01-29T16:51:49+00:00</lastmod>
 <priority>0.80</priority>
 </url>
+  
 <url>
 <loc>https://dhankesaritoday.in/about.html</loc>
 <lastmod>2026-01-29T16:51:50+00:00</lastmod>
@@ -48,6 +49,11 @@
 <url>
 <loc>https://dhankesaritoday.in/disclaimer.html</loc>
 <lastmod>2026-01-29T16:51:50+00:00</lastmod>
+<priority>0.80</priority>
+</url>
+  <url>
+<loc>https://dhankesaritoday.in/mizoram-state-lottery-result-today.html</loc>
+<lastmod>2026-02-10T16:51:49+00:00</lastmod>
 <priority>0.80</priority>
 </url>
 </urlset>
