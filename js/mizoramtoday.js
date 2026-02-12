@@ -1,107 +1,108 @@
-
-/* ===== IST DATE / TIME ===== */
+<script>
+/* ===== IST TIME ===== */
 function istNow(){
   return new Date(
-    new Date().toLocaleString("en-IN",{ timeZone:"Asia/Kolkata" })
+    new Date().toLocaleString("en-IN",{timeZone:"Asia/Kolkata"})
   );
 }
 function istHour(){ return istNow().getHours(); }
 function showDate(){ return istNow().toDateString(); }
 
-/* ===== CHECK PDF EXISTS ===== */
-async function pdfExists(url){
-  try{
-    const res = await fetch(url,{method:"HEAD"});
-    return res.ok && res.headers.get("content-type")?.includes("pdf");
-  }catch{
-    return false;
-  }
-}
-
 /* ===== DRAWS ===== */
-const draws = [
- { id:"draw11", title:"Mizoram Lottery 11 AM Result", hour:11, param:10, extraS:true },
- { id:"draw12", title:"Mizoram Lottery 12 PM Result", hour:12, param:11 },
- { id:"draw16", title:"Mizoram Lottery 4 PM Result",  hour:16, param:3 },
- { id:"draw19", title:"Mizoram Lottery 7 PM Result",  hour:19, param:7 },
- { id:"draw21", title:"Mizoram Lottery 9 PM Result",  hour:21, param:9 }
+const draws=[
+ { id:"draw11", title:"Mizoram Lottery 11 AM Result", hour:11, code:10, extra:true },
+ { id:"draw12", title:"Mizoram Lottery 12 PM Result", hour:12, code:11 },
+ { id:"draw16", title:"Mizoram Lottery 4 PM Result",  hour:16, code:3 },
+ { id:"draw19", title:"Mizoram Lottery 7 PM Result",  hour:19, code:7 },
+ { id:"draw21", title:"Mizoram Lottery 9 PM Result",  hour:21, code:9 }
 ];
 
+/* ===== MAIN ===== */
 draws.forEach(draw=>{
-  const wrap = document.getElementById(draw.id);
 
-  /* TITLE */
-  const title = document.createElement("div");
+  const wrap=document.getElementById(draw.id);
+  if(!wrap) return;
+
+  wrap.innerHTML="";
+
+  /* title */
+  const title=document.createElement("div");
   title.className="draw-title";
-  title.textContent = draw.title;
+  title.textContent=draw.title;
 
-  /* DATE */
-  const date = document.createElement("div");
+  /* date */
+  const date=document.createElement("div");
   date.className="date-show";
-  date.textContent = "Date: " + showDate();
+  date.textContent="Date: "+showDate();
 
-  wrap.append(title, date);
+  wrap.append(title,date);
 
-  /* 🔒 TIME LOCK */
+  /* TIME LOCK */
   if(istHour() < draw.hour){
-    wrap.innerHTML += `
+    wrap.innerHTML+=`
       <div class="status">
         Result will be published after ${draw.hour}:00
       </div>`;
     return;
   }
 
-  /* PDF LINK */
-  const pdfUrl = draw.extraS
-    ? "https://mizoramlottery.com/Home/PrintsToday?dateTime=" + draw.param
-    : "https://mizoramlottery.com/Home/PrintToday?dateTime=" + draw.param;
+  /* PDF URL */
+  const pdfUrl= draw.extra
+   ? `https://mizoramlottery.com/Home/PrintsToday?dateTime=${draw.code}`
+   : `https://mizoramlottery.com/Home/PrintToday?dateTime=${draw.code}`;
 
-  const status = document.createElement("div");
+  /* UI elements */
+  const status=document.createElement("div");
   status.className="status";
   status.innerHTML=`<span class="spinner"></span> Loading result...`;
 
-  const iframe = document.createElement("iframe");
+  const iframe=document.createElement("iframe");
+  iframe.style.display="none";
 
-  const download = document.createElement("a");
+  const download=document.createElement("a");
   download.className="download-btn";
-  download.textContent="Download PDF";
   download.href=pdfUrl;
   download.target="_blank";
+  download.textContent="Download PDF";
+  download.style.display="none";
 
-  const retry = document.createElement("button");
+  const retry=document.createElement("button");
   retry.className="retry-btn";
   retry.textContent="Retry";
+  retry.style.display="none";
 
-  wrap.append(status, iframe, download, retry);
+  wrap.append(status,iframe,download,retry);
 
-  let attempt=0, max=5, loaded=false;
+  let tries=0;
+  const max=5;
+  let loaded=false;
 
-  async function load(){
+  function load(){
 
     if(loaded) return;
-    attempt++;
+    tries++;
 
-    const exists = await pdfExists(pdfUrl);
+    iframe.src=
+      "https://docs.google.com/gview?embedded=true&url="
+      +encodeURIComponent(pdfUrl)
+      +"&t="+Date.now();
 
-    if(!exists){
+    const timer=setTimeout(()=>{
 
-      if(attempt>=max){
+      if(loaded) return;
+
+      if(tries>=max){
         status.textContent="Please try after sometime.";
         retry.style.display="inline-block";
-        return;
+      }else{
+        load();
       }
 
-      setTimeout(load,15000); // retry delay
-      return;
-    }
-
-    iframe.src =
-      "https://docs.google.com/gview?embedded=true&url="
-      + encodeURIComponent(pdfUrl)
-      + "&t=" + Date.now();
+    },15000);
 
     iframe.onload=()=>{
       loaded=true;
+      clearTimeout(timer);
       iframe.style.display="block";
       status.style.display="none";
       retry.style.display="none";
@@ -110,7 +111,7 @@ draws.forEach(draw=>{
   }
 
   retry.onclick=()=>{
-    attempt=0;
+    tries=0;
     loaded=false;
     status.innerHTML=`<span class="spinner"></span> Retrying...`;
     status.style.display="block";
@@ -119,5 +120,6 @@ draws.forEach(draw=>{
   };
 
   load();
-});
 
+});
+</script>
