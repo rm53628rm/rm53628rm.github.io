@@ -1,4 +1,4 @@
-<script>
+
 /* ===== IST TIME ===== */
 function istNow(){
   return new Date(
@@ -122,4 +122,4 @@ draws.forEach(draw=>{
   load();
 
 });
-</script>
+
