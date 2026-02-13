@@ -8,6 +8,14 @@ function istNow(){
 function istHour(){ return istNow().getHours(); }
 function showDate(){ return istNow().toDateString(); }
 
+function format12(hour){
+  const ampm = hour >= 12 ? "PM" : "AM";
+  let h = hour % 12;
+  if(h === 0) h = 12;
+  return h + ":00 " + ampm;
+}
+
+
 /* ===== DRAWS ===== */
 const draws=[
  { id:"draw11", title:"Mizoram Lottery 11 AM Result", hour:11, code:10, extra:true },
@@ -41,7 +49,7 @@ draws.forEach(draw=>{
   if(istHour() < draw.hour){
     wrap.innerHTML+=`
       <div class="status">
-        Result will be published after ${draw.hour}:00
+        Result will be published after ${format12(draw.hour)}
       </div>`;
     return;
   }
