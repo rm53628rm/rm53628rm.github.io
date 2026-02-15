@@ -74,32 +74,27 @@ header{
 .menu-close{font-size:40px;cursor:pointer;color:#fff}
 
 
+/* ================= RESULT BOX LAYOUT SYSTEM ================= */
 
-/* ================= RESULT BOX CENTER SYSTEM ================= */
-
-/* Har draw container ko flex center bana do */
-[id^="draw"] {
-  display: flex;
-  flex-direction: column;
-  align-items: center;      /* horizontal center */
-  justify-content: center;  /* vertical flow center */
-  text-align: center;
-  width: 100%;
+/* draw container center */
+[id^="draw"]{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  width:100%;
 }
+
+/* ===== BASE (Mobile first) ===== */
 .result-section{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:1fr;
   gap:20px;
   max-width:1200px;
   margin:auto;
-  justify-items:center;   /* ⭐ important */
-}
-.result-box{
-  width:100%;
-  max-width:340px;
 }
 
-/* box style */
+/* card style */
 .result-box{
   background:#fff;
   padding:15px;
@@ -108,19 +103,41 @@ header{
   text-align:center;
 }
 
-/* tablet */
-@media(max-width:900px){
+
+/* ===== TABLET (≥600px) ===== */
+@media(min-width:600px){
   .result-section{
     grid-template-columns:repeat(2,1fr);
   }
-}
 
-/* mobile */
-@media(max-width:600px){
-  .result-section{
-    grid-template-columns:1fr;
+  /* agar last single item ho → center */
+  .result-box:last-child:nth-child(odd){
+    grid-column:1 / -1;
+    justify-self:center;
+    max-width:420px;
+    width:100%;
   }
 }
+
+
+/* ===== DESKTOP (≥992px) ===== */
+@media(min-width:992px){
+  .result-section{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  /* last 2 items center */
+  .result-box:nth-last-child(2){
+    grid-column:1 / 2;
+    justify-self:end;
+  }
+  .result-box:last-child{
+    grid-column:3 / 4;
+    justify-self:start;
+  }
+}
+
+
 
 .result-box h2{
   font-size:18px;
