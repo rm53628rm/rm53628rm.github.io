@@ -1,137 +1,118 @@
-/* ===== IST DATE / TIME ===== */
-function istNow(){
-  return new Date(
-    new Date().toLocaleString("en-IN",{ timeZone:"Asia/Kolkata" })
+<script>
+/* ================= IST TIME ================= */
+function istHour(){
+  return Number(
+    new Date().toLocaleString("en-IN",{
+      timeZone:"Asia/Kolkata",
+      hour:"2-digit",
+      hour12:false
+    })
   );
 }
-function istHour(){ return istNow().getHours(); }
-function showDate(){ return istNow().toDateString(); }
-
-/* ===== CHECK PDF EXISTS ===== */
-async function pdfExists(url){
-  try{
-    const res = await fetch(url,{ method:"HEAD", cache:"no-store" });
-    const type = res.headers.get("content-type") || "";
-    return res.ok && type.includes("pdf");
-  }catch{
-    return false;
-  }
+function istDate(){
+  return new Date(
+    new Date().toLocaleDateString("en-CA",{timeZone:"Asia/Kolkata"})
+  );
 }
 
-/* ===== DRAWS (MANUAL TIME TEXT) ===== */
+/* ================= DRAWS ================= */
 const draws = [
- { id:"draw11", title:"Mizoram Lottery 11 AM Result", hour:11, time:"11 AM", param:10, extraS:true },
- { id:"draw12", title:"Mizoram Lottery 12 PM Result", hour:12, time:"12 PM", param:11 },
- { id:"draw16", title:"Mizoram Lottery 4 PM Result",  hour:16, time:"4 PM", param:3 },
- { id:"draw19", title:"Mizoram Lottery 7 PM Result",  hour:19, time:"7 PM", param:7 },
- { id:"draw21", title:"Mizoram Lottery 9 PM Result",  hour:21, time:"9 PM", param:9 }
+ { id:"draw11", hour:11, time:"11 AM",title:"Mizoram Lottery 11 AM Result", param:10, extraS:true },
+ { id:"draw12", hour:12, time:"12 PM",title:"Mizoram Lottery 12 PM Result", param:11 },
+ { id:"draw16", hour:16, time:"4 PM",title:"Mizoram Lottery 4 PM Result",  param:3 },
+ { id:"draw19", hour:19, time:"7 PM",title:"Mizoram Lottery 7 PM Result",  param:7 },
+ { id:"draw21", hour:21, time:"9 PM",title:"Mizoram Lottery 9 PM Result",  param:9 }
 ];
 
-/* ===== MAIN LOOP ===== */
 draws.forEach(draw=>{
-
-  const wrap = document.getElementById(draw.id);
+  const wrap=document.getElementById(draw.id);
   if(!wrap) return;
 
-  /* TITLE */
-  const title = document.createElement("div");
-  title.className="draw-title";
-  title.textContent = draw.title;
+  const now=istHour();
+  const dateStr=istDate().toDateString();
 
-  /* DATE */
-  const date = document.createElement("div");
-  date.className="date-show";
-  date.textContent = "Date: " + showDate();
-
-  wrap.append(title, date);
+  /* title + date ALWAYS */
+  wrap.innerHTML=`
+    <div class="draw-title">${draw.title}</div>
+    <div class="draw-date">Date: ${dateStr}</div>
+  `;
 
   /* ===== TIME LOCK ===== */
-  if(istHour() < draw.hour){
-    wrap.innerHTML += `
+  if(now < draw.hour){
+    wrap.innerHTML+=`
       <div class="status">
         Result will be published after ${draw.time}
-      </div>`;
+      </div>
+    `;
     return;
   }
 
-  /* ===== PDF LINK ===== */
-  const pdfUrl = draw.extraS
-    ? "https://mizoramlottery.com/Home/PrintsToday?dateTime=" + draw.param
-    : "https://mizoramlottery.com/Home/PrintToday?dateTime=" + draw.param;
+  /* ===== LINK ===== */
+  const base = draw.extraS
+    ? "https://mizoramlottery.com/Home/PrintsToday?dateTime="
+    : "https://mizoramlottery.com/Home/PrintToday?dateTime=";
 
-  /* STATUS */
-  const status = document.createElement("div");
+  const pdfUrl = base + draw.param;
+
+  const status=document.createElement("div");
   status.className="status";
-  status.innerHTML=`<span class="spinner"></span> Loading result...`;
+  status.innerHTML=`<span class="spinner"></span>Loading result...`;
 
-  /* IFRAME */
-  const iframe = document.createElement("iframe");
-  iframe.style.display="none";
+  const pdfBox=document.createElement("div");
+  pdfBox.className="pdf-container";
 
-  /* DOWNLOAD */
-  const download = document.createElement("a");
+  const iframe=document.createElement("iframe");
+  pdfBox.appendChild(iframe);
+
+  const download=document.createElement("a");
   download.className="download-btn";
   download.textContent="Download PDF";
   download.href=pdfUrl;
   download.target="_blank";
-  download.style.display="none";
 
-  /* RETRY */
-  const retry = document.createElement("button");
+  const retry=document.createElement("button");
   retry.className="retry-btn";
   retry.textContent="Retry";
-  retry.style.display="none";
 
-  wrap.append(status, iframe, download, retry);
+  wrap.append(status,pdfBox,download,retry);
 
-  let attempt = 0;
-  const maxAttempts = 5;
-  let loaded = false;
+  let attempt=0,max=5,loaded=false;
 
-  /* ===== LOAD FUNCTION ===== */
-  async function load(){
-
+  function loadPDF(){
     if(loaded) return;
     attempt++;
-
-    const exists = await pdfExists(pdfUrl);
-
-    if(!exists){
-
-      if(attempt >= maxAttempts){
-        status.textContent="Please try after sometime.";
-        retry.style.display="inline-block";
-        return;
-      }
-
-      setTimeout(load,15000);
-      return;
-    }
-
-    iframe.src =
+    iframe.src=
       "https://docs.google.com/gview?embedded=true&url="
       + encodeURIComponent(pdfUrl)
-      + "&t=" + Date.now();
+      + "&t="+Date.now();
 
-    iframe.onload = ()=>{
-      loaded=true;
-      iframe.style.display="block";
-      status.style.display="none";
-      retry.style.display="none";
-      download.style.display="inline-block";
-    };
+    setTimeout(()=>{
+      if(!loaded && attempt>=max){
+        status.textContent="Result not available. Retry after sometime.";
+        retry.style.display="inline-block";
+      }else if(!loaded){
+        loadPDF();
+      }
+    },30000);
   }
 
-  /* ===== RETRY BUTTON ===== */
-  retry.onclick = ()=>{
-    attempt = 0;
-    loaded = false;
+  iframe.onload=()=>{
+    loaded=true;
+    status.style.display="none";
+    pdfBox.style.display="block";
+    download.style.display="inline-block";
     retry.style.display="none";
-    status.innerHTML=`<span class="spinner"></span> Retrying...`;
-    status.style.display="block";
-    load();
   };
 
-  /* START */
-  load();
+  retry.onclick=()=>{
+    attempt=0;
+    loaded=false;
+    status.innerHTML=`<span class="spinner"></span>Retrying...`;
+    status.style.display="block";
+    retry.style.display="none";
+    loadPDF();
+  };
+
+  loadPDF();
 });
+</script>
