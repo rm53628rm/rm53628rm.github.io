@@ -92,17 +92,25 @@ header{
   gap:20px;
   max-width:1200px;
   margin:auto;
+  justify-items:center;   /* ⭐ sab cards center */
 }
-.result-section{
-  justify-content:center;
+
+/* row1 ke 3 cards center width control */
+.result-box{
+  width:100%;
+  max-width:320px;
 }
-/* second row 2 items center aligned */
+
+/* row2 ke 2 cards ko center lane ka trick */
 .result-box:nth-child(4){
   grid-column:1/2;
+  justify-self:end;
 }
 .result-box:nth-child(5){
-  grid-column:2/3;
+  grid-column:3/4;
+  justify-self:start;
 }
+
 
 /* box style */
 .result-box{
