@@ -90,11 +90,12 @@ header{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:20px;
-  justify-content:center;
   max-width:1200px;
   margin:auto;
 }
-
+.result-section{
+  justify-content:center;
+}
 /* second row 2 items center aligned */
 .result-box:nth-child(4){
   grid-column:1/2;
