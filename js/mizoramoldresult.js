@@ -1,153 +1,122 @@
+document.addEventListener("DOMContentLoaded",()=>{
 
-<script>
-/* ===== IST DATE ===== */
-function istNow(){
-  return new Date(
-    new Date().toLocaleString("en-IN",{timeZone:"Asia/Kolkata"})
-  );
-}
-
-/* DEFAULT = YESTERDAY */
-function defaultDate(){
-  let d=istNow();
-  d.setDate(d.getDate()-1);
-  return d;
-}
-
-/* FORMAT DD/MM/YYYY */
-function formatDate(d){
-  let day=String(d.getDate()).padStart(2,"0");
-  let mon=String(d.getMonth()+1).padStart(2,"0");
-  let yr=d.getFullYear();
-  return `${day}/${mon}/${yr}`;
-}
-
-/* DRAWS */
+/* DRAW LIST */
 const draws=[
- { id:"draw11", title:"Mizoram 11 AM Result", code:10, extra:true },
- { id:"draw12", title:"Mizoram 12 PM Result", code:11 },
- { id:"draw16", title:"Mizoram 4 PM Result",  code:3 },
- { id:"draw19", title:"Mizoram 7 PM Result",  code:7 },
- { id:"draw21", title:"Mizoram 9 PM Result",  code:9 }
+{ id:"draw11", title:"11 AM Result", code:10, prints:true },
+{ id:"draw12", title:"12 PM Result", code:11 },
+{ id:"draw16", title:"4 PM Result", code:3 },
+{ id:"draw19", title:"7 PM Result", code:7 },
+{ id:"draw21", title:"9 PM Result", code:9 }
 ];
 
-/* DATE INPUT */
 const picker=document.getElementById("datePicker");
+if(!picker) return;
 
-/* DEFAULT SET */
-let selected=defaultDate();
-picker.valueAsDate=selected;
+/* YESTERDAY DEFAULT */
+const d=new Date();
+d.setDate(d.getDate()-1);
+const defaultDate=d.toISOString().split("T")[0];
 
-/* LOAD FUNCTION */
-function loadResults(dateObj){
+picker.value=defaultDate;
+loadAll(defaultDate);
 
-  const dateStr=formatDate(dateObj);
-  const encoded=dateStr.replace(/\//g,"%2F");
+picker.addEventListener("change",()=>{
+loadAll(picker.value);
+});
 
-  draws.forEach(draw=>{
+/* LOAD ALL RESULTS */
+function loadAll(dateStr){
 
-    const wrap=document.getElementById(draw.id);
-    if(!wrap) return;
+const [year,month,day]=dateStr.split("-");
 
-    wrap.innerHTML="";
+draws.forEach(draw=>{
 
-    /* title */
-    const title=document.createElement("div");
-    title.className="draw-title";
-    title.textContent=draw.title;
+const wrap=document.getElementById(draw.id);
+if(!wrap) return;
 
-    /* date */
-    const date=document.createElement("div");
-    date.className="date-show";
-    date.textContent="Date: "+dateStr;
+wrap.innerHTML=`
+<div class="draw-title">Mizoram Lottery ${draw.title}</div>
+<div class="draw-date">${day}/${month}/${year}</div>
+`;
 
-    wrap.append(title,date);
+const base=draw.prints
+? "https://mizoramlottery.com/Home/Prints?dateTime="
+: "https://mizoramlottery.com/Home/Print?dateTime=";
 
-    /* PDF URL */
-    const pdfUrl= draw.extra
-     ? `https://mizoramlottery.com/Home/Prints?dateTime=${draw.code}&date=${encoded}`
-     : `https://mizoramlottery.com/Home/Print?dateTime=${draw.code}&date=${encoded}`;
+const pdfUrl= base + draw.code +
+"&date=" + day + "%2F" + month + "%2F" + year;
 
-    /* UI */
-    const status=document.createElement("div");
-    status.className="status";
-    status.innerHTML=`<span class="spinner"></span> Loading result...`;
+/* STATUS */
+const status=document.createElement("div");
+status.className="status";
+status.innerHTML=`<span class="spinner"></span> Loading result...`;
 
-    const iframe=document.createElement("iframe");
-    iframe.style.display="none";
+/* PDF BOX */
+const pdfBox=document.createElement("div");
+pdfBox.className="pdf-container";
 
-    const download=document.createElement("a");
-    download.className="download-btn";
-    download.href=pdfUrl;
-    download.target="_blank";
-    download.textContent="Download PDF";
-    download.style.display="none";
+/* IFRAME */
+const iframe=document.createElement("iframe");
 
-    const retry=document.createElement("button");
-    retry.className="retry-btn";
-    retry.textContent="Retry";
-    retry.style.display="none";
+/* DOWNLOAD BTN */
+const download=document.createElement("a");
+download.className="download-btn";
+download.textContent="Download PDF";
+download.href=pdfUrl;
+download.target="_blank";
 
-    wrap.append(status,iframe,download,retry);
+/* RETRY BTN */
+const retry=document.createElement("button");
+retry.className="retry-btn";
+retry.textContent="Retry";
 
-    let tries=0;
-    const max=5;
-    let loaded=false;
+wrap.append(status,pdfBox,download,retry);
+pdfBox.appendChild(iframe);
 
-    function load(){
+/* RETRY SYSTEM */
+let attempt=0,max=5,loaded=false;
 
-      if(loaded) return;
-      tries++;
+function load(){
 
-      iframe.src=
-        "https://docs.google.com/gview?embedded=true&url="
-        +encodeURIComponent(pdfUrl)
-        +"&t="+Date.now();
+if(loaded) return;
+attempt++;
 
-      const timer=setTimeout(()=>{
+iframe.src=
+"https://docs.google.com/gview?embedded=true&url="
++ encodeURIComponent(pdfUrl)
++ "&t="+Date.now();
 
-        if(loaded) return;
-
-        if(tries>=max){
-          status.textContent="Please try after sometime.";
-          retry.style.display="inline-block";
-        }else{
-          load();
-        }
-
-      },15000);
-
-      iframe.onload=()=>{
-        loaded=true;
-        clearTimeout(timer);
-        iframe.style.display="block";
-        status.style.display="none";
-        retry.style.display="none";
-        download.style.display="inline-block";
-      };
-    }
-
-    retry.onclick=()=>{
-      tries=0;
-      loaded=false;
-      status.innerHTML=`<span class="spinner"></span> Retrying...`;
-      status.style.display="block";
-      retry.style.display="none";
-      load();
-    };
-
-    load();
-
-  });
+setTimeout(()=>{
+if(!loaded && attempt>=max){
+status.textContent="Result not available. Retry later.";
+retry.style.display="block";
+}
+else if(!loaded){
+load();
+}
+},15000);
 }
 
-/* FIRST LOAD */
-loadResults(selected);
+iframe.onload=()=>{
+loaded=true;
+status.style.display="none";
+pdfBox.style.display="block";
+download.style.display="block";
+retry.style.display="none";
+};
 
-/* DATE CHANGE */
-picker.addEventListener("change",()=>{
-  const val=picker.value;
-  if(!val) return;
-  loadResults(new Date(val));
+retry.onclick=()=>{
+attempt=0;
+loaded=false;
+status.innerHTML=`<span class="spinner"></span> Retrying...`;
+status.style.display="flex";
+retry.style.display="none";
+load();
+};
+
+load();
+
 });
-</script>
+}
+
+});
