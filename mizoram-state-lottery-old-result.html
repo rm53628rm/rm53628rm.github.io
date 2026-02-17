@@ -176,114 +176,119 @@ Dhankesari Today – Mizoram State Lottery Today Result 11AM,12PM, 4PM, 7PM, 9PM
 </footer>
 
 <script>
-/* ================= DRAW CONFIG ================= */
-const draws=[
-{ id:"draw11", title:"11 AM Result", code:10, prints:true },
-{ id:"draw12", title:"12 PM Result", code:11 },
-{ id:"draw16", title:"4 PM Result", code:3 },
-{ id:"draw19", title:"7 PM Result", code:7 },
-{ id:"draw21", title:"9 PM Result", code:9 }
-];
-
-/* ================= DATE PICKER ================= */
-const picker=document.getElementById("datePicker");
-
-/* yesterday default */
-function getYesterday(){
-const d=new Date();
-d.setDate(d.getDate()-1);
-return d.toISOString().split("T")[0];
+/* ================= DATE ================= */
+function getSelectedDate(){
+  const picker=document.getElementById("datePicker");
+  const d=new Date(picker.value);
+  const day=String(d.getDate()).padStart(2,"0");
+  const month=String(d.getMonth()+1).padStart(2,"0");
+  const year=d.getFullYear();
+  return {day,month,year};
 }
 
-const defaultDate=getYesterday();
-picker.value=defaultDate;
-loadAll(defaultDate);
+/* ================= DRAWS ================= */
+const draws = [
+ { id:"draw11", title:"Mizoram Lottery 11 AM Result", param:10, extraS:true },
+ { id:"draw12", title:"Mizoram Lottery 12 PM Result", param:11 },
+ { id:"draw16", title:"Mizoram Lottery 4 PM Result",  param:3 },
+ { id:"draw19", title:"Mizoram Lottery 7 PM Result",  param:7 },
+ { id:"draw21", title:"Mizoram Lottery 9 PM Result",  param:9 }
+];
 
-picker.addEventListener("change",()=>{
-loadAll(picker.value);
-});
+/* default yesterday */
+const picker=document.getElementById("datePicker");
+const y=new Date();
+y.setDate(y.getDate()-1);
+picker.value=y.toISOString().split("T")[0];
+
+loadAll();
+
+/* change */
+picker.addEventListener("change",loadAll);
 
 /* ================= LOAD ALL ================= */
-function loadAll(dateStr){
+function loadAll(){
 
-const [year,month,day]=dateStr.split("-");
+const {day,month,year}=getSelectedDate();
 
 draws.forEach(draw=>{
 
 const wrap=document.getElementById(draw.id);
+if(!wrap) return;
 
 /* header */
 wrap.innerHTML=`
-<div class="draw-title">Mizoram Lottery ${draw.title}</div>
+<div class="draw-title">${draw.title}</div>
 <div class="draw-date">${day}/${month}/${year}</div>
 `;
 
-/* pdf url */
-const base=draw.prints
-? "https://mizoramlottery.com/Home/Prints?dateTime="
-: "https://mizoramlottery.com/Home/Print?dateTime=";
+/* link */
+const base = draw.extraS
+ ? "https://mizoramlottery.com/Home/Prints?dateTime="
+ : "https://mizoramlottery.com/Home/Print?dateTime=";
 
-const pdfUrl= base + draw.code +
-"&date=" + day + "%2F" + month + "%2F" + year;
+const pdfUrl = base + draw.param +
+"&date="+day+"%2F"+month+"%2F"+year;
 
 /* elements */
 const status=document.createElement("div");
 status.className="status";
 status.innerHTML=`<span class="spinner"></span>Loading result...`;
 
-const iframe=document.createElement("iframe");
-iframe.style.display="none";
-iframe.style.width="100%";
-iframe.style.aspectRatio="3/4";
-iframe.style.border="none";
+const pdfBox=document.createElement("div");
+pdfBox.className="pdf-container";
 
-/* download button */
+const iframe=document.createElement("iframe");
+iframe.loading="lazy";
+
+pdfBox.appendChild(iframe);
+
 const download=document.createElement("a");
 download.className="download-btn";
 download.textContent="Download PDF";
 download.href=pdfUrl;
 download.target="_blank";
-download.style.display="none";
 
-/* retry button */
 const retry=document.createElement("button");
 retry.className="retry-btn";
 retry.textContent="Retry";
-retry.style.display="none";
 
-wrap.append(status,iframe,download,retry);
+wrap.append(status,pdfBox,download,retry);
 
-/* ================= RETRY SYSTEM ================= */
+/* ================= SAFE LOADER ================= */
 let attempt=0;
 let max=5;
 let loaded=false;
 
-function load(){
+function loadPDF(){
 
 if(loaded) return;
 attempt++;
 
-/* direct pdf load */
-iframe.src=pdfUrl+"#toolbar=0";
+iframe.src=
+"https://docs.google.com/gview?embedded=true&url="
++ encodeURIComponent(pdfUrl)
++ "&t="+Date.now();
 
-/* retry timer */
+/* retry check */
 setTimeout(()=>{
 if(!loaded && attempt>=max){
-status.textContent="Result not available. Retry later.";
+status.textContent="Result not available. Retry after sometime.";
 retry.style.display="inline-block";
 }
 else if(!loaded){
-load();
+loadPDF();
 }
-},15000);
+},20000);
 }
 
 /* success */
 iframe.onload=()=>{
 loaded=true;
 status.style.display="none";
-iframe.style.display="block";
+pdfBox.style.display="block";
 download.style.display="inline-block";
+retry.style.display="none";
 };
 
 /* retry click */
@@ -293,25 +298,17 @@ loaded=false;
 status.innerHTML=`<span class="spinner"></span>Retrying...`;
 status.style.display="block";
 retry.style.display="none";
-load();
+loadPDF();
 };
 
-/* start */
-load();
+loadPDF();
 
 });
 }
-
-/* ================= MENU ================= */
-function openMenu(){
-menu.classList.add("active");
-overlay.style.display="block";
-}
-function closeMenu(){
-menu.classList.remove("active");
-overlay.style.display="none";
-}
 </script>
+    
+
+
   
   <script>
 function openMenu(){menu.classList.add("active");overlay.style.display="block"}
