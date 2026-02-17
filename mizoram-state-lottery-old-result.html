@@ -175,131 +175,124 @@ Dhankesari Today – Mizoram State Lottery Today Result 11AM,12PM, 4PM, 7PM, 9PM
   </div>
 </footer>
 
-<script>
-/* ================= IST TIME ================= */
-function istHour(){
-  return Number(
-    new Date().toLocaleString("en-IN",{
-      timeZone:"Asia/Kolkata",
-      hour:"2-digit",
-      hour12:false
-    })
-  );
-}
-function istDate(){
-  return new Date(
-    new Date().toLocaleDateString("en-CA",{timeZone:"Asia/Kolkata"})
-  );
-}
-
-/* ================= DRAWS ================= */
-const draws = [
- { id:"draw11", hour:11, time:"11 AM",title:"Mizoram Lottery 11 AM Result", param:10, extraS:true },
- { id:"draw12", hour:12, time:"12 PM",title:"Mizoram Lottery 12 PM Result", param:11 },
- { id:"draw16", hour:16, time:"4 PM",title:"Mizoram Lottery 4 PM Result",  param:3 },
- { id:"draw19", hour:19, time:"7 PM",title:"Mizoram Lottery 7 PM Result",  param:7 },
- { id:"draw21", hour:21, time:"9 PM",title:"Mizoram Lottery 9 PM Result",  param:9 }
+/* ================= DRAW CONFIG ================= */
+const draws=[
+ { id:"draw11", title:"11 AM Result", code:10, prints:true },
+ { id:"draw12", title:"12 PM Result", code:11 },
+ { id:"draw16", title:"4 PM Result", code:3 },
+ { id:"draw19", title:"7 PM Result", code:7 },
+ { id:"draw21", title:"9 PM Result", code:9 }
 ];
 
+/* ================= DATE PICKER ================= */
+const picker=document.getElementById("datePicker");
+
+/* yesterday default */
+function yesterday(){
+ const d=new Date();
+ d.setDate(d.getDate()-1);
+ return d.toISOString().split("T")[0];
+}
+
+picker.value=yesterday();
+loadAll();
+
+picker.addEventListener("change",loadAll);
+
+/* ================= LOAD ALL ================= */
+function loadAll(){
+
+const val=picker.value;
+if(!val) return;
+
+const [year,month,day]=val.split("-");
+
 draws.forEach(draw=>{
-  const wrap=document.getElementById(draw.id);
-  if(!wrap) return;
 
-  const now=istHour();
-  const dateStr=istDate().toDateString();
+const wrap=document.getElementById(draw.id);
+if(!wrap) return;
 
-  wrap.innerHTML=`
-    <div class="draw-title">${draw.title}</div>
-    <div class="draw-date">Date: ${dateStr}</div>
-  `;
+wrap.innerHTML=`
+<div class="draw-title">${draw.title}</div>
+<div class="draw-date">${day}/${month}/${year}</div>
+`;
 
-  /* ===== TIME LOCK ===== */
-  if(now < draw.hour){
-    wrap.innerHTML+=`
-      <div class="status">
-        Result will be published after ${draw.time}
-      </div>
-    `;
-    return;
-  }
+const base = draw.prints
+ ? "https://mizoramlottery.com/Home/Prints?dateTime="
+ : "https://mizoramlottery.com/Home/Print?dateTime=";
 
-  /* ===== PDF LINK ===== */
-  const base = draw.extraS
-    ? "https://mizoramlottery.com/Home/PrintsToday?dateTime="
-    : "https://mizoramlottery.com/Home/PrintToday?dateTime=";
+const pdfUrl = base + draw.code +
+"&date="+day+"%2F"+month+"%2F"+year;
 
-  const pdfUrl = base + draw.param;
+/* elements */
+const status=document.createElement("div");
+status.className="status";
+status.innerHTML=`<span class="spinner"></span> Loading result...`;
 
-  /* ===== ELEMENTS ===== */
-  const status=document.createElement("div");
-  status.className="status";
-  status.innerHTML=`<span class="spinner"></span> Loading result...`;
+const box=document.createElement("div");
+box.className="pdf-container";
+box.style.display="none";
 
-  const pdfBox=document.createElement("div");
-  pdfBox.className="pdf-container";
-  pdfBox.style.display="none";
+const iframe=document.createElement("iframe");
+box.appendChild(iframe);
 
-  const iframe=document.createElement("iframe");
-  iframe.loading="lazy";
-  iframe.referrerPolicy="no-referrer";
-  pdfBox.appendChild(iframe);
+const download=document.createElement("a");
+download.className="download-btn";
+download.textContent="Download PDF";
+download.href=pdfUrl;
+download.target="_blank";
+download.style.display="none";
 
-  const download=document.createElement("a");
-  download.className="download-btn";
-  download.textContent="Download PDF";
-  download.href=pdfUrl;
-  download.target="_blank";
-  download.style.display="none";
+const retry=document.createElement("button");
+retry.className="retry-btn";
+retry.textContent="Retry";
+retry.style.display="none";
 
-  const retry=document.createElement("button");
-  retry.className="retry-btn";
-  retry.textContent="Retry";
-  retry.style.display="none";
+wrap.append(status,box,download,retry);
 
-  wrap.append(status,pdfBox,download,retry);
+/* retry system */
+let attempts=0;
+const max=5;
 
-  let attempts=0;
-  const max=5;
+function loadPDF(){
 
-  function showSpinner(text){
-    status.innerHTML=`<span class="spinner"></span> ${text}`;
-  }
+attempts++;
 
-  function loadPDF(){
-    attempts++;
+iframe.src=
+"https://docs.google.com/gview?embedded=true&url="
++ encodeURIComponent(pdfUrl)
++ "&t="+Date.now();
 
-    showSpinner("Loading result...");
+const timer=setTimeout(()=>{
+if(attempts>=max){
+status.textContent="Result not available. Retry.";
+retry.style.display="inline-block";
+}else{
+loadPDF();
+}
+},9000);
 
-    iframe.src = pdfUrl + "&t=" + Date.now();
+iframe.onload=()=>{
+clearTimeout(timer);
+status.style.display="none";
+box.style.display="block";
+download.style.display="inline-block";
+retry.style.display="none";
+};
+}
 
-    const timer=setTimeout(()=>{
-      if(attempts>=max){
-        status.textContent="Result not available. Retry after sometime.";
-        retry.style.display="inline-block";
-      }else{
-        loadPDF();
-      }
-    },10000);
+retry.onclick=()=>{
+attempts=0;
+retry.style.display="none";
+status.innerHTML=`<span class="spinner"></span> Retrying...`;
+status.style.display="block";
+loadPDF();
+};
 
-    iframe.onload=()=>{
-      clearTimeout(timer);
-      status.style.display="none";
-      pdfBox.style.display="block";
-      download.style.display="inline-block";
-      retry.style.display="none";
-    };
-  }
+loadPDF();
 
-  retry.onclick=()=>{
-    attempts=0;
-    retry.style.display="none";
-    showSpinner("Retrying...");
-    loadPDF();
-  };
-
-  loadPDF();
 });
-</script>
+}
     
     
 
