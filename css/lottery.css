@@ -412,6 +412,7 @@ h1::after{
   color:#ffffff;
 }
 
+
 /* divider */
 .footer-divider{
   width:100%;
@@ -431,4 +432,32 @@ h1::after{
   .footer-title{font-size:16px;}
   .footer-text{font-size:13px;}
   .footer-links a{font-size:13px;}
+}
+
+.breadcrumb{
+  font-size:14px;
+  margin:10px 0 15px;
+  color:#666;
+}
+
+.breadcrumb a{
+  color:#0a58ca;
+  text-decoration:none;
+}
+
+.breadcrumb a:hover{
+  text-decoration:underline;
+}
+
+.breadcrumb span{
+  color:#222;
+  font-weight:600;
+}
+
+
+.result-source{
+ font-size:13px;
+ color:#666;
+ text-align:center;
+ margin-top:10px;
 }
