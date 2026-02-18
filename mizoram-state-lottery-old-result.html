@@ -174,7 +174,6 @@ Dhankesari Today – Mizoram State Lottery Today Result 11AM,12PM, 4PM, 7PM, 9PM
 
   </div>
 </footer>
-<script>
 /* ================= DRAW CONFIG ================= */
 const draws=[
  { id:"draw11", title:"11 AM Result", code:10, prints:true },
@@ -184,10 +183,9 @@ const draws=[
  { id:"draw21", title:"9 PM Result", code:9 }
 ];
 
-/* ================= DATE PICKER ================= */
 const picker=document.getElementById("datePicker");
 
-/* yesterday default */
+/* ================= DEFAULT DATE ================= */
 function yesterday(){
  const d=new Date();
  d.setDate(d.getDate()-1);
@@ -196,10 +194,9 @@ function yesterday(){
 
 picker.value=yesterday();
 loadAll();
-
 picker.addEventListener("change",loadAll);
 
-/* ================= LOAD ALL ================= */
+/* ================= MAIN LOAD ================= */
 function loadAll(){
 
 const val=picker.value;
@@ -234,6 +231,7 @@ box.className="pdf-container";
 box.style.display="none";
 
 const iframe=document.createElement("iframe");
+iframe.style.background="#fff";
 box.appendChild(iframe);
 
 const download=document.createElement("a");
@@ -250,43 +248,81 @@ retry.style.display="none";
 
 wrap.append(status,box,download,retry);
 
-/* retry system */
-let attempts=0;
-const max=5;
+/* ================= LOADER ================= */
+let tries=0;
+const maxTry=5;
 
 function loadPDF(){
 
-attempts++;
+tries++;
+
+let failed=false;
 
 iframe.src=
 "https://docs.google.com/gview?embedded=true&url="
 + encodeURIComponent(pdfUrl)
 + "&t="+Date.now();
 
+/* timeout fail detect */
 const timer=setTimeout(()=>{
-if(attempts>=max){
-status.textContent="Result not available. Retry.";
+
+failed=true;
+
+if(tries>=maxTry){
+status.textContent="Result not available yet.";
 retry.style.display="inline-block";
 }else{
 loadPDF();
 }
-},9000);
 
+},8000);
+
+/* load success detect */
 iframe.onload=()=>{
+
+if(failed) return;
 clearTimeout(timer);
+
+/* blank pdf detect */
+try{
+const txt=iframe.contentDocument.body.innerText.trim();
+if(txt.length<5) throw "blank";
+}catch{
+
+if(tries<maxTry){
+loadPDF();
+return;
+}else{
+status.textContent="Result not available yet.";
+retry.style.display="inline-block";
+return;
+}
+}
+
+/* SUCCESS */
 status.style.display="none";
 box.style.display="block";
 download.style.display="inline-block";
 retry.style.display="none";
+
 };
 }
 
+/* ================= RETRY BUTTON ================= */
 retry.onclick=()=>{
-attempts=0;
-retry.style.display="none";
-status.innerHTML=`<span class="spinner"></span> Retrying...`;
+
+tries=0;
+iframe.src="about:blank";
+
+status.innerHTML=`<span class="spinner"></span> Loading result...`;
 status.style.display="block";
-loadPDF();
+
+box.style.display="none";
+download.style.display="none";
+retry.style.display="none";
+
+setTimeout(loadPDF,300);
+
 };
 
 loadPDF();
@@ -294,9 +330,6 @@ loadPDF();
 });
 }
     
-    
-</script>
-
   
   <script>
 function openMenu(){menu.classList.add("active");overlay.style.display="block"}
