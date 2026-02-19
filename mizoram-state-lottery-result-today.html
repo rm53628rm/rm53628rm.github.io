@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <title>
-Dhankesari Today – Mizoram State Lottery Today Result 11AM,12PM, 4PM, 7PM, 9PM.
+Mizoram Lottery Result Today 11AM, 12PM, 4PM, 7PM, 9PM – Live PDF
+    
     </title>
 
 <meta name="description" content="Mizoram State Lottery Today Result 11AM,12PM, 4PM, 7PM, 9PM.
@@ -112,7 +113,8 @@ Dhankesari Today – Mizoram State Lottery Today Result 11AM,12PM, 4PM, 7PM, 9PM
   <span>Mizoram Today Result</span>
 </div>
   <div class="container">
-<h1>Mizoram State Lottery Today Result 11AM,12PM, 4PM, 7PM, 9PM.</h1>
+<h1>Mizoram State Lottery Result Today – Live Results & PDF Download
+    .</h1>
       <p>Last updated:
 <script>document.write(new Date().toLocaleDateString())</script>
       </p>
@@ -120,7 +122,7 @@ Dhankesari Today – Mizoram State Lottery Today Result 11AM,12PM, 4PM, 7PM, 9PM
 <div class="section-title">🔥 Mizoram State Lottery Today Result Live.</div>
   </div>
 
-<body>
+
 
 <section class="result-section">
 
@@ -199,7 +201,6 @@ Results sourced from official state lottery bulletin.
 
   </div>
 </footer>
-
 <script>
 /* ================= IST TIME ================= */
 function istHour(){
@@ -231,7 +232,12 @@ draws.forEach(draw=>{
   if(!wrap) return;
 
   const now=istHour();
-  const dateStr=istDate().toDateString();
+
+  /* ✅ NEW FORMAT DATE */
+  const dateStr = new Date().toLocaleDateString(
+    "en-IN",
+    { day:"numeric", month:"long", year:"numeric", timeZone:"Asia/Kolkata" }
+  );
 
   /* title + date ALWAYS */
   wrap.innerHTML=`
@@ -264,6 +270,7 @@ draws.forEach(draw=>{
   pdfBox.className="pdf-container";
 
   const iframe=document.createElement("iframe");
+  iframe.loading="lazy";
   pdfBox.appendChild(iframe);
 
   const download=document.createElement("a");
@@ -283,6 +290,7 @@ draws.forEach(draw=>{
   function loadPDF(){
     if(loaded) return;
     attempt++;
+
     iframe.src=
       "https://docs.google.com/gview?embedded=true&url="
       + encodeURIComponent(pdfUrl)
@@ -315,9 +323,17 @@ draws.forEach(draw=>{
     loadPDF();
   };
 
-  loadPDF();
+  /* ===== LAZY LOAD ON SCROLL ===== */
+  const observer=new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting){
+      loadPDF();
+      observer.disconnect();
+    }
+  });
+
+  observer.observe(wrap);
 });
-</script>
+  </script>      
   <script>
 function openMenu(){menu.classList.add("active");overlay.style.display="block"}
 function closeMenu(){menu.classList.remove("active");overlay.style.display="none"}
