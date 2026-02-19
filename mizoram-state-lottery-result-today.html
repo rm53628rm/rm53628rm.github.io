@@ -201,7 +201,7 @@ Results sourced from official state lottery bulletin.
 
   </div>
 </footer>
-<script>
+    <script>
 /* ================= IST TIME ================= */
 function istHour(){
   return Number(
@@ -232,7 +232,6 @@ draws.forEach(draw=>{
   if(!wrap) return;
 
   const now=istHour();
-
   /* ✅ NEW FORMAT DATE */
   const dateStr = new Date().toLocaleDateString(
     "en-IN",
@@ -270,7 +269,6 @@ draws.forEach(draw=>{
   pdfBox.className="pdf-container";
 
   const iframe=document.createElement("iframe");
-  iframe.loading="lazy";
   pdfBox.appendChild(iframe);
 
   const download=document.createElement("a");
@@ -290,7 +288,6 @@ draws.forEach(draw=>{
   function loadPDF(){
     if(loaded) return;
     attempt++;
-
     iframe.src=
       "https://docs.google.com/gview?embedded=true&url="
       + encodeURIComponent(pdfUrl)
@@ -323,17 +320,10 @@ draws.forEach(draw=>{
     loadPDF();
   };
 
-  /* ===== LAZY LOAD ON SCROLL ===== */
-  const observer=new IntersectionObserver(entries=>{
-    if(entries[0].isIntersecting){
-      loadPDF();
-      observer.disconnect();
-    }
-  });
-
-  observer.observe(wrap);
+  loadPDF();
 });
-  </script>      
+</script>
+
   <script>
 function openMenu(){menu.classList.add("active");overlay.style.display="block"}
 function closeMenu(){menu.classList.remove("active");overlay.style.display="none"}
