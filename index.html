@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-IN">
 <head>
 <meta charset="UTF-8">
 <title>
@@ -58,7 +58,8 @@ Dhankesari Today – Dear Lottery Result Morning 8pm, Day 6pm & Night 8pm (Live 
 
 <body>
 
-<header>
+<header role="banner">
+  
 <div class="menu-btn" onclick="openMenu()">☰</div>
 <div class="header-text">
 <h2>Dhankesari Today </h2>
@@ -86,7 +87,8 @@ Dhankesari Today – Dear Lottery Result Morning 8pm, Day 6pm & Night 8pm (Live 
   
 </div>
   <!-- ===== NAV BAR ===== -->
-<nav class="result-nav">
+<nav class="result-nav" role="navigation">
+  
  <a class="active" href="index.html">Home</a>
    <a href="lottery-sambad-1-pm-result-today.html">🌅 1 PM Result</a>
   <a href="lottery-sambad-6-pm-result-today.html">🌞 6 PM Result</a>
@@ -101,13 +103,20 @@ Dhankesari Today – Dear Lottery Result Morning 8pm, Day 6pm & Night 8pm (Live 
   <span>Today Results</span>
 </div>
   
-  <div class="container">
+  <main class="container" role="main">
+    
 <h1 class="page-title">Lottery Sambad Today Result 1PM,6PM & 8PM – Nagaland State Lottery Result</h1>
     
 <div class="section-title">🔥 Lottery Sambad Today Result Live.</div>
-  </div>
+  
   <p>Last updated:
-<script>document.write(new Date().toLocaleDateString())</script>
+<script>
+document.write(
+ new Date().toLocaleDateString("en-IN",
+ {day:"numeric",month:"long",year:"numeric"})
+)
+</script>
+    
   </p>
 <section class="result-section">
 
@@ -457,7 +466,7 @@ Select a date below to view Morning, Day, and Night lottery results with PDF dow
   </div>
   </footer>
   
-  
+</main>
   
 <script src="js/testt.js"defer></script>
   <script src="js/faq.js"defer></script>
